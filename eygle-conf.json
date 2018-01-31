@@ -1,0 +1,22 @@
+{
+  "server": {
+    "port": 4646,
+    "dbName": "eygle",
+    "debug": false,
+    "sessionCookieName": "eygle-connect.sid",
+
+    "environments": {
+      "production": {
+        "logger": {
+          "type": "file",
+          "root": "{{root}}/server/logs",
+          "maxLogFiles": 10,
+          "allLogsFileName": "{{appName}}-{{env}}-{{pmId}}.log"
+        }
+      },
+      "development": {
+        "filesRoot": "/../../../files"
+      }
+    }
+  }
+}
