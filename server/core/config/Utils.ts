@@ -41,6 +41,11 @@ class Utils {
      */
     public root: string;
 
+   /**
+    * Api root path
+    */
+   public apiRoot: string;
+
     /**
      * Client root path
      */
@@ -131,6 +136,7 @@ class Utils {
         this.debug = ProjectConfig.debug;
 
         this.root = ProjectConfig.root;
+        this.apiRoot = ProjectConfig.apiRoot;
         this.clientRoot = ProjectConfig.clientRoot;
         this.imagesRoot = ProjectConfig.imagesRoot;
         this.filesRoot = ProjectConfig.filesRoot;

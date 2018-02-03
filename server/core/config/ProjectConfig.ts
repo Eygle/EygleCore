@@ -44,6 +44,11 @@ class ProjectConfig {
     public root: string;
 
     /**
+     * Api root path
+     */
+    public apiRoot: string;
+
+    /**
      * Client root path
      * Replace {{root}} by given configuration root value
      */
@@ -102,8 +107,7 @@ class ProjectConfig {
         }
 
         this._env = process.env.NODE_ENV;
-        console.log("loaded data", json);
-        this._buildConf(json);
+        this._buildConf(json.server || {});
     }
 
     /**
@@ -148,11 +152,15 @@ class ProjectConfig {
             data.environments[this._env] : {};
         env.logger = env.logger || {};
         data.logger = data.logger || {};
+        console.log(data);
 
         console.log("inside load env dep", env);
         this.appName = env.appName || data.appName || process.env.NODE_APP;
+        this.port = env.port || data.port || process.env.PORT;
+        this.dbName = env.dbName || data.dbName;
         this.root = path.normalize(env.root || data.root || `${__dirname}/../../..`);
         this.debug = env.debug !== undefined ? env.debug : data.debug !== undefined ? data.debug : false;
+        this.apiRoot = this._formatConfStr(env.apiRoot || data.apiRoot || '{{root}}/server/api');
         this.clientRoot = this._formatConfStr(env.clientRoot || data.clientRoot || '{{root}}/client');
         this.imagesRoot = this._formatConfStr(env.imagesRoot || data.imagesRoot || '{{root}}/client/images');
         this.filesRoot = this._formatConfStr(env.filesRoot || data.filesRoot || '{{root}}/server/files');

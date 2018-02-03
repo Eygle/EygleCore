@@ -186,7 +186,7 @@ class DB {
       Utils.logger.trace(`Model ${parent ? `${parent}/${modelName}` : modelName} loaded`);
     }
     if (!parent) {
-      Utils.logger.info('Mongo database connected');
+      Utils.logger.info(`Mongo database '${Utils.dbName}' connected`);
     }
   }
 }
