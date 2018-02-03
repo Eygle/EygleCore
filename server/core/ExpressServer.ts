@@ -119,13 +119,16 @@ export class ExpressServer {
          }));
 
          if (ProjectConfig.implementsAuth) {
+            Utils.logger.trace("Module Auth activated");
             PassportConfig.init(this._app);
          }
          Routes.init(this._app);
          this._handleErrors(this._app); // Last errors handler
          if (ProjectConfig.includeCronManager) {
+            Utils.logger.trace("Module Cron Manager activated");
             CronManager.init();
          }
+         Utils.logger.info("All modules are loaded and activated\n");
       } catch (err) {
          console.error(err);
       }
@@ -154,6 +157,7 @@ export class ExpressServer {
     * @private
     */
    private _initCSRF(app) {
+      Utils.logger.trace("Module CSRF activated");
       app.use(csrf(<any>{
          cookie: {
             secure: EEnv.Prod === Utils.env || EEnv.Preprod === Utils.env // Only for productions
@@ -182,8 +186,8 @@ export class ExpressServer {
     */
    private _printHeader() {
       const sentence = `===== START ${Utils.appName.toUpperCase()} SERVER =====`;
-      Utils.logger.info(`     ${'='.repeat(sentence.length)}`);
+      Utils.logger.info(`     ${(<any>'=').repeat(sentence.length)}`);
       Utils.logger.info(`     ${sentence}`);
-      Utils.logger.info(`     ${'='.repeat(sentence.length)}\n`);
+      Utils.logger.info(`     ${(<any>'=').repeat(sentence.length)}\n`);
    }
 }

@@ -46,7 +46,6 @@ class PassportConfig {
           });
         })
         .catch(err => {
-          console.log('err');
           done(err);
         });
     });

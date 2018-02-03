@@ -25,7 +25,6 @@ class Auth {
    */
   public loginMiddleware() {
     return (req, res, next) => {
-      console.log(req.body);
       passport.authenticate('local', (err, user) => {
         if (err) return next(err);
         if (!user || user.locked) {

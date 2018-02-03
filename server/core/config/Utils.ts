@@ -128,8 +128,6 @@ class Utils {
     constructor () {
         this.env = ProjectConfig.getEnv();
 
-        console.log("app name",  ProjectConfig.appName, "port", ProjectConfig.port, "dbname", ProjectConfig.dbName);
-
         this.appName = ProjectConfig.appName;
         this.port = ProjectConfig.port;
         this.dbName = ProjectConfig.dbName;

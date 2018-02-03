@@ -5,6 +5,7 @@ import Utils from './Utils';
 import Auth from '../middlewares/Auth';
 import EmailsUnsubscribe from '../middlewares/EmailsUnsubscribe';
 import {EEnv} from '../typings/server.enums';
+import ProjectConfig from "./ProjectConfig";
 
 class Routes {
   public static init(app) {
@@ -22,16 +23,21 @@ class Routes {
     app.all('/api/*', [Resty.httpMiddleware(`${__dirname}/../api`)]);
 
     // AUTH
-    app.post('/register', [Auth.registerMiddleware()]);
-    app.post('/login', [Auth.loginLimitMiddleware(), Auth.loginMiddleware()]);
-    app.post('/logout', [Auth.logoutMiddleware()]);
-    app.post('/forgot-password', [Auth.forgotPasswordMiddleware()]);
-    app.put('/change-password/*', [Auth.changePasswordMiddleware()]);
-    app.put('/unlock-user/*', [Auth.unlockAccountMiddleware()]);
+     if (ProjectConfig.implementsAuth) {
+        app.post('/register', [Auth.registerMiddleware()]);
+        app.post('/login', [Auth.loginLimitMiddleware(), Auth.loginMiddleware()]);
+        app.post('/logout', [Auth.logoutMiddleware()]);
+        app.post('/forgot-password', [Auth.forgotPasswordMiddleware()]);
+        app.put('/change-password/*', [Auth.changePasswordMiddleware()]);
+        app.put('/unlock-user/*', [Auth.unlockAccountMiddleware()]);
+     }
 
     // EMAILS UNSUBSCRIBE
-    app.get('/unsubscribe/*', [EmailsUnsubscribe.getMiddleware()]);
-    app.post('/unsubscribe/*', [EmailsUnsubscribe.getPostMiddleware()]);
+     if (ProjectConfig.includeEmailUnsubscribe) {
+       Utils.logger.trace("Module Emails unsubscription activated");
+        app.get('/unsubscribe/*', [EmailsUnsubscribe.getMiddleware()]);
+        app.post('/unsubscribe/*', [EmailsUnsubscribe.getPostMiddleware()]);
+     }
 
     // FALLBACK (when reloading on a route redirect to index.html)
     app.get('/*', [this.indexRedirect()]);
