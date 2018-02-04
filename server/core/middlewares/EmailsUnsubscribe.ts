@@ -2,11 +2,13 @@ import * as Twig from 'twig';
 import * as fs from 'fs';
 import * as bcrypt from 'bcrypt';
 
-import Utils from '../config/Utils';
+import Utils from '../../../commons/core/utils/Utils';
 import UserSchema from '../schemas/User.schema';
 import {EHTTPStatus} from '../typings/server.enums';
 import {CustomEdError} from '../config/EdError';
 import {User} from '../../../commons/core/models/User';
+import Logger from "../config/Logger";
+import ProjectConfig from "../config/ProjectConfig";
 
 class EmailsUnsubscribe {
   /**
@@ -16,11 +18,11 @@ class EmailsUnsubscribe {
     return (req, res, next) => {
       const [email, hash] = req.params[0].split('/');
 
-      Utils.logger.log(`User ${email} visited unsubscribe view`);
+       Logger.log(`User ${email} visited unsubscribe view`);
 
       this._checkUser(email, hash, (user) => {
         res.send(Twig.twig(<any>{
-          data: <any>fs.readFileSync(`${Utils.root}/server/templates/unsubscribe_from_emails/unsubscribe.twig`, {encoding: 'UTF-8'})
+           data: <any>fs.readFileSync(`${ProjectConfig.root}/server/templates/unsubscribe_from_emails/unsubscribe.twig`, {encoding: 'UTF-8'})
         }).render({
           html_title: 'Gestion des listes de diffusions',
           title: 'Liste de diffusion',
@@ -45,7 +47,7 @@ class EmailsUnsubscribe {
           }
         }
 
-        Utils.logger.log(`User '${email}' change it's subscriptions preferences`);
+         Logger.log(`User '${email}' change it's subscriptions preferences`);
         user.save((err) => {
           if (err) return next(err);
           res.sendStatus(200);

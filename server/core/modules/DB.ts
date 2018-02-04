@@ -1,9 +1,11 @@
 import mongoose = require('mongoose');
 import q = require('q');
 import fs = require('fs');
-import Utils from '../config/Utils';
+import Utils from '../../../commons/core/utils/Utils';
 import {CustomEdError} from '../config/EdError';
 import {EHTTPStatus} from '../typings/server.enums';
+import Logger from "../config/Logger";
+import ProjectConfig from "../config/ProjectConfig";
 
 class DB {
    /**
@@ -36,15 +38,15 @@ class DB {
       const defer: Q.Deferred<any> = q.defer();
 
       mongoose.Promise = global.Promise;
-      mongoose.connect('mongodb://localhost/' + Utils.dbName);
+      mongoose.connect('mongodb://localhost/' + ProjectConfig.dbName);
       this._instance = mongoose.connection;
       this._instance.on('error', () => {
-         Utils.logger.error('Mongoose connection error');
+         Logger.error('Mongoose connection error');
       });
       this._instance.once('open', () => {
-         this._loadModels();
-         this._loadModels(`${Utils.root}/server/schemas/`);
-         Utils.logger.info(`Mongo database '${Utils.dbName}' connected`);
+         this._loadModels(null);
+         this._loadModels(ProjectConfig.dbCollectionsPrefix, `${ProjectConfig.root}/server/schemas/`);
+         Logger.info(`Mongo database '${ProjectConfig.dbName}' connected`);
          defer.resolve();
       });
 
@@ -170,22 +172,22 @@ class DB {
     * Load all models
     * @private
     */
-   private _loadModels(path = `${__dirname}/../schemas`, parent = null): void {
+   private _loadModels(prefix: string, path = `${__dirname}/../schemas`, parent = null): void {
       for (const f of fs.readdirSync(path)) {
-         const modelName = f.split('.')[0];
+         const modelName = (prefix || '') + f.split('.')[0];
          if (modelName === 'ASchema') continue;
 
          const file = `${path}/${f}`;
          const stat = fs.statSync(file);
          if (stat.isDirectory()) {
-            this._loadModels(file, f);
+            this._loadModels(prefix, file, f);
             continue;
          }
          const model = require(file).schema.importSchema(modelName);
          model.on('error', (err) => {
-            Utils.logger.error(`Mongo error: [${err.name}] ${err.message}`, err.errors);
+            Logger.error(`Mongo error: [${err.name}] ${err.message}`, err.errors);
          });
-         Utils.logger.trace(`Model ${parent ? `${parent}/${modelName}` : modelName} loaded`);
+         Logger.trace(`Model ${parent ? `${parent}/${modelName}` : modelName} loaded`);
       }
    }
 }

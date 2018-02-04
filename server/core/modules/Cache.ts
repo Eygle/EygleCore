@@ -1,7 +1,8 @@
 import * as q from 'q';
 import * as sizeof from 'object-sizeof';
 
-import Utils from '../config/Utils';
+import Utils from '../../../commons/core/utils/Utils';
+import Logger from "../config/Logger";
 
 class Cache {
   /**
@@ -78,7 +79,7 @@ class Cache {
 
     this._data[key] = entry;
     this._size += entry.s;
-    Utils.logger.trace(`${action} ${this._info()}`);
+     Logger.trace(`${action} ${this._info()}`);
     this._checkCacheSize();
   }
 
@@ -97,7 +98,7 @@ class Cache {
       this._size -= entry.s;
       this._keys--;
       if (log) {
-        Utils.logger.trace(`Removed ${expired ? 'expired ' : ''}'${key}' from cache ${this._info()}`);
+         Logger.trace(`Removed ${expired ? 'expired ' : ''}'${key}' from cache ${this._info()}`);
       }
     }
   }
@@ -126,7 +127,7 @@ class Cache {
           this._removeOldestValue();
           nbr++;
         }
-        Utils.logger.info(`Cache size exceeded (${Utils.formatSize(this._maxSize)}). ${nbr} elements where removed. ${this._info()}`);
+         Logger.info(`Cache size exceeded (${Utils.formatSize(this._maxSize)}). ${nbr} elements where removed. ${this._info()}`);
       });
     }
     defer.resolve();

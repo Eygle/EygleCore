@@ -1,11 +1,11 @@
 import * as tracer from "tracer";
 import * as cron from "node-schedule";
-
-import Utils from "../config/Utils";
 import CronJobSchema from "../schemas/CronJob.schema";
 import {CronJob} from "./CronJob";
 import {EEnv} from "../typings/server.enums";
 import {ILogger} from "../typings/server.interfaces";
+import ProjectConfig from "../config/ProjectConfig";
+import Logger from "../config/Logger";
 
 abstract class AJob implements CronJob {
    /**
@@ -61,9 +61,9 @@ abstract class AJob implements CronJob {
    constructor(name: string) {
       this.name = name;
       this.logFilename = `mapui-${this._formatName()}`;
-      if (EEnv.Prod === Utils.env || EEnv.Preprod === Utils.env) {
+      if (EEnv.Prod === ProjectConfig.env || EEnv.Preprod === ProjectConfig.env) {
          this.logger = (<any>tracer).dailyfile({
-            root: `${Utils.root}/logs`,
+            root: `${ProjectConfig.root}/logs`,
             maxLogFiles: 10,
             allLogsFileName: this.logFilename,
             format: "{{timestamp}} <{{title}}> {{message}}",
@@ -116,7 +116,7 @@ abstract class AJob implements CronJob {
     */
    public schedule(): void {
       this.isScheduled = true;
-      Utils.logger.trace(`Cron load job ${this.name} (rule: ${this.scheduleRule})`);
+      Logger.trace(`Cron load job ${this.name} (rule: ${this.scheduleRule})`);
       if (this._job) {
          this._job.reschedule(this.scheduleRule);
       }
@@ -132,7 +132,7 @@ abstract class AJob implements CronJob {
    public unSchedule(): void {
       this.isScheduled = false;
       this._job.cancel();
-      Utils.logger.trace(`Cron un-schedule job ${this.name}`);
+      Logger.trace(`Cron un-schedule job ${this.name}`);
       this.saveDBModel();
    };
 
@@ -147,7 +147,7 @@ abstract class AJob implements CronJob {
       this._model.isRunning = this.isRunning;
       this._model.lastRun = this.lastRun;
       CronJobSchema.save(this._model)
-         .catch(Utils.logger.error);
+         .catch(Logger.error);
    }
 
    /**

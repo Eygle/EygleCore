@@ -1,8 +1,7 @@
 import * as q from 'q';
 import * as os from 'os';
 import * as clamscan from 'clamscan';
-
-import Utils from '../config/Utils';
+import Logger from "../config/Logger";
 
 class Antivirus {
   /**
@@ -42,7 +41,7 @@ class Antivirus {
 
     this._clam.is_infected(file, (err, f, is_infected) => {
       if (err) {
-        Utils.logger.error('Error during virus scan', err);
+         Logger.error('Error during virus scan', err);
         defer.reject(null);
       }
 

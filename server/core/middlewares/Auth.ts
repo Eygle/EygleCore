@@ -1,7 +1,7 @@
 import * as passport from 'passport';
 import * as _ from 'underscore';
 
-import Utils from '../config/Utils';
+import Utils from '../../../commons/core/utils/Utils';
 import {CustomEdError, EdError} from '../config/EdError';
 import Emails from '../modules/Emails';
 import UserSchema from '../schemas/User.schema';
@@ -9,6 +9,8 @@ import Permission from '../modules/Permissions';
 import {EEnv, EHTTPStatus} from '../typings/server.enums';
 import {User} from '../../../commons/core/models/User';
 import {ILoginAttempt} from "../typings/server.interfaces";
+import Logger from "../config/Logger";
+import ProjectConfig from "../config/ProjectConfig";
 
 class Auth {
   /**
@@ -48,7 +50,7 @@ class Auth {
    */
   public logoutMiddleware() {
     return (req, res) => {
-      Utils.logger.log(`User ${req.user ?
+       Logger.log(`User ${req.user ?
         req.user.fullName || req.user.email :
         '[null]'}${req.user ? ` (${req.user._id})` : ''} logged out`);
       req.logout();
@@ -68,8 +70,19 @@ class Auth {
       })
         .then((user: User) => {
           Emails.sendWelcome(user);
-          Utils.logger.log(`User ${req.body.email} registered successfully`);
-          res.sendStatus(200);
+           Logger.log(`User ${req.body.email} registered successfully`);
+
+           passport.authenticate('local', (err, user) => {
+              if (err) return next(err);
+
+              req.logIn(user, (err2) => {
+                 if (err2) {
+                    return next(err2);
+                 }
+                 this.addUserCookie(res, user);
+                 res.sendStatus(200);
+              });
+           })(req, res, next);
         })
         .catch(err => next(err));
     };
@@ -86,7 +99,7 @@ class Auth {
         UserSchema.save(user).then((userSaved: User) => {
           UserSchema.getPasswordsById(userSaved._id.toString()).then(userWPwd => {
             Emails.sendPasswordRecovery(userWPwd);
-            Utils.logger.log(`User ${req.body.email} recovered password`);
+             Logger.log(`User ${req.body.email} recovered password`);
             res.sendStatus(200);
           }).catch((err) => next(err));
         }).catch((err) => next(err));
@@ -110,7 +123,7 @@ class Auth {
 
       UserSchema.changePasswordById(id, req.body.oldPwd, req.body.password)
         .then((user) => {
-          Utils.logger.log(`User ${req.user.email} changed password`);
+           Logger.log(`User ${req.user.email} changed password`);
           res.status(200).json(user);
         })
         .catch(err => next(err));
@@ -159,7 +172,7 @@ class Auth {
         this._cleanAttempts(user.userName);
         this._cleanAttempts(user.email);
         Emails.sendUnlockedAccount(user);
-        Utils.logger.log(`User ${user.email} account has been unlocked by ${req.user.email}`);
+         Logger.log(`User ${user.email} account has been unlocked by ${req.user.email}`);
         res.sendStatus(200);
       })
         .catch(err => next(err));
@@ -174,7 +187,7 @@ class Auth {
   public addUserCookie(res, user) {
     res.cookie('user',
       JSON.stringify(this._generateUserCookieData(user)),
-      {secure: EEnv.Dev !== Utils.env && EEnv.Test !== Utils.env});
+       {secure: EEnv.Dev !== ProjectConfig.env && EEnv.Test !== ProjectConfig.env});
   }
 
   /**
@@ -213,17 +226,17 @@ class Auth {
           userRes.locked = true;
           UserSchema.save(userRes).then((userSaved: User) => {
             Emails.sendLockedAccount(userSaved);
-            Utils.logger.warn(`User ${username} account is locked due to too many login attempts`);
+             Logger.warn(`User ${username} account is locked due to too many login attempts`);
           }).catch(err => next(err));
         } else {
-          Utils.logger.warn(`User ${username} tried to logged in with a locked account`);
+           Logger.warn(`User ${username} tried to logged in with a locked account`);
         }
         res.status(403).send('TooManyAttempts');
       }).catch(err => {
         next(err);
       });
     } else if (user) {
-      Utils.logger.warn(`User ${username} tried to logged in with a locked account`);
+       Logger.warn(`User ${username} tried to logged in with a locked account`);
       res.status(403).send('TooManyAttempts');
     } else {
       res.status(400).send('FailedToLogin');

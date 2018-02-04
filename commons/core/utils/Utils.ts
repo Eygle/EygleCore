@@ -1,65 +1,6 @@
-import * as tracer from 'tracer';
 import * as _ from "underscore";
 
-import {EEnv} from "../typings/server.enums";
-import {ILogger} from "../typings/server.interfaces";
-import ProjectConfig from "./ProjectConfig";
-
 class Utils {
-    /**
-     * Current environment
-     */
-    public env: EEnv;
-
-    /**
-     * Application name
-     */
-    public appName: string;
-
-    /**
-     * Application port
-     */
-    public port: number;
-
-    /**
-     * Database name
-     */
-    public dbName: string;
-
-    /**
-     * Debug mode
-     */
-    public debug: boolean;
-
-    /**
-     * Logger
-     */
-    public logger: ILogger;
-
-    /**
-     * Server root path
-     */
-    public root: string;
-
-   /**
-    * Api root path
-    */
-   public apiRoot: string;
-
-    /**
-     * Client root path
-     */
-    public clientRoot: string;
-
-    /**
-     * Images root path
-     */
-    public imagesRoot: string;
-
-    /**
-     * FileSchema upload & download root path
-     */
-    public filesRoot: string;
 
     /**
      * Files download base URL
@@ -126,24 +67,10 @@ class Utils {
      * Initialize utils values
      */
     constructor () {
-        this.env = ProjectConfig.getEnv();
-
-        this.appName = ProjectConfig.appName;
-        this.port = ProjectConfig.port;
-        this.dbName = ProjectConfig.dbName;
-        this.debug = ProjectConfig.debug;
-
-        this.root = ProjectConfig.root;
-        this.apiRoot = ProjectConfig.apiRoot;
-        this.clientRoot = ProjectConfig.clientRoot;
-        this.imagesRoot = ProjectConfig.imagesRoot;
-        this.filesRoot = ProjectConfig.filesRoot;
-
         this.dlURL = '/files/down';
         this.viewURL = '/files';
 
         this.sessionSecret = 'Un42Petit12Little75Secret12PuiMap!';
-        this.sessionCookieName = ProjectConfig.sessionCookieName;
         this.userHash = 'UnPeu42DeseL';
 
         this.maxLoginAttempts = 5;
@@ -156,15 +83,6 @@ class Utils {
 
         this.tmdbToken = '22e2817ba73ca94f0b3971f847acefc6';
         this.tvdbToken = '72FB8B2E308C7EE1';
-
-        switch (ProjectConfig.loggerType) {
-            case "console":
-                this.logger = (<any>tracer).colorConsole(ProjectConfig.logger);
-                break;
-            case "file":
-                this.logger = (<any>tracer).dailyfile(ProjectConfig.logger);
-                break;
-        }
     }
 
     /**

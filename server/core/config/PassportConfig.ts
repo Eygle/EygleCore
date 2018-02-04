@@ -2,9 +2,9 @@ import * as passport from 'passport';
 import * as bcrypt from 'bcrypt';
 import * as local from 'passport-local';
 
-import Utils from './Utils';
 import UserSchema from '../schemas/User.schema';
 import {User} from '../../../commons/core/models/User';
+import Logger from "./Logger";
 
 class PassportConfig {
   /**
@@ -24,24 +24,25 @@ class PassportConfig {
    * @private
    */
   private static _localStrategy() {
-    return new local.Strategy({passReqToCallback: true}, (req, username, password, done) => {
+     return new local.Strategy({passReqToCallback: true, usernameField: 'email'}, (req, username, password, done) => {
+        console.log(username, password);
       username = username.replace(' ', '');
       username = username.toLowerCase();
 
       UserSchema.findOneByUserNameOrEmail(username, true)
         .then((user: User) => {
           if (!user) {
-            Utils.logger.log(`User '${username}' login failed (no such username or email)`);
+             Logger.log(`User '${username}' login failed (no such username or email)`);
             return done(null, false);
           }
 
           bcrypt.compare(password, user.password, (err, res) => {
             if (!res) {
-              Utils.logger.log(`User '${username}' login failed (wrong password)`);
+               Logger.log(`User '${username}' login failed (wrong password)`);
               return done(null, false);
             }
 
-            Utils.logger.log(`User '${username}' (${user._id}) logged in`);
+             Logger.log(`User '${username}' (${user._id}) logged in`);
             return done(null, user);
           });
         })
@@ -73,7 +74,7 @@ class PassportConfig {
           done(null, user);
         })
         .catch(err => {
-          Utils.logger.error('Deserialize user error', err);
+           Logger.error('Deserialize user error', err);
           done(null, false);
         });
     };

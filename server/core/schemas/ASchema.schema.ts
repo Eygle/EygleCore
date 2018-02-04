@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import * as q from 'q';
 
 import DB from '../modules/DB';
-import Utils from '../config/Utils';
+import Utils from '../../../commons/core/utils/Utils';
 import {CustomEdError} from '../config/EdError';
 import {EHTTPStatus} from '../typings/server.enums';
 import {AModel} from '../../../commons/core/models/AModel';

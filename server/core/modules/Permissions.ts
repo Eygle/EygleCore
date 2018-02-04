@@ -1,8 +1,7 @@
-import Utils from '../config/Utils';
-
 import ConfigSchema from '../schemas/Config.schema';
 import {User} from '../../../commons/core/models/User';
 import {Permission} from "../models/Config";
+import Logger from "../config/Logger";
 
 /**
  * List of permissions
@@ -23,7 +22,7 @@ class Permissions {
             next();
           })
           .catch((err: Error) => {
-            Utils.logger.error('Mongo error', err);
+             Logger.error('Mongo error', err);
             next(err);
           });
       } else {

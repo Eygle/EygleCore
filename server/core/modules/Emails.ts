@@ -5,9 +5,10 @@ import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import * as q from 'q';
 import {EmailTemplate} from 'email-templates';
-import Utils from '../config/Utils';
 import {EEnv} from '../typings/server.enums';
 import {User} from '../../../commons/core/models/User';
+import ProjectConfig from "../config/ProjectConfig";
+import Logger from "../config/Logger";
 
 class Emails {
   private _siteURL: string;
@@ -65,21 +66,21 @@ class Emails {
       return conditional % 2 === 0 ? options.fn(this) : options.inverse(this);
     });
 
-    if (Utils.env !== EEnv.Prod) {
+     if (ProjectConfig.env !== EEnv.Prod) {
       locals.email = 'dev@eygle.fr';
       locals.bccmail = '';
     }
 
     template.render(locals, function (err, results) {
       if (err) {
-        Utils.logger.error('Email template rendering error: ', err);
+         Logger.error('Email template rendering error: ', err);
         defer.reject(err);
       } else {
-        if (Utils.env === EEnv.Dev || Utils.env === EEnv.Test) {
+         if (ProjectConfig.env === EEnv.Dev || ProjectConfig.env === EEnv.Test) {
           transporter.use('stream', require('nodemailer-dkim').signer({
             domainName: 'eygle.fr',
             keySelector: 'key1',
-            privateKey: fs.readFileSync(`${Utils.root}/server/misc/key1.eygle.fr.pem`)
+             privateKey: fs.readFileSync(`${ProjectConfig.root}/server/misc/key1.eygle.fr.pem`)
           }));
         }
 
@@ -98,7 +99,7 @@ class Emails {
 
         transporter.sendMail(optSendMail, function (err2, responseStatus) {
           if (err2) {
-            Utils.logger.error(`Error while sending email to ${optSendMail.to}:`, err2);
+             Logger.error(`Error while sending email to ${optSendMail.to}:`, err2);
             defer.reject(err2);
           } else {
             defer.resolve();
@@ -116,7 +117,7 @@ class Emails {
    * @private
    */
   private _smtpConnect() {
-    if (EEnv.Dev === Utils.env || EEnv.Test === Utils.env) {
+     if (EEnv.Dev === ProjectConfig.env || EEnv.Test === ProjectConfig.env) {
       return nodemailer.createTransport(smtpTransport({
         host: 'smtp.free.fr',
         port: 465,

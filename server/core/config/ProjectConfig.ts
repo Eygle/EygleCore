@@ -3,6 +3,7 @@ import * as path from "path";
 import {EEnv} from "../typings/server.enums";
 
 class ProjectConfig {
+
    /**
     * Include implementsAuth
     */
@@ -24,6 +25,16 @@ class ProjectConfig {
    public activateCSRFSecurity: boolean;
 
    /**
+    * Current environment
+    */
+   public envName: string;
+
+   /**
+    * Current environment
+    */
+   public env: EEnv;
+
+   /**
     * Server port
     */
    public port: number;
@@ -32,6 +43,11 @@ class ProjectConfig {
     * Mongodb database name
     */
    public dbName: string;
+
+   /**
+    * Mongodb collections prefix
+    */
+   public dbCollectionsPrefix: string;
 
    /**
     * Application name
@@ -86,11 +102,6 @@ class ProjectConfig {
     */
    public debug: boolean;
 
-   /**
-    * Current environment
-    */
-   private _env;
-
    constructor() {
       const confFile = path.normalize(`${__dirname}/../../../eygle-conf.json`);
       const data = <string>fs.readFileSync(confFile, {encoding: 'utf8'});
@@ -106,25 +117,29 @@ class ProjectConfig {
          process.exit(-1);
       }
 
-      this._env = process.env.NODE_ENV;
+      this._loadEnv();
       this._buildConf(json.server || {});
    }
 
    /**
-    * Get environment as EEnv enum
+    * Load environment
     * @return {EEnv}
     */
-   public getEnv(): EEnv {
-      switch (this._env) {
+   private _loadEnv(): void {
+      this.envName = process.env.NODE_ENV;
+      switch (this.envName) {
          case 'development':
-            return EEnv.Dev;
+            this.env = EEnv.Dev;
+            break;
          case 'test':
-            return EEnv.Test;
+            this.env = EEnv.Test;
+            break;
          case 'preprod':
-            return EEnv.Preprod;
+            this.env = EEnv.Preprod;
+            break;
          case 'production':
          default:
-            return EEnv.Prod;
+            this.env = EEnv.Prod;
       }
    }
 
@@ -135,8 +150,8 @@ class ProjectConfig {
     * @private
     */
    private _buildConf(data: any) {
-      const env = data.environments && data.environments.hasOwnProperty(this._env) ?
-         data.environments[this._env] : {};
+      const env = data.environments && data.environments.hasOwnProperty(this.envName) ?
+         data.environments[this.envName] : {};
       env.logger = env.logger || {};
       data.logger = data.logger || {};
 
@@ -149,6 +164,7 @@ class ProjectConfig {
       this.appName = env.appName || data.appName || process.env.NODE_APP;
       this.port = env.port || data.port || process.env.PORT;
       this.dbName = env.dbName || data.dbName;
+      this.dbCollectionsPrefix = env.dbCollectionsPrefix || data.dbCollectionsPrefix || null;
       this.root = path.normalize(env.root || data.root || `${__dirname}/../../..`);
       this.debug = this._checkBooleanPresence('debug', env, data);
       this.apiRoot = this._formatConfStr(env.apiRoot || data.apiRoot || '{{root}}/server/api');
@@ -178,7 +194,7 @@ class ProjectConfig {
    private _formatConfStr(str: string) {
       str = str.replace('{{root}}', this.root);
       str = str.replace('{{appName}}', this.appName);
-      str = str.replace('{{env}}', this._env);
+      str = str.replace('{{env}}', this.envName);
       str = str.replace('{{pmId}}', process.env.pm_id);
 
       return str;

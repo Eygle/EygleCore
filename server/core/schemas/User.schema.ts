@@ -4,7 +4,7 @@ import * as q from 'q';
 
 import DB from '../modules/DB';
 import Cache from '../modules/Cache';
-import Utils from '../config/Utils';
+import Utils from '../../../commons/core/utils/Utils';
 import ASchema from './ASchema.schema';
 import {EHTTPStatus} from '../typings/server.enums';
 import {CustomEdError} from '../config/EdError';

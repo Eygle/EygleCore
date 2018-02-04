@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import * as q from 'q';
 import * as _ from 'underscore';
-
-import Utils from '../config/Utils';
 import CronJobSchema from '../schemas/CronJob.schema';
 import {EEnv} from '../typings/server.enums';
 import AJob from '../models/AJob';
 import {CronJob} from '../models/CronJob';
+import ProjectConfig from "../config/ProjectConfig";
+import Logger from "../config/Logger";
 
 class CronManager {
   /**
@@ -14,7 +14,7 @@ class CronManager {
    * @type {string}
    * @private
    */
-  private _jobsPath = `${Utils.root}/server/cron/jobs/`;
+  private _jobsPath = `${ProjectConfig.root}/server/cron/jobs/`;
 
   /**
    * All [[AJob]]s
@@ -26,7 +26,7 @@ class CronManager {
    * @private
    */
   public init(): void {
-    if (EEnv.Prod !== Utils.env || parseInt(process.env.pm_id) === 1) { // Limit to a pm2 single instance for prod
+     if (EEnv.Prod !== ProjectConfig.env || parseInt(process.env.pm_id) === 1) { // Limit to a pm2 single instance for prod
       CronJobSchema.getAll()
         .then((dbItems: Array<CronJob>) => {
           this._list = [];
@@ -46,7 +46,7 @@ class CronManager {
               item.setModel(dbItem);
             } else {
               // Schedule only if there is not environment restriction or the restriction is matched
-              item.isScheduled = !item.environments || !!~item.environments.indexOf(Utils.env);
+               item.isScheduled = !item.environments || !!~item.environments.indexOf(ProjectConfig.env);
               promises.push(
                 CronJobSchema.add(item)
                   .then((model: CronJob) => {
@@ -69,10 +69,10 @@ class CronManager {
                   item.schedule();
                 }
               }
-              Utils.logger.log('Crontab ready\n');
+               Logger.log('Crontab ready\n');
             });
         })
-        .catch(err => Utils.logger.error);
+         .catch(err => Logger.error);
     }
   }
 

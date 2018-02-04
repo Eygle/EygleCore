@@ -11,7 +11,7 @@ import * as connectMongo from 'connect-mongo';
 import * as csrf from "csurf";
 
 import Permission from "./modules/Permissions";
-import Utils from "./config/Utils";
+import Utils from "../../commons/core/utils/Utils";
 import DB from './modules/DB';
 import {EdError} from "./config/EdError";
 import Routes from "./config/Routes";
@@ -19,6 +19,7 @@ import {EEnv} from "./typings/server.enums";
 import ProjectConfig from "./config/ProjectConfig";
 import PassportConfig from "./config/PassportConfig";
 import CronManager from "./modules/CronManager";
+import Logger from "./config/Logger";
 
 const MongoStore = connectMongo(session);
 
@@ -52,14 +53,14 @@ export class ExpressServer {
 
       // Initialize all databases connections
       q.allSettled(promises).then(() => {
-         Utils.logger.info('All databases are connected and ready\n');
+         Logger.info('All databases are connected and ready\n');
          this._init();
 
-         Utils.logger.info(`Node v${process.versions.node}`);
-         Utils.logger.info(`Environment: ${process.env.NODE_ENV || 'production'}`);
+         Logger.info(`Node v${process.versions.node}`);
+         Logger.info(`Environment: ${process.env.NODE_ENV || 'production'}`);
 
          const inst = this._http.listen(this._app.get('port'), this._app.get('ip'), () => {
-            Utils.logger.info("Express server listening on port %d\n", this._app.get('port'));
+            Logger.info("Express server listening on port %d\n", this._app.get('port'));
          });
       });
    }
@@ -75,7 +76,7 @@ export class ExpressServer {
          // connect-mongo instance
          this._mongoStore = new MongoStore(<any>{
             mongooseConnection: DB.instance,
-            db: Utils.dbName
+            db: ProjectConfig.dbName
          });
 
          // Common express session used in express and socket.io
@@ -84,7 +85,7 @@ export class ExpressServer {
             secret: Utils.sessionSecret,
             cookie: {
                maxAge: 2592000000, // 30 days,
-               domain: EEnv.Prod === Utils.env || EEnv.Preprod === Utils.env ? ".mapui.fr" : undefined
+               domain: EEnv.Prod === ProjectConfig.env || EEnv.Preprod === ProjectConfig.env ? ".mapui.fr" : undefined
             },
             resave: true,
             rolling: true,
@@ -93,7 +94,7 @@ export class ExpressServer {
          });
 
          this._app.set("view options", {layout: false});
-         this._app.set('port', Utils.port);
+         this._app.set('port', ProjectConfig.port);
          this._app.disable('x-powered-by');
 
          this._app.use((<any>bodyParser).urlencoded({extended: true}));
@@ -119,16 +120,16 @@ export class ExpressServer {
          }));
 
          if (ProjectConfig.implementsAuth) {
-            Utils.logger.trace("Module Auth activated");
+            Logger.trace("Module Auth activated");
             PassportConfig.init(this._app);
          }
          Routes.init(this._app);
          this._handleErrors(this._app); // Last errors handler
          if (ProjectConfig.includeCronManager) {
-            Utils.logger.trace("Module Cron Manager activated");
+            Logger.trace("Module Cron Manager activated");
             CronManager.init();
          }
-         Utils.logger.info("All modules are loaded and activated\n");
+         Logger.info("All modules are loaded and activated\n");
       } catch (err) {
          console.error(err);
       }
@@ -141,11 +142,11 @@ export class ExpressServer {
    private _handleErrors(app) {
       app.use(function (err, req, res, next) { // DO NOT REMOVE next argument
          if (err instanceof EdError || err.name === 'ValidationError') {
-            Utils.logger.error(`[user ${req.user ? req.user._id : '[null]'}] HTTP ${req.method.toUpperCase()} ${req.url} - Error ${err.status || 500}: ${err.message}`);
+            Logger.error(`[user ${req.user ? req.user._id : '[null]'}] HTTP ${req.method.toUpperCase()} ${req.url} - Error ${err.status || 500}: ${err.message}`);
             res.status(err.status || 500).send(err.message);
          }
          else {
-            Utils.logger.error(`[user ${req.user ? req.user._id : '[null]'}] HTTP ${req.method.toUpperCase()} ${req.url} - Server Error ${err.status || 500}:`, err);
+            Logger.error(`[user ${req.user ? req.user._id : '[null]'}] HTTP ${req.method.toUpperCase()} ${req.url} - Server Error ${err.status || 500}:`, err);
             res.status(err.status || 500).send(new EdError(err.status || 500).message);
          }
       });
@@ -157,15 +158,15 @@ export class ExpressServer {
     * @private
     */
    private _initCSRF(app) {
-      Utils.logger.trace("Module CSRF activated");
+      Logger.trace("Module CSRF activated");
       app.use(csrf(<any>{
          cookie: {
-            secure: EEnv.Prod === Utils.env || EEnv.Preprod === Utils.env // Only for productions
+            secure: EEnv.Prod === ProjectConfig.env || EEnv.Preprod === ProjectConfig.env // Only for productions
          }
       }));
 
       app.use(function (req, res, next) {
-         res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: EEnv.Prod === Utils.env || EEnv.Preprod === Utils.env});
+         res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: EEnv.Prod === ProjectConfig.env || EEnv.Preprod === ProjectConfig.env});
          next();
       });
 
@@ -175,7 +176,7 @@ export class ExpressServer {
 
          // handle CSRF token errors here
          const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
-         Utils.logger.error(`Error with CSRF token: HTTP ${req.method.toUpperCase()} ${req.url} [${ip}]`);
+         Logger.error(`Error with CSRF token: HTTP ${req.method.toUpperCase()} ${req.url} [${ip}]`);
          res.status(403).send('Form tampered with');
       });
    }
@@ -185,9 +186,9 @@ export class ExpressServer {
     * @private
     */
    private _printHeader() {
-      const sentence = `===== START ${Utils.appName.toUpperCase()} SERVER =====`;
-      Utils.logger.info(`     ${(<any>'=').repeat(sentence.length)}`);
-      Utils.logger.info(`     ${sentence}`);
-      Utils.logger.info(`     ${(<any>'=').repeat(sentence.length)}\n`);
+      const sentence = `===== START ${ProjectConfig.appName.toUpperCase()} SERVER =====`;
+      Logger.info(`     ${(<any>'=').repeat(sentence.length)}`);
+      Logger.info(`     ${sentence}`);
+      Logger.info(`     ${(<any>'=').repeat(sentence.length)}\n`);
    }
 }

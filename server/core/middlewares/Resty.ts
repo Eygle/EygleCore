@@ -1,14 +1,15 @@
 import fs = require('fs');
 import path = require('path');
 import _ = require('underscore');
-
 import Permissions from '../modules/Permissions';
-import Utils from '../config/Utils';
+import Utils from '../../../commons/core/utils/Utils';
 import {CustomEdError} from '../config/EdError';
 import {EHTTPStatus} from '../typings/server.enums';
 import {EPermission} from '../../../commons/core/core.enums';
 import {User} from '../../../commons/core/models/User';
 import {IRestyContext, IRoutePermissions} from '../typings/resty.interface';
+import ProjectConfig from "../config/ProjectConfig";
+import Logger from "../config/Logger";
 
 class Resty {
    private static _resources: any;
@@ -23,7 +24,7 @@ class Resty {
          if (!this._resources) {
             this._resources = {};
             this._addResources(resourceDir, this._resources);
-            this._addResources(Utils.apiRoot, this._resources);
+            this._addResources(ProjectConfig.apiRoot, this._resources);
          }
 
          return (req, res, next) => {
@@ -52,7 +53,7 @@ class Resty {
             resource[method].apply(resource, args);
          };
       } catch (e) {
-         Utils.logger.error('Resty error:', e);
+         Logger.error('Resty error:', e);
       }
    }
 

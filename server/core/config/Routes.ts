@@ -1,11 +1,11 @@
 import * as express from 'express';
 
 import Resty from '../middlewares/Resty';
-import Utils from './Utils';
 import Auth from '../middlewares/Auth';
 import EmailsUnsubscribe from '../middlewares/EmailsUnsubscribe';
 import {EEnv} from '../typings/server.enums';
 import ProjectConfig from "./ProjectConfig";
+import Logger from "./Logger";
 
 class Routes {
   public static init(app) {
@@ -13,10 +13,10 @@ class Routes {
     app.get('/', [this.indexRedirect()]);
 
     // STATIC ROUTES
-    app.use('/', express.static(Utils.clientRoot));
+     app.use('/', express.static(ProjectConfig.clientRoot));
 
-    if (EEnv.Prod !== Utils.env && EEnv.Preprod !== Utils.env) {
-      app.use('/bower_components', express.static(`${Utils.root}/../bower_components`));
+     if (EEnv.Prod !== ProjectConfig.env && EEnv.Preprod !== ProjectConfig.env) {
+        app.use('/bower_components', express.static(`${ProjectConfig.root}/../bower_components`));
     }
 
     // API ENTRY POINT
@@ -34,7 +34,7 @@ class Routes {
 
     // EMAILS UNSUBSCRIBE
      if (ProjectConfig.includeEmailUnsubscribe) {
-       Utils.logger.trace("Module Emails unsubscription activated");
+        Logger.trace("Module Emails unsubscription activated");
         app.get('/unsubscribe/*', [EmailsUnsubscribe.getMiddleware()]);
         app.post('/unsubscribe/*', [EmailsUnsubscribe.getPostMiddleware()]);
      }
@@ -46,7 +46,7 @@ class Routes {
   private static indexRedirect() {
     return (req, res) => {
       Auth.addUserCookie(res, req.user || null);
-      res.sendFile(`${Utils.clientRoot}/index.html`);
+       res.sendFile(`${ProjectConfig.clientRoot}/index.html`);
     };
   }
 }
