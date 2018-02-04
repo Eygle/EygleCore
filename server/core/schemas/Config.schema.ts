@@ -3,6 +3,7 @@ import q = require('q');
 import DB from '../modules/DB';
 import ASchema from './ASchema.schema';
 import {Permission} from "../models/Config";
+import {EPermission, ERole} from "../../../commons/core/core.enums";
 
 const _schema: mongoose.Schema = DB.createSchema({
   name: {type: String, required: true, unique: true},
@@ -33,86 +34,86 @@ class ConfigSchema extends ASchema {
    */
   private _fill() {
     const permissions = [{
-      name: 'seeHome',
-      roles: ['guest', 'user']
+      name: EPermission.SeeHome,
+      roles: [ERole.Guest, ERole.User]
     }, {
-      name: 'seeLastAdded',
-      roles: ['user']
+      name: EPermission.SeeLastAdded,
+      roles: [ERole.User]
     }, {
-      name: 'seeSoonToBeRemoved',
-      roles: ['user']
+      name: EPermission.SeeSoonToBeRemoved,
+      roles: [ERole.User]
     }, {
-      name: 'seeTVShows',
-      roles: ['user']
+      name: EPermission.SeeTVShows,
+      roles: [ERole.User]
     }, {
-      name: 'editTVShows',
-      roles: ['contributor']
+      name: EPermission.EditTVShows,
+      roles: [ERole.Contributor]
     }, {
-      name: 'deleteTVShows',
-      roles: ['admin']
+      name: EPermission.DeleteTVShows,
+      roles: [ERole.Admin]
     }, {
-      name: 'seeMovies',
-      roles: ['user']
+      name: EPermission.SeeMovies,
+      roles: [ERole.User]
     }, {
-      name: 'editMovies',
-      roles: ['contributor']
+      name: EPermission.EditMovies,
+      roles: [ERole.Contributor]
     }, {
-      name: 'deleteMovies',
-      roles: ['admin']
+      name: EPermission.DeleteMovies,
+      roles: [ERole.Admin]
     }, {
-      name: 'addSubtitles',
-      roles: ['contributor']
+      name: EPermission.AddSubtitles,
+      roles: [ERole.Contributor]
     }, {
-      name: 'removeSubtitles',
-      roles: ['admin']
+      name: EPermission.RemoveSubtitles,
+      roles: [ERole.Admin]
     }, {
-      name: 'seeFiles',
-      roles: ['user']
+      name: EPermission.SeeFiles,
+      roles: [ERole.User]
     }, {
-      name: 'editFiles',
-      roles: ['admin']
+      name: EPermission.EditFiles,
+      roles: [ERole.Admin]
     }, {
-      name: 'deleteFiles',
-      roles: ['admin']
+      name: EPermission.DeleteFiles,
+      roles: [ERole.Admin]
     }, {
-      name: 'identifyMedia',
-      roles: ['contributor']
+      name: EPermission.IdentifyMedia,
+      roles: [ERole.Contributor]
     }, {
-      name: 'seeAccount',
-      roles: ['guest', 'user']
+      name: EPermission.SeeAccount,
+      roles: [ERole.Guest, ERole.User]
     }, {
-      name: 'editAccount',
-      roles: ['guest', 'user']
+      name: EPermission.EditAccount,
+      roles: [ERole.Guest, ERole.User]
     }, {
-      name: 'seeSettings',
-      roles: ['guest', 'user']
+      name: EPermission.SeeSettings,
+      roles: [ERole.Guest, ERole.User]
     }, {
-      name: 'editSettings',
-      roles: ['guest', 'user']
+      name: EPermission.EditSettings,
+      roles: [ERole.Guest, ERole.User]
     }, {
-      name: 'deleteAccount',
-      roles: ['admin']
+      name: EPermission.DeleteAccount,
+      roles: [ERole.Admin]
     }, {
-      name: 'seeAdminPanel',
-      roles: ['admin']
+      name: EPermission.SeeAdminPanel,
+      roles: [ERole.Admin]
     }, {
-      name: 'seeMultipleResults',
-      roles: ['admin']
+      name: EPermission.SeeMultipleResults,
+      roles: [ERole.Admin]
     }, {
-      name: 'manageMultipleResults',
-      roles: ['admin']
+      name: EPermission.ManageMultipleResults,
+      roles: [ERole.Admin]
     }, {
-      name: 'seeUsers',
-      roles: ['admin']
+      name: EPermission.SeeUsers,
+      roles: [ERole.Admin]
     }, {
-      name: 'editUsers',
-      roles: ['admin']
+      name: EPermission.EditUsers,
+      roles: [ERole.Admin]
     }, {
-      name: 'seeStats',
-      roles: ['admin']
+      name: EPermission.SeeStats,
+      roles: [ERole.Admin]
     }, {
-      name: 'manageCron',
-      roles: ['admin']
+      name: EPermission.ManageCron,
+      roles: [ERole.Admin]
     }];
 
     this.add({

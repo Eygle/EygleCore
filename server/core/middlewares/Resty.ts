@@ -5,7 +5,8 @@ import _ = require('underscore');
 import Permissions from '../modules/Permissions';
 import Utils from '../config/Utils';
 import {CustomEdError} from '../config/EdError';
-import {EHTTPStatus, EPermission} from '../typings/server.enums';
+import {EHTTPStatus} from '../typings/server.enums';
+import {EPermission} from '../../../commons/core/core.enums';
 import {User} from '../../../commons/core/models/User';
 import {IRestyContext, IRoutePermissions} from '../typings/resty.interface';
 
