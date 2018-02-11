@@ -4,7 +4,7 @@ import * as _ from 'underscore';
 import CronJobSchema from '../schemas/CronJob.schema';
 import {EEnv} from '../typings/server.enums';
 import AJob from '../models/AJob';
-import {CronJob} from '../models/CronJob';
+import {CronJob} from '../../../commons/core/models/CronJob';
 import ProjectConfig from "../config/ProjectConfig";
 import Logger from "../config/Logger";
 
@@ -14,7 +14,7 @@ class CronManager {
    * @type {string}
    * @private
    */
-  private _jobsPath = `${ProjectConfig.root}/server/cron/jobs/`;
+  private _jobsPath = `${ProjectConfig.root}/server/cron-jobs/`;
 
   /**
    * All [[AJob]]s

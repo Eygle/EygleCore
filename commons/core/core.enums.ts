@@ -35,3 +35,9 @@ export enum ERole {
    Contributor = 'contributor',
    Admin = 'admin'
 }
+
+export enum ECronJobAction {
+   Run = 'run',
+   Schedule = 'schedule',
+   UnSchedule = 'un-schedule',
+}

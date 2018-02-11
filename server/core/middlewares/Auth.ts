@@ -65,7 +65,7 @@ class Auth {
     return (req, res, next) => {
       UserSchema.add({
         email: req.body.email,
-        userName: req.body.userName,
+         userName: req.body.username,
         password: req.body.password
       })
         .then((user: User) => {

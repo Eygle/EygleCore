@@ -1,7 +1,7 @@
 import * as tracer from "tracer";
 import * as cron from "node-schedule";
 import CronJobSchema from "../schemas/CronJob.schema";
-import {CronJob} from "./CronJob";
+import {CronJob} from "../../../commons/core/models/CronJob";
 import {EEnv} from "../typings/server.enums";
 import {ILogger} from "../typings/server.interfaces";
 import ProjectConfig from "../config/ProjectConfig";

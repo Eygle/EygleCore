@@ -20,6 +20,7 @@ import ProjectConfig from "./config/ProjectConfig";
 import PassportConfig from "./config/PassportConfig";
 import CronManager from "./modules/CronManager";
 import Logger from "./config/Logger";
+import {CustomRoute} from "./models/CustomRoute";
 
 const MongoStore = connectMongo(session);
 
@@ -38,6 +39,11 @@ export class ExpressServer {
     * Mongo store instance
     */
    private _mongoStore: any;
+
+   /**
+    * List of custom routes
+    */
+   private _customRoutes: [CustomRoute];
 
    constructor() {
       this._app = express();
@@ -63,6 +69,15 @@ export class ExpressServer {
             Logger.info("Express server listening on port %d\n", this._app.get('port'));
          });
       });
+   }
+
+   /**
+    * Add custom routes
+    * @param {[Route]} routes
+    */
+   public setRoutes(routes: [CustomRoute]) {
+      this._customRoutes = routes;
+      return this;
    }
 
    /**
@@ -123,7 +138,7 @@ export class ExpressServer {
             Logger.trace("Module Auth activated");
             PassportConfig.init(this._app);
          }
-         Routes.init(this._app);
+         Routes.init(this._app, this._customRoutes);
          this._handleErrors(this._app); // Last errors handler
          if (ProjectConfig.includeCronManager) {
             Logger.trace("Module Cron Manager activated");

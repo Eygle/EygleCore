@@ -9,6 +9,7 @@ import ASchema from './ASchema.schema';
 import {EHTTPStatus} from '../typings/server.enums';
 import {CustomEdError} from '../config/EdError';
 import {User} from '../../../commons/core/models/User';
+import {ERole} from "../../../commons/core/core.enums";
 
 const _schema: mongoose.Schema = DB.createSchema({
   email: {
@@ -59,7 +60,7 @@ const _schema: mongoose.Schema = DB.createSchema({
 
   roles: {
     type: [String],
-    'default': ['public'],
+     'default': [ERole.Guest],
     select: false
   },
 

@@ -1,4 +1,4 @@
-import {AModel} from "../../../commons/core/models/AModel";
+import {AModel} from "./AModel";
 
 export class CronJob extends AModel {
     /**

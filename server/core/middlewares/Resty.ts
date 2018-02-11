@@ -4,12 +4,13 @@ import _ = require('underscore');
 import Permissions from '../modules/Permissions';
 import Utils from '../../../commons/core/utils/Utils';
 import {CustomEdError} from '../config/EdError';
-import {EHTTPStatus} from '../typings/server.enums';
+import {EEnv, EHTTPStatus} from '../typings/server.enums';
 import {EPermission} from '../../../commons/core/core.enums';
 import {User} from '../../../commons/core/models/User';
 import {IRestyContext, IRoutePermissions} from '../typings/resty.interface';
 import ProjectConfig from "../config/ProjectConfig";
 import Logger from "../config/Logger";
+import Auth from "./Auth";
 
 class Resty {
    private static _resources: any;
@@ -45,6 +46,9 @@ class Resty {
             args.push((data = undefined) => {
                if (data instanceof Error) {
                   return next(data);
+               }
+               if (EEnv.Dev === ProjectConfig.env && req.url === '/api/permissions') {
+                  Auth.addUserCookie(res, req.user);
                }
                this._send(res, data);
             });
