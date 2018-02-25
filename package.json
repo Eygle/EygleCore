@@ -38,7 +38,7 @@
     "@types/express-session": "^1.15.6",
     "@types/handlebars": "^4.0.36",
     "@types/method-override": "0.0.31",
-    "@types/mongoose": "^5.0.0",
+    "@types/mongoose": "^4.7.33",
     "@types/node-schedule": "^1.2.2",
     "@types/nodemailer": "^4.3.2",
     "@types/nodemailer-smtp-transport": "^2.7.4",
