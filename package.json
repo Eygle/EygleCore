@@ -1,5 +1,5 @@
 {
-  "name": "eyglecore",
+  "name": "eygle-core",
   "version": "1.0.0",
   "description": "Eygle's projects commons parts",
   "main": "index.js",
