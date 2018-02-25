@@ -8,7 +8,7 @@ import {CronJob} from '../../../commons/core/models/CronJob';
 import ProjectConfig from "../config/ProjectConfig";
 import Logger from "../config/Logger";
 
-class CronManager {
+export class CronManager {
   /**
    * Path of jobs folder
    * @type {string}

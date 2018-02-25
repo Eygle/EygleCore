@@ -1,6 +1,6 @@
 import * as _ from "underscore";
 
-class Utils {
+export class Utils {
 
     /**
      * Files download base URL

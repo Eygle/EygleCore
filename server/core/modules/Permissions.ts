@@ -8,7 +8,7 @@ import Logger from "../config/Logger";
  */
 let list: Array<Permission> = null;
 
-class Permissions {
+export class Permissions {
 
   /**
    * Permission middleware

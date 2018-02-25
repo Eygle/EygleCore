@@ -12,7 +12,7 @@ import {ILoginAttempt} from "../typings/server.interfaces";
 import Logger from "../config/Logger";
 import ProjectConfig from "../config/ProjectConfig";
 
-class Auth {
+export class Auth {
   /**
    * Users login attempts failed
    */
@@ -250,7 +250,7 @@ class Auth {
    */
   private _cleanAttempts(username) {
     if ((<any>this._attempts).hasOwnProperty(username)) {
-      this._attempts[username] = {list: [], locked: false};
+       this._attempts[username] = <ILoginAttempt>{list: [], locked: false};
     }
   }
 

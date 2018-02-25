@@ -7,7 +7,7 @@ import {EHTTPStatus} from '../typings/server.enums';
 import Logger from "../config/Logger";
 import ProjectConfig from "../config/ProjectConfig";
 
-class DB {
+export class DB {
    /**
     * Is database connected
     */

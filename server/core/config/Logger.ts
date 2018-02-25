@@ -1,7 +1,7 @@
 import * as tracer from 'tracer';
 import ProjectConfig from "./ProjectConfig";
 
-class Logger {
+export class Logger {
 
    /**
     * External logger instance

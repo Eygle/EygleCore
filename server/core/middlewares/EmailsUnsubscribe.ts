@@ -10,7 +10,7 @@ import {User} from '../../../commons/core/models/User';
 import Logger from "../config/Logger";
 import ProjectConfig from "../config/ProjectConfig";
 
-class EmailsUnsubscribe {
+export class EmailsUnsubscribe {
   /**
    * Express middleware getter
    */

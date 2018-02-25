@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from "path";
 import {EEnv} from "../typings/server.enums";
 
-class ProjectConfig {
+export class ProjectConfig {
 
    /**
     * Include implementsAuth
@@ -219,7 +219,7 @@ class ProjectConfig {
    }
 }
 
-interface ILoggerConf {
+export interface ILoggerConf {
 
    /**
     * Lines format (default: "{{timestamp}} <{{title}}> {{message}}")

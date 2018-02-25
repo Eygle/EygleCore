@@ -4,7 +4,7 @@ import * as sizeof from 'object-sizeof';
 import Utils from '../../../commons/core/utils/Utils';
 import Logger from "../config/Logger";
 
-class Cache {
+export class Cache {
   /**
    * Node cache instance
    */

@@ -4,13 +4,13 @@ import * as sendEmailTransport from 'nodemailer-sendmail-transport';
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import * as q from 'q';
-import {EmailTemplate} from 'email-templates';
+import * as EmailTemplate from 'email-templates';
 import {EEnv} from '../typings/server.enums';
 import {User} from '../../../commons/core/models/User';
 import ProjectConfig from "../config/ProjectConfig";
 import Logger from "../config/Logger";
 
-class Emails {
+export class Emails {
   private _siteURL: string;
 
   constructor() {

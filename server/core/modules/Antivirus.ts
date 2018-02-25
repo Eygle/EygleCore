@@ -3,7 +3,7 @@ import * as os from 'os';
 import * as clamscan from 'clamscan';
 import Logger from "../config/Logger";
 
-class Antivirus {
+export class Antivirus {
   /**
    * Clamscan path
    */

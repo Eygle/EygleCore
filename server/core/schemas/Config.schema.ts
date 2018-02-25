@@ -10,7 +10,7 @@ const _schema: mongoose.Schema = DB.createSchema({
   data: mongoose.Schema.Types.Mixed
 }, false);
 
-class ConfigSchema extends ASchema {
+export class ConfigSchema extends ASchema {
   /**
    * Get list of permissions
    * @return {Promise<Array<Permission>>}
