@@ -1,5 +1,5 @@
 import { CustomRoute } from "./models/CustomRoute";
-export declare class ExpressServer {
+export declare class EygleServer {
     /**
      * Express application instance
      */

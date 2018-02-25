@@ -22,7 +22,7 @@ const PassportConfig_1 = require("./config/PassportConfig");
 const CronManager_1 = require("./modules/CronManager");
 const Logger_1 = require("./config/Logger");
 const MongoStore = connectMongo(session);
-class ExpressServer {
+class EygleServer {
     constructor() {
         this._app = express();
     }
@@ -166,5 +166,5 @@ class ExpressServer {
         Logger_1.default.info(`     ${'='.repeat(sentence.length)}\n`);
     }
 }
-exports.ExpressServer = ExpressServer;
-//# sourceMappingURL=ExpressServer.js.map
+exports.EygleServer = EygleServer;
+//# sourceMappingURL=EygleServerServer.js.map

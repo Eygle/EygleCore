@@ -24,7 +24,7 @@ import {CustomRoute} from "./models/CustomRoute";
 
 const MongoStore = connectMongo(session);
 
-export class ExpressServer {
+export class EygleServer {
    /**
     * Express application instance
     */
