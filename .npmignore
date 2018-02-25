@@ -1,5 +1,8 @@
 # ignore the .ts files
 *.ts
+eygle-conf.json
+tsconfig.json
+tslint.json
 
 # include the .d.ts files
 !*.d.ts
