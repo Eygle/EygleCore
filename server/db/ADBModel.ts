@@ -84,7 +84,16 @@ export default abstract class ADBModel {
     /**
      * Create new model instance
      * @param data
-     * @param user
+     * @param exclude
+     * @return mongoose.Model<any>
+     */
+    public static create(data: any, exclude = null) {
+        return new this._model(this.formatData(data, exclude));
+    }
+
+    /**
+     * Create new model instance
+     * @param data
      * @param exclude
      * @param populateOptions
      * @return {Promise<T>}
@@ -96,7 +105,6 @@ export default abstract class ADBModel {
     /**
      * Save model instance
      * @param item
-     * @param user
      * @param data
      * @param exclude
      * @param populateOptions
@@ -108,7 +116,6 @@ export default abstract class ADBModel {
     /**
      * Find model instance by id and save it
      * @param id
-     * @param user
      * @param data
      * @param exclude
      * @param populateOptions
