@@ -1,7 +1,7 @@
 /// <reference types="q" />
 /// <reference types="mongoose" />
-import mongoose = require('mongoose');
-import q = require('q');
+import * as mongoose from 'mongoose';
+import * as q from 'q';
 export default class DB {
     /**
      * Is database connected

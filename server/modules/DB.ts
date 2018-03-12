@@ -1,6 +1,6 @@
-import mongoose = require('mongoose');
-import q = require('q');
-import fs = require('fs');
+import * as mongoose from 'mongoose';
+import * as q from 'q';
+import * as fs from 'fs';
 import Utils from '../../commons/utils/Utils';
 import {EHTTPStatus} from '../typings/server.enums';
 import ServerConfig from "../utils/ServerConfig";
@@ -33,7 +33,6 @@ export default class DB {
    public static init(): Q.Promise<any> {
       const defer: Q.Deferred<any> = q.defer();
 
-      mongoose.Promise = global.Promise;
       mongoose.connect('mongodb://localhost/' + ServerConfig.dbName);
       this._instance = mongoose.connection;
       this._instance.on('error', () => {

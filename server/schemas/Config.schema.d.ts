@@ -1,6 +1,6 @@
 /// <reference types="q" />
 /// <reference types="mongoose" />
-import mongoose = require('mongoose');
+import * as mongoose from 'mongoose';
 import ASchema from './ASchema.schema';
 import { Permission } from "../models/Config";
 export declare class ConfigSchema extends ASchema {

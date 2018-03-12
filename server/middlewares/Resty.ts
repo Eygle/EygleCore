@@ -1,6 +1,6 @@
-import fs = require('fs');
-import path = require('path');
-import _ = require('underscore');
+import * as fs from 'fs';
+import * as path from 'path';
+import * as _ from 'underscore';
 import Permissions from '../modules/Permissions';
 import Utils from '../../commons/utils/Utils';
 import {EHTTPStatus} from '../typings/server.enums';

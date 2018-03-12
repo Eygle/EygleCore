@@ -22,7 +22,6 @@ class DB {
      */
     static init() {
         const defer = q.defer();
-        mongoose.Promise = global.Promise;
         mongoose.connect('mongodb://localhost/' + ServerConfig_1.default.dbName);
         this._instance = mongoose.connection;
         this._instance.on('error', () => {

@@ -1,5 +1,5 @@
-import mongoose = require('mongoose');
-import q = require('q');
+import * as mongoose from 'mongoose';
+import * as q from 'q';
 import DB from '../modules/DB';
 import ASchema from './ASchema.schema';
 import {Permission} from "../models/Config";
