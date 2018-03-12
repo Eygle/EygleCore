@@ -1,4 +1,4 @@
-import { CustomRoute } from "./models/CustomRoute";
+import { ICustomModule, ICustomRoute } from "./typings/customs.interface";
 export declare class EygleServer {
     /**
      * Express application instance
@@ -16,16 +16,30 @@ export declare class EygleServer {
      * List of custom routes
      */
     private _customRoutes;
-    constructor();
+    /**
+     * List of custom modules
+     */
+    private _customModules;
+    /**
+     * Constructor
+     * @param conf
+     * @param {string} configFilePath Project configuration file path
+     */
+    constructor(conf: any, configFilePath: string);
     /**
      * Start node Express server
      */
     start(): void;
     /**
      * Add custom routes
-     * @param {[Route]} routes
+     * @param route
      */
-    setRoutes(routes: [CustomRoute]): this;
+    addRoute(route: ICustomRoute): this;
+    /**
+     * Add custom routes
+     * @param {ICustomModule} module
+     */
+    addModule(module: ICustomModule): this;
     /**
      * Initialize server
      * @private

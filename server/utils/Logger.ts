@@ -5,7 +5,11 @@ export default class Logger {
    /**
     * External logger instance
     */
-   private static _instance = ServerConfig.generateLogger();
+   private static _instance;
+
+   public static init() {
+      this._instance = ServerConfig.generateLogger();
+   }
 
    /**
     * Trace lvl

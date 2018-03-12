@@ -4,12 +4,12 @@ import Resty from '../middlewares/Resty';
 import Auth from '../middlewares/Auth';
 import EmailsUnsubscribe from '../middlewares/EmailsUnsubscribe';
 import Logger from "./Logger";
-import {CustomRoute} from "../models/CustomRoute";
 import ServerConfig from "./ServerConfig";
 import {EEnv} from "../../commons/core.enums";
+import {ICustomRoute} from "../typings/customs.interface";
 
 class Routes {
-   public static init(app, routes: [CustomRoute]) {
+   public static init(app, routes: ICustomRoute[]) {
       // Home exception (catch url '/', add cookie and serve index.html)
       app.get('/', [this.indexRedirect()]);
 

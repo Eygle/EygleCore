@@ -3,6 +3,7 @@ export default class Logger {
      * External logger instance
      */
     private static _instance;
+    static init(): void;
     /**
      * Trace lvl
      * @param args

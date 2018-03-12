@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ServerConfig_1 = require("./ServerConfig");
 class Logger {
+    static init() {
+        this._instance = ServerConfig_1.default.generateLogger();
+    }
     /**
      * Trace lvl
      * @param args
@@ -45,9 +48,5 @@ class Logger {
         this._instance.error.apply(this, args);
     }
 }
-/**
- * External logger instance
- */
-Logger._instance = ServerConfig_1.default.generateLogger();
 exports.default = Logger;
 //# sourceMappingURL=Logger.js.map

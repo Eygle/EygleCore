@@ -13,13 +13,14 @@ import * as csrf from "csurf";
 import Permission from "./modules/Permissions";
 import DB from './modules/DB';
 import CronManager from "./modules/CronManager";
-import {CustomRoute} from "./models/CustomRoute";
 import Logger from "./utils/Logger";
 import ServerConfig from "./utils/ServerConfig";
 import {EEnv} from "../commons/core.enums";
 import PassportConfig from "./utils/PassportConfig";
 import Routes from "./utils/Routes";
 import EdError from "./utils/EdError";
+import ProjectConfig from "../commons/utils/ProjectConfig";
+import {ICustomModule, ICustomRoute} from "./typings/customs.interface";
 
 const MongoStore = connectMongo(session);
 
@@ -42,11 +43,26 @@ export class EygleServer {
    /**
     * List of custom routes
     */
-   private _customRoutes: [CustomRoute];
+   private _customRoutes: ICustomRoute[];
 
-   constructor() {
-      this._app = express();
-   }
+    /**
+     * List of custom modules
+     */
+    private _customModules: ICustomModule[];
+
+    /**
+     * Constructor
+     * @param conf
+     * @param {string} configFilePath Project configuration file path
+     */
+    constructor(conf: any, configFilePath: string) {
+        this._customRoutes = [];
+        this._customModules = [];
+        this._app = express();
+        ProjectConfig.initForServer(conf, configFilePath, process.env.NODE_ENV);
+        ServerConfig.init();
+        Logger.init();
+    }
 
    /**
     * Start node Express server
@@ -70,14 +86,23 @@ export class EygleServer {
       });
    }
 
-   /**
-    * Add custom routes
-    * @param {[Route]} routes
-    */
-   public setRoutes(routes: [CustomRoute]) {
-      this._customRoutes = routes;
-      return this;
-   }
+    /**
+     * Add custom routes
+     * @param route
+     */
+    public addRoute(route: ICustomRoute) {
+        this._customRoutes.push(route);
+        return this;
+    }
+
+    /**
+     * Add custom routes
+     * @param {ICustomModule} module
+     */
+    public addModule(module: ICustomModule) {
+        this._customModules.push(module);
+        return this;
+    }
 
    /**
     * Initialize server
@@ -143,6 +168,13 @@ export class EygleServer {
             Logger.trace("Module Cron Manager activated");
             CronManager.init();
          }
+
+          // Initialize all custom modeules
+          for (const module of this._customModules) {
+              Logger.trace(`Module ${module.name} activated`);
+              module.init(this._app);
+          }
+
          Logger.info("All modules are loaded and activated\n");
       } catch (err) {
          console.error(err);

@@ -20,10 +20,21 @@ const core_enums_1 = require("../commons/core.enums");
 const PassportConfig_1 = require("./utils/PassportConfig");
 const Routes_1 = require("./utils/Routes");
 const EdError_1 = require("./utils/EdError");
+const ProjectConfig_1 = require("../commons/utils/ProjectConfig");
 const MongoStore = connectMongo(session);
 class EygleServer {
-    constructor() {
+    /**
+     * Constructor
+     * @param conf
+     * @param {string} configFilePath Project configuration file path
+     */
+    constructor(conf, configFilePath) {
+        this._customRoutes = [];
+        this._customModules = [];
         this._app = express();
+        ProjectConfig_1.default.initForServer(conf, configFilePath, process.env.NODE_ENV);
+        ServerConfig_1.default.init();
+        Logger_1.default.init();
     }
     /**
      * Start node Express server
@@ -44,10 +55,18 @@ class EygleServer {
     }
     /**
      * Add custom routes
-     * @param {[Route]} routes
+     * @param route
      */
-    setRoutes(routes) {
-        this._customRoutes = routes;
+    addRoute(route) {
+        this._customRoutes.push(route);
+        return this;
+    }
+    /**
+     * Add custom routes
+     * @param {ICustomModule} module
+     */
+    addModule(module) {
+        this._customModules.push(module);
         return this;
     }
     /**
@@ -105,6 +124,11 @@ class EygleServer {
             if (ServerConfig_1.default.includeCronManager) {
                 Logger_1.default.trace("Module Cron Manager activated");
                 CronManager_1.default.init();
+            }
+            // Initialize all custom modeules
+            for (const module of this._customModules) {
+                Logger_1.default.trace(`Module ${module.name} activated`);
+                module.init(this._app);
             }
             Logger_1.default.info("All modules are loaded and activated\n");
         }
