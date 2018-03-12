@@ -7,7 +7,7 @@ import Cache from '../modules/Cache';
 import Utils from '../../commons/utils/Utils';
 import ASchema from './ASchema.schema';
 import {EHTTPStatus} from '../typings/server.enums';
-import {CustomEdError} from '../config/EdError';
+import {CustomEdError} from '../utils/EdError';
 import {User} from '../../commons/models/User';
 import {ERole} from "../../commons/core.enums";
 

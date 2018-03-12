@@ -5,43 +5,39 @@ import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import * as q from 'q';
 import * as EmailTemplate from 'email-templates';
-import {EEnv} from '../typings/server.enums';
 import {User} from '../../commons/models/User';
-import ProjectConfig from "../config/ProjectConfig";
-import Logger from "../config/Logger";
+import ServerConfig from "../utils/ServerConfig";
+import Logger from "../utils/Logger";
+import {EEnv} from "../../commons/core.enums";
 
-export class Emails {
-  private _siteURL: string;
-
-  constructor() {
-    this._siteURL = 'https://www.dl.eygle.fr';
-  }
+export default class Emails {
+  private static _siteURL: string = 'https://www.dl.eygle.fr';
 
   /**
    * TODO
    */
-  public sendWelcome(dest: User) {
-
-  }
-
-  /**
-   * TODO
-   */
-  public sendPasswordRecovery(dest: User) {
+  public static sendWelcome(dest: User) {
 
   }
 
   /**
    * TODO
    */
-  public sendLockedAccount(dest: User) {
+  public static sendPasswordRecovery(dest: User) {
 
   }
 
   /**
    * TODO
    */
-  public sendUnlockedAccount(dest: User) {
+  public static sendLockedAccount(dest: User) {
+
+  }
+
+  /**
+   * TODO
+   */
+  public static sendUnlockedAccount(dest: User) {
 
   }
 
@@ -50,10 +46,10 @@ export class Emails {
    * @param locals
    * @private
    */
-  private _sendTemplateMail(locals) {
+  private static _sendTemplateMail(locals) {
     const defer = q.defer();
     const transporter = this._smtpConnect();
-    const template = new EmailTemplate(`${__dirname}/../templates/${locals.template}`);
+    const template = new EmailTemplate(<any>`${__dirname}/../templates/${locals.template}`);
 
     handlebars.registerHelper('if_even', function (conditional, options) {
       return conditional % 2 === 0 ? options.fn(this) : options.inverse(this);
@@ -66,7 +62,7 @@ export class Emails {
       return conditional % 2 === 0 ? options.fn(this) : options.inverse(this);
     });
 
-     if (ProjectConfig.env !== EEnv.Prod) {
+     if (ServerConfig.env !== EEnv.Prod) {
       locals.email = 'dev@eygle.fr';
       locals.bccmail = '';
     }
@@ -76,11 +72,11 @@ export class Emails {
          Logger.error('Email template rendering error: ', err);
         defer.reject(err);
       } else {
-         if (ProjectConfig.env === EEnv.Dev || ProjectConfig.env === EEnv.Test) {
+         if (ServerConfig.env === EEnv.Dev || ServerConfig.env === EEnv.Test) {
           transporter.use('stream', require('nodemailer-dkim').signer({
             domainName: 'eygle.fr',
             keySelector: 'key1',
-             privateKey: fs.readFileSync(`${ProjectConfig.root}/server/misc/key1.eygle.fr.pem`)
+             privateKey: fs.readFileSync(`${ServerConfig.root}/server/misc/key1.eygle.fr.pem`)
           }));
         }
 
@@ -116,8 +112,8 @@ export class Emails {
    * @return {Transporter}
    * @private
    */
-  private _smtpConnect() {
-     if (EEnv.Dev === ProjectConfig.env || EEnv.Test === ProjectConfig.env) {
+  private static _smtpConnect() {
+     if (EEnv.Dev === ServerConfig.env || EEnv.Test === ServerConfig.env) {
       return nodemailer.createTransport(smtpTransport({
         host: 'smtp.free.fr',
         port: 465,
@@ -132,5 +128,3 @@ export class Emails {
     }
   }
 }
-
-export default new Emails();

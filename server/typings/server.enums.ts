@@ -1,10 +1,3 @@
-export enum EEnv {
-    Prod = 0,
-    Preprod,
-    Dev,
-    Test
-}
-
 export enum EHTTPStatus {
     BadRequest = 400,
     Forbidden = 403,

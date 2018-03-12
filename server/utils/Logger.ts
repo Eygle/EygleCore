@@ -1,29 +1,17 @@
-import * as tracer from 'tracer';
-import ProjectConfig from "./ProjectConfig";
+import ServerConfig from "./ServerConfig";
 
-export class Logger {
+export default class Logger {
 
    /**
     * External logger instance
     */
-   private _instance;
-
-   constructor() {
-      switch (ProjectConfig.loggerType) {
-         case "console":
-            this._instance = (<any>tracer).colorConsole(ProjectConfig.logger);
-            break;
-         case "file":
-            this._instance = (<any>tracer).dailyfile(ProjectConfig.logger);
-            break;
-      }
-   }
+   private static _instance = ServerConfig.generateLogger();
 
    /**
     * Trace lvl
     * @param args
     */
-   trace(...args) {
+   static trace(...args) {
       this._instance.trace.apply(this, args);
    }
 
@@ -31,7 +19,7 @@ export class Logger {
     * Log lvl
     * @param args
     */
-   log(...args) {
+   static log(...args) {
       this._instance.log.apply(this, args);
    }
 
@@ -39,7 +27,7 @@ export class Logger {
     * Info lvl
     * @param args
     */
-   info(...args) {
+   static info(...args) {
       this._instance.info.apply(this, args);
    }
 
@@ -47,7 +35,7 @@ export class Logger {
     * Debug lvl
     * @param args
     */
-   debug(...args) {
+   static debug(...args) {
       this._instance.debug.apply(this, args);
    }
 
@@ -55,7 +43,7 @@ export class Logger {
     * Warn lvl
     * @param args
     */
-   warn(...args) {
+   static warn(...args) {
       this._instance.warn.apply(this, args);
    }
 
@@ -63,9 +51,7 @@ export class Logger {
     * Error lvl
     * @param args
     */
-   error(...args) {
+   static error(...args) {
       this._instance.error.apply(this, args);
    }
 }
-
-export default new Logger();

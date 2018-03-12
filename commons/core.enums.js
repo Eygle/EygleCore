@@ -44,4 +44,21 @@ var ECronJobAction;
     ECronJobAction["Schedule"] = "schedule";
     ECronJobAction["UnSchedule"] = "un-schedule";
 })(ECronJobAction = exports.ECronJobAction || (exports.ECronJobAction = {}));
+var ELoggerLvl;
+(function (ELoggerLvl) {
+    ELoggerLvl[ELoggerLvl["TRACE"] = 0] = "TRACE";
+    ELoggerLvl[ELoggerLvl["DEBUG"] = 1] = "DEBUG";
+    ELoggerLvl[ELoggerLvl["INFO"] = 2] = "INFO";
+    ELoggerLvl[ELoggerLvl["LOG"] = 3] = "LOG";
+    ELoggerLvl[ELoggerLvl["WARN"] = 4] = "WARN";
+    ELoggerLvl[ELoggerLvl["ERROR"] = 5] = "ERROR";
+    ELoggerLvl[ELoggerLvl["OFF"] = 6] = "OFF";
+})(ELoggerLvl = exports.ELoggerLvl || (exports.ELoggerLvl = {}));
+var EEnv;
+(function (EEnv) {
+    EEnv[EEnv["Prod"] = 0] = "Prod";
+    EEnv[EEnv["Preprod"] = 1] = "Preprod";
+    EEnv[EEnv["Dev"] = 2] = "Dev";
+    EEnv[EEnv["Test"] = 3] = "Test";
+})(EEnv = exports.EEnv || (exports.EEnv = {}));
 //# sourceMappingURL=core.enums.js.map

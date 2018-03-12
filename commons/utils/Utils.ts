@@ -1,96 +1,25 @@
 import * as _ from "underscore";
+import ProjectConfig from "./ProjectConfig";
+import {EEnv} from "../core.enums";
 
-export class Utils {
-
-    /**
-     * Files download base URL
-     */
-    public dlURL: string;
-
-    /**
-     * Files view base URL
-     */
-    public viewURL: string;
-
-    /**
-     * Express session secret
-     */
-    public sessionSecret: string;
-
-    /**
-     * Session cookie name
-     */
-    public sessionCookieName: string;
-
-    /**
-     * Eygle user hash used to identify user in urls
-     */
-    public userHash: string;
-
-    /**
-     * Maximum attempts before having your account locked
-     */
-    public maxLoginAttempts: number;
-
-    /**
-     * Maximum attempts before having your IP locked
-     */
-    public maxIpLoginAttempts: number;
-
-    /**
-     * Number of milliseconds for attempts expire duration
-     * Every attempts older than loginAttemptsExpire milliseconds will be voided
-     */
-    public loginAttemptsExpire: number;
-
-    /**
-     * Number of milliseconds for IP attempts expire duration
-     */
-    public loginIpAttemptsExpire: number;
-
-    /**
-     * Number of milliseconds the IP is locked
-     */
-    public ipLockedTime: number;
+export default class Utils {
 
     /**
      * TMDB Api token
      */
-    public tmdbToken: string;
+    public static tmdbToken: string = '22e2817ba73ca94f0b3971f847acefc6';
 
     /**
      * TVDB Api token
      */
-    public tvdbToken: string;
-
-    /**
-     * Initialize utils values
-     */
-    constructor () {
-        this.dlURL = '/files/down';
-        this.viewURL = '/files';
-
-        this.sessionSecret = 'Un42Petit12Little75Secret12PuiMap!';
-        this.userHash = 'UnPeu42DeseL';
-
-        this.maxLoginAttempts = 5;
-
-        this.loginAttemptsExpire = 24 * 3600 * 1000; // 24 hours
-
-        this.maxIpLoginAttempts = 15;
-        this.loginIpAttemptsExpire = 20 * 60 * 1000; // 20 minutes
-        this.ipLockedTime = 60 * 60 * 1000; // 1 hour
-
-        this.tmdbToken = '22e2817ba73ca94f0b3971f847acefc6';
-        this.tvdbToken = '72FB8B2E308C7EE1';
-    }
+    public static tvdbToken: string = '72FB8B2E308C7EE1';
 
     /**
      * Is value a mongoId (24 chars hexadecimal string)
      * @param value
      * @return {boolean}
      */
-    public isMongoId(value) {
+    public static isMongoId(value) {
         return /^[0-9a-fA-F]{24}$/.test(value);
     }
 
@@ -99,7 +28,7 @@ export class Utils {
      * @param value
      * @return {Date}
      */
-    public convertDate(value: string) {
+    public static convertDate(value: string) {
         return Date.parse(value) ? new Date(value) : null;
     }
 
@@ -109,7 +38,7 @@ export class Utils {
      * @param value
      * @return {boolean}
      */
-    public hasId(value: any) {
+    public static hasId(value: any) {
         return value && value._id && this.isMongoId(value._id);
     }
 
@@ -118,7 +47,7 @@ export class Utils {
      * @param value
      * @return {boolean}
      */
-    public isString(value: any) {
+    public static isString(value: any) {
         return typeof value === "string";
     }
 
@@ -129,7 +58,7 @@ export class Utils {
      * @param obj2
      * @return {boolean}
      */
-    public compareIds(obj1: any, obj2: any) {
+    public static compareIds(obj1: any, obj2: any) {
         if (this.isString(obj2)) {
             return this.isString(obj1) ? obj1 === obj2 : this.hasId(obj1) && obj1._id.toString() === obj2;
         }
@@ -144,7 +73,7 @@ export class Utils {
      * @param obj
      * @return {string}
      */
-    public getId(obj: any): string {
+    public static getId(obj: any): string {
         if (this.isString(obj)) return obj;
         if (this.hasId(obj)) return obj._id.toString();
         return null;
@@ -154,7 +83,7 @@ export class Utils {
      * Generate a random string composed of 10 digits
      * @return {string}
      */
-    public generateValidMail(): string {
+    public static generateValidMail(): string {
         return Math.random().toString().slice(-10);
     };
 
@@ -163,7 +92,7 @@ export class Utils {
      * @param {number} bytes
      * @return {string}
      */
-    public formatSize(bytes: number): string {
+    public static formatSize(bytes: number): string {
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
         if (bytes == 0) return '0 Byte';
         const i = Math.floor(Math.log(bytes) / Math.log(1024));
@@ -175,7 +104,7 @@ export class Utils {
      * @param {any} ms
      * @return {string}
      */
-    public formatDuration(ms: number): string {
+    public static formatDuration(ms: number): string {
         const duration = parseInt(<any>(ms / 1000), 10);
         const h = Math.floor(duration / 3600);
         const m = Math.floor((duration - (h * 3600)) / 60);
@@ -191,7 +120,7 @@ export class Utils {
      * @param callback
      * @param {string} idx
      */
-    public forEachNewObject(oArr: Array<any>, nArr: Array<any>, callback, idx = '_id'): void {
+    public static forEachNewObject(oArr: Array<any>, nArr: Array<any>, callback, idx = '_id'): void {
         if (!oArr || !nArr) return;
         for (let item of nArr) {
             if (!_.find(oArr, (i) => {
@@ -209,13 +138,33 @@ export class Utils {
     }
 
     /**
+     * Get {EEnv} from name
+     * @param {string} envName
+     * @return {EEnv}
+     */
+    public static getEnvFromName(envName: string): EEnv {
+        switch (envName) {
+            case 'development':
+                return EEnv.Dev;
+            case 'test':
+                return EEnv.Test;
+            case 'preprod':
+                return EEnv.Preprod;
+            case 'production':
+            default:
+                ProjectConfig.envName = 'production';
+                return EEnv.Prod;
+        }
+    }
+
+    /**
      * Normalize string
      * Lowercase string
      * Replace any non alphanumerical character by a single '-'
      * @param str
      * @return {string}
      */
-    public normalize(str: string) {
+    public static normalize(str: string) {
         if (!str) return null;
         str = str.toLowerCase();
 
@@ -252,7 +201,7 @@ export class Utils {
      * Map all accents to base letters
      * @private
      */
-    private _defaultDiacriticsRemovalMap: Array<any> = [
+    private static _defaultDiacriticsRemovalMap: Array<any> = [
         {
             'base': 'A',
             'letters': /[\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F]/g
@@ -435,5 +384,3 @@ export class Utils {
         }
     ];
 }
-
-export default new Utils;

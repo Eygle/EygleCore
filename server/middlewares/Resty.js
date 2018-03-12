@@ -5,11 +5,12 @@ const path = require("path");
 const _ = require("underscore");
 const Permissions_1 = require("../modules/Permissions");
 const Utils_1 = require("../../commons/utils/Utils");
-const EdError_1 = require("../config/EdError");
 const server_enums_1 = require("../typings/server.enums");
-const ProjectConfig_1 = require("../config/ProjectConfig");
-const Logger_1 = require("../config/Logger");
+const core_enums_1 = require("../../commons/core.enums");
 const Auth_1 = require("./Auth");
+const ServerConfig_1 = require("../utils/ServerConfig");
+const Logger_1 = require("../utils/Logger");
+const EdError_1 = require("../utils/EdError");
 class Resty {
     /**
      * Express middleware used for http connexions
@@ -21,7 +22,7 @@ class Resty {
             if (!this._resources) {
                 this._resources = {};
                 this._addResources(resourceDir, this._resources);
-                this._addResources(ProjectConfig_1.default.apiRoot, this._resources);
+                this._addResources(ServerConfig_1.default.apiRoot, this._resources);
             }
             return (req, res, next) => {
                 const method = req.method.toLowerCase();
@@ -39,7 +40,7 @@ class Resty {
                     if (data instanceof Error) {
                         return next(data);
                     }
-                    if (server_enums_1.EEnv.Dev === ProjectConfig_1.default.env && req.url === '/api/permissions') {
+                    if (core_enums_1.EEnv.Dev === ServerConfig_1.default.env && req.url === '/api/permissions') {
                         Auth_1.default.addUserCookie(res, req.user);
                     }
                     this._send(res, data);

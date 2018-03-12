@@ -1,59 +1,60 @@
 import * as q from 'q';
 import * as os from 'os';
 import * as clamscan from 'clamscan';
-import Logger from "../config/Logger";
 
-export class Antivirus {
-  /**
-   * Clamscan path
-   */
-  private _binPath: string;
+import Logger from '../utils/Logger';
 
-  /**
-   * ClamAV scanner
-   */
-  private _clam;
+export default class Antivirus {
+    /**
+     * Clamscan path
+     */
+    private static _binPath: string;
 
-  /**
-   * Log path
-   */
-  private _logPath: string;
+    /**
+     * ClamAV scanner
+     */
+    private static _clam: any;
 
-  constructor() {
-    this._binPath = os.platform() === 'win32' ? 'C:\\Program Files\\ClamAV-x64\\clamscan.exe' : '/usr/local/bin/clamscan';
-    this._logPath = os.platform() === 'win32' ? '../clamscan.log' : '/var/log/node-clam/all.log';
-    this._clam = clamscan({
-      remove_infected: true,
-      scan_log: this._logPath,
-      clamscan: {
-        path: this._binPath
-      },
-      preference: 'clamscan'
-    });
-  }
+    /**
+     * Log path
+     */
+    private static _logPath: string;
 
-  /**
-   * Check file using CLamAV
-   * @param file path
-   */
-  public checkFile(file): Q.Promise<any> {
-    const defer = q.defer();
+    public static init(): void {
+        this._binPath = os.platform() === 'win32' ? 'C:\\Program Files\\ClamAV-x64\\clamscan.exe' : '/usr/local/bin/clamscan';
+        this._logPath = os.platform() === 'win32' ? '../clamscan.log' : '/var/log/node-clam/all.log';
 
-    this._clam.is_infected(file, (err, f, is_infected) => {
-      if (err) {
-         Logger.error('Error during virus scan', err);
-        defer.reject(null);
-      }
+        this._clam = clamscan({
+            remove_infected: true,
+            scan_log: this._logPath,
+            clamscan: {
+                path: this._binPath
+            },
+            preference: 'clamscan'
+        });
+    }
 
-      if (is_infected) {
-        defer.reject(null);
-      } else {
-        defer.resolve();
-      }
-    });
+    /**
+     * Check file using CLamAV
+     * @param file path
+     */
+    public static checkFile(file: any): Q.Promise<any> {
+        const defer = q.defer();
 
-    return defer.promise;
-  }
+        this._clam.is_infected(file, (err: any, fileRes: any, is_infected: boolean) => {
+            if (err) {
+                Logger.error('Error during virus scan', err);
+                defer.reject(null);
+            }
+
+            if (is_infected) {
+                defer.reject(null);
+            }
+            else {
+                defer.resolve();
+            }
+        });
+
+        return defer.promise;
+    }
 }
-
-export default new Antivirus();

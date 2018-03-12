@@ -1,22 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const passport = require("passport");
-const Utils_1 = require("../../commons/utils/Utils");
-const EdError_1 = require("../config/EdError");
 const Emails_1 = require("../modules/Emails");
 const User_schema_1 = require("../schemas/User.schema");
 const Permissions_1 = require("../modules/Permissions");
 const server_enums_1 = require("../typings/server.enums");
-const Logger_1 = require("../config/Logger");
-const ProjectConfig_1 = require("../config/ProjectConfig");
+const Logger_1 = require("../utils/Logger");
+const EdError_1 = require("../utils/EdError");
+const core_enums_1 = require("../../commons/core.enums");
+const ServerConfig_1 = require("../utils/ServerConfig");
 class Auth {
-    constructor() {
-        this._attempts = {};
-    }
     /**
      * @return {(req:any, res:any, next:any)} Login middleware
      */
-    loginMiddleware() {
+    static loginMiddleware() {
         return (req, res, next) => {
             passport.authenticate('local', (err, user) => {
                 if (err)
@@ -38,7 +35,7 @@ class Auth {
     /**
      * @return {(req:any, res:any, next:any)} Logout middleware
      */
-    logoutMiddleware() {
+    static logoutMiddleware() {
         return (req, res) => {
             Logger_1.default.log(`User ${req.user ?
                 req.user.fullName || req.user.email :
@@ -50,7 +47,7 @@ class Auth {
     /**
      * @return {(req:any, res:any, next:any)} Register middleware
      */
-    registerMiddleware() {
+    static registerMiddleware() {
         return (req, res, next) => {
             User_schema_1.default.add({
                 email: req.body.email,
@@ -78,7 +75,7 @@ class Auth {
     /**
      * @return {(req:any, res:any, next:any)} Forgot password middleware
      */
-    forgotPasswordMiddleware() {
+    static forgotPasswordMiddleware() {
         return (req, res, next) => {
             User_schema_1.default.findOneByEmail(req.body.email).then((user) => {
                 if (!user)
@@ -97,7 +94,7 @@ class Auth {
     /**
      * @return {(req:any, res:any, next:any)} Change password middleware
      */
-    changePasswordMiddleware() {
+    static changePasswordMiddleware() {
         return (req, res, next) => {
             const p = req.url.split('/');
             const id = p[p.length - 1];
@@ -119,7 +116,7 @@ class Auth {
      * This security will lock accounts after a certain amount of tries
      * @return {(req:any, res:any, next:any)} Login limit middleware
      */
-    loginLimitMiddleware() {
+    static loginLimitMiddleware() {
         return (req, res, next) => {
             const username = req.body.username;
             if (!this._attempts.hasOwnProperty(username)) {
@@ -137,12 +134,12 @@ class Auth {
      * This security will lock accounts after a certain amount of tries
      * @return {(req:any, res:any, next:any)} Login limit middleware
      */
-    unlockAccountMiddleware() {
+    static unlockAccountMiddleware() {
         return (req, res, next) => {
             const p = req.url.split('/');
             const id = p[p.length - 1];
             if (!Permissions_1.default.ensureAuthorized(req.user, 'admin')) {
-                return next(new EdError_1.EdError(server_enums_1.EHTTPStatus.Forbidden));
+                return next(new EdError_1.default(server_enums_1.EHTTPStatus.Forbidden));
             }
             User_schema_1.default.saveById(id, {
                 locked: false
@@ -161,8 +158,8 @@ class Auth {
      * @param res
      * @param user
      */
-    addUserCookie(res, user) {
-        res.cookie('user', JSON.stringify(this._generateUserCookieData(user)), { secure: server_enums_1.EEnv.Dev !== ProjectConfig_1.default.env && server_enums_1.EEnv.Test !== ProjectConfig_1.default.env });
+    static addUserCookie(res, user) {
+        res.cookie('user', JSON.stringify(this._generateUserCookieData(user)), { secure: core_enums_1.EEnv.Dev !== ServerConfig_1.default.env && core_enums_1.EEnv.Test !== ServerConfig_1.default.env });
     }
     /**
      * Generate user data used in clients
@@ -170,7 +167,7 @@ class Auth {
      * @return any
      * @private
      */
-    _generateUserCookieData(user) {
+    static _generateUserCookieData(user) {
         return user ? {
             _id: user._id.toString(),
             userName: user.userName,
@@ -189,7 +186,7 @@ class Auth {
      * @param next
      * @private
      */
-    _addLoginFailedAttempt(user, req, res, next) {
+    static _addLoginFailedAttempt(user, req, res, next) {
         const username = req.body.username;
         this._addAttempt(username);
         if (this._attempts[username].locked) {
@@ -222,7 +219,7 @@ class Auth {
      * @param username
      * @private
      */
-    _cleanAttempts(username) {
+    static _cleanAttempts(username) {
         if (this._attempts.hasOwnProperty(username)) {
             this._attempts[username] = { list: [], locked: false };
         }
@@ -232,35 +229,38 @@ class Auth {
      * @param username
      * @private
      */
-    _addAttempt(username) {
+    static _addAttempt(username) {
         if (!this._attempts.hasOwnProperty(username)) {
             this._attempts[username] = { list: [], locked: false };
         }
         this._attempts[username].list.push(Date.now());
-        if (!this._attempts[username].locked && this._attempts[username].list.length >= Utils_1.default.maxLoginAttempts) {
+        if (!this._attempts[username].locked && this._attempts[username].list.length >= ServerConfig_1.default.maxLoginAttempts) {
             this._attempts[username].locked = true;
         }
-        if (this._attempts[username].list.length > Utils_1.default.maxLoginAttempts) {
+        if (this._attempts[username].list.length > ServerConfig_1.default.maxLoginAttempts) {
             this._attempts[username].list.splice(0, 1);
         }
     }
     /**
      * Remove all expired attempts
      */
-    _cleanExpiredAttempts(username) {
+    static _cleanExpiredAttempts(username) {
         if (!this._attempts.hasOwnProperty(username))
             return;
         const now = Date.now();
         const userAttempts = this._attempts[username].list;
         for (const idx in userAttempts) {
             if (userAttempts.hasOwnProperty(idx)) {
-                if (now - userAttempts[idx] >= Utils_1.default.loginAttemptsExpire) {
+                if (now - userAttempts[idx] >= ServerConfig_1.default.loginAttemptsExpire) {
                     userAttempts.splice(idx, 1);
                 }
             }
         }
     }
 }
-exports.Auth = Auth;
-exports.default = new Auth();
+/**
+ * Users login attempts failed
+ */
+Auth._attempts = {};
+exports.default = Auth;
 //# sourceMappingURL=Auth.js.map

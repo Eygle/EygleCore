@@ -1,19 +1,19 @@
 import ConfigSchema from '../schemas/Config.schema';
 import {User} from '../../commons/models/User';
 import {Permission} from "../models/Config";
-import Logger from "../config/Logger";
+import Logger from "../utils/Logger";
 
 /**
  * List of permissions
  */
 let list: Array<Permission> = null;
 
-export class Permissions {
+export default class Permissions {
 
   /**
    * Permission middleware
    */
-  public middleware(): Function {
+  public static middleware(): Function {
     return (req, res, next) => {
       if (!list) {
         ConfigSchema.getPermissions()
@@ -37,7 +37,7 @@ export class Permissions {
    * @param accessRole
    * @return {boolean}
    */
-  public ensureAuthorized(user: User, accessRole: string) {
+  public static ensureAuthorized(user: User, accessRole: string) {
     const memberRights = user.roles || ['public'];
 
     if (!!~memberRights.indexOf('admin')) {
@@ -59,7 +59,3 @@ export class Permissions {
     return false;
   }
 }
-
-const permission = new Permissions(); // Accessible via static methods
-
-export default permission;

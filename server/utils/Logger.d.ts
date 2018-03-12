@@ -1,39 +1,36 @@
-export declare class Logger {
+export default class Logger {
     /**
      * External logger instance
      */
-    private _instance;
-    constructor();
+    private static _instance;
     /**
      * Trace lvl
      * @param args
      */
-    trace(...args: any[]): void;
+    static trace(...args: any[]): void;
     /**
      * Log lvl
      * @param args
      */
-    log(...args: any[]): void;
+    static log(...args: any[]): void;
     /**
      * Info lvl
      * @param args
      */
-    info(...args: any[]): void;
+    static info(...args: any[]): void;
     /**
      * Debug lvl
      * @param args
      */
-    debug(...args: any[]): void;
+    static debug(...args: any[]): void;
     /**
      * Warn lvl
      * @param args
      */
-    warn(...args: any[]): void;
+    static warn(...args: any[]): void;
     /**
      * Error lvl
      * @param args
      */
-    error(...args: any[]): void;
+    static error(...args: any[]): void;
 }
-declare const _default: Logger;
-export default _default;

@@ -2,19 +2,18 @@ import * as Twig from 'twig';
 import * as fs from 'fs';
 import * as bcrypt from 'bcrypt';
 
-import Utils from '../../commons/utils/Utils';
 import UserSchema from '../schemas/User.schema';
 import {EHTTPStatus} from '../typings/server.enums';
-import {CustomEdError} from '../config/EdError';
 import {User} from '../../commons/models/User';
-import Logger from "../config/Logger";
-import ProjectConfig from "../config/ProjectConfig";
+import {CustomEdError} from "../utils/EdError";
+import ServerConfig from "../utils/ServerConfig";
+import Logger from "../utils/Logger";
 
-export class EmailsUnsubscribe {
+export default class EmailsUnsubscribe {
   /**
    * Express middleware getter
    */
-  public getMiddleware() {
+  public static getMiddleware() {
     return (req, res, next) => {
       const [email, hash] = req.params[0].split('/');
 
@@ -22,7 +21,7 @@ export class EmailsUnsubscribe {
 
       this._checkUser(email, hash, (user) => {
         res.send(Twig.twig(<any>{
-           data: <any>fs.readFileSync(`${ProjectConfig.root}/server/templates/unsubscribe_from_emails/unsubscribe.twig`, {encoding: 'UTF-8'})
+           data: <any>fs.readFileSync(`${ServerConfig.root}/server/templates/unsubscribe_from_emails/unsubscribe.twig`, {encoding: 'UTF-8'})
         }).render({
           html_title: 'Gestion des listes de diffusions',
           title: 'Liste de diffusion',
@@ -36,7 +35,7 @@ export class EmailsUnsubscribe {
   /**
    * Express middleware getter
    */
-  public getPostMiddleware() {
+  public static getPostMiddleware() {
     return (req, res, next) => {
       const [email, hash] = req.params[0].split('/');
 
@@ -64,13 +63,13 @@ export class EmailsUnsubscribe {
    * @param error
    * @private
    */
-  private _checkUser(email, hash, success, error) {
+  private static _checkUser(email, hash, success, error) {
     hash = hash.replace(new RegExp('\\+', 'g'), '/');
     UserSchema.findOneByEmail(email)
       .then((user: User) => {
         if (!user) return error(new CustomEdError('Email not found', EHTTPStatus.BadRequest));
 
-        if (bcrypt.compareSync(user._id.toString() + Utils.userHash, hash)) {
+        if (bcrypt.compareSync(user._id.toString() + ServerConfig.userHash, hash)) {
           success(user);
         } else {
           error(new CustomEdError('Invalid user hash', EHTTPStatus.BadRequest));
@@ -79,5 +78,3 @@ export class EmailsUnsubscribe {
       .catch(err => error(err));
   }
 }
-
-export default new EmailsUnsubscribe();

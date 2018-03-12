@@ -2,10 +2,10 @@ import * as tracer from "tracer";
 import * as cron from "node-schedule";
 import CronJobSchema from "../schemas/CronJob.schema";
 import {CronJob} from "../../commons/models/CronJob";
-import {EEnv} from "../typings/server.enums";
 import {ILogger} from "../typings/server.interfaces";
-import ProjectConfig from "../config/ProjectConfig";
-import Logger from "../config/Logger";
+import ServerConfig from "../utils/ServerConfig";
+import {EEnv} from "../../commons/core.enums";
+import Logger from "../utils/Logger";
 
 abstract class AJob implements CronJob {
    /**
@@ -61,9 +61,9 @@ abstract class AJob implements CronJob {
    constructor(name: string) {
       this.name = name;
       this.logFilename = `mapui-${this._formatName()}`;
-      if (EEnv.Prod === ProjectConfig.env || EEnv.Preprod === ProjectConfig.env) {
+      if (EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env) {
          this.logger = (<any>tracer).dailyfile({
-            root: `${ProjectConfig.root}/logs`,
+            root: `${ServerConfig.root}/logs`,
             maxLogFiles: 10,
             allLogsFileName: this.logFilename,
             format: "{{timestamp}} <{{title}}> {{message}}",

@@ -3,16 +3,16 @@ import path = require('path');
 import _ = require('underscore');
 import Permissions from '../modules/Permissions';
 import Utils from '../../commons/utils/Utils';
-import {CustomEdError} from '../config/EdError';
-import {EEnv, EHTTPStatus} from '../typings/server.enums';
-import {EPermission} from '../../commons/core.enums';
+import {EHTTPStatus} from '../typings/server.enums';
+import {EEnv, EPermission} from '../../commons/core.enums';
 import {User} from '../../commons/models/User';
 import {IRestyContext, IRoutePermissions} from '../typings/resty.interface';
-import ProjectConfig from "../config/ProjectConfig";
-import Logger from "../config/Logger";
 import Auth from "./Auth";
+import ServerConfig from "../utils/ServerConfig";
+import Logger from "../utils/Logger";
+import {CustomEdError} from "../utils/EdError";
 
-class Resty {
+export default class Resty {
    private static _resources: any;
 
    /**
@@ -25,7 +25,7 @@ class Resty {
          if (!this._resources) {
             this._resources = {};
             this._addResources(resourceDir, this._resources);
-            this._addResources(ProjectConfig.apiRoot, this._resources);
+            this._addResources(ServerConfig.apiRoot, this._resources);
          }
 
          return (req, res, next) => {
@@ -47,7 +47,7 @@ class Resty {
                if (data instanceof Error) {
                   return next(data);
                }
-               if (EEnv.Dev === ProjectConfig.env && req.url === '/api/permissions') {
+               if (EEnv.Dev === ServerConfig.env && req.url === '/api/permissions') {
                   Auth.addUserCookie(res, req.user);
                }
                this._send(res, data);
@@ -188,8 +188,6 @@ class Resty {
       return resources;
    }
 }
-
-export default Resty;
 
 export class RoutePermissions implements IRoutePermissions {
    public 'default': string;

@@ -3,10 +3,10 @@ import * as express from 'express';
 import Resty from '../middlewares/Resty';
 import Auth from '../middlewares/Auth';
 import EmailsUnsubscribe from '../middlewares/EmailsUnsubscribe';
-import {EEnv} from '../typings/server.enums';
-import ProjectConfig from "./ProjectConfig";
 import Logger from "./Logger";
 import {CustomRoute} from "../models/CustomRoute";
+import ServerConfig from "./ServerConfig";
+import {EEnv} from "../../commons/core.enums";
 
 class Routes {
    public static init(app, routes: [CustomRoute]) {
@@ -14,17 +14,17 @@ class Routes {
       app.get('/', [this.indexRedirect()]);
 
       // STATIC ROUTES
-      app.use('/', express.static(ProjectConfig.clientRoot));
+      app.use('/', express.static(ServerConfig.clientRoot));
 
-      if (EEnv.Prod !== ProjectConfig.env && EEnv.Preprod !== ProjectConfig.env) {
-         app.use('/bower_components', express.static(`${ProjectConfig.root}/../bower_components`));
+      if (EEnv.Prod !== ServerConfig.env && EEnv.Preprod !== ServerConfig.env) {
+         app.use('/bower_components', express.static(`${ServerConfig.root}/../bower_components`));
       }
 
       // API ENTRY POINT
       app.all('/api/*', [Resty.httpMiddleware(`${__dirname}/../api`)]);
 
       // AUTH
-      if (ProjectConfig.implementsAuth) {
+      if (ServerConfig.implementsAuth) {
          app.post('/register', [Auth.registerMiddleware()]);
          app.post('/login', [Auth.loginLimitMiddleware(), Auth.loginMiddleware()]);
          app.post('/logout', [Auth.logoutMiddleware()]);
@@ -34,7 +34,7 @@ class Routes {
       }
 
       // EMAILS UNSUBSCRIBE
-      if (ProjectConfig.includeEmailUnsubscribe) {
+      if (ServerConfig.includeEmailUnsubscribe) {
          Logger.trace("Module Emails unsubscription activated");
          app.get('/unsubscribe/*', [EmailsUnsubscribe.getMiddleware()]);
          app.post('/unsubscribe/*', [EmailsUnsubscribe.getPostMiddleware()]);
@@ -52,7 +52,7 @@ class Routes {
    private static indexRedirect() {
       return (req, res) => {
          Auth.addUserCookie(res, req.user || null);
-         res.sendFile(`${ProjectConfig.clientRoot}/index.html`);
+         res.sendFile(`${ServerConfig.clientRoot}/index.html`);
       };
    }
 }

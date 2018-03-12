@@ -1,23 +1,21 @@
 /// <reference types="q" />
-export declare class Antivirus {
+export default class Antivirus {
     /**
      * Clamscan path
      */
-    private _binPath;
+    private static _binPath;
     /**
      * ClamAV scanner
      */
-    private _clam;
+    private static _clam;
     /**
      * Log path
      */
-    private _logPath;
-    constructor();
+    private static _logPath;
+    static init(): void;
     /**
      * Check file using CLamAV
      * @param file path
      */
-    checkFile(file: any): Q.Promise<any>;
+    static checkFile(file: any): Q.Promise<any>;
 }
-declare const _default: Antivirus;
-export default _default;

@@ -1,12 +1,12 @@
-export declare class EmailsUnsubscribe {
+export default class EmailsUnsubscribe {
     /**
      * Express middleware getter
      */
-    getMiddleware(): (req: any, res: any, next: any) => void;
+    static getMiddleware(): (req: any, res: any, next: any) => void;
     /**
      * Express middleware getter
      */
-    getPostMiddleware(): (req: any, res: any, next: any) => void;
+    static getPostMiddleware(): (req: any, res: any, next: any) => void;
     /**
      * User getter
      * @param email
@@ -15,7 +15,5 @@ export declare class EmailsUnsubscribe {
      * @param error
      * @private
      */
-    private _checkUser(email, hash, success, error);
+    private static _checkUser(email, hash, success, error);
 }
-declare const _default: EmailsUnsubscribe;
-export default _default;

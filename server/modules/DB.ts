@@ -2,51 +2,47 @@ import mongoose = require('mongoose');
 import q = require('q');
 import fs = require('fs');
 import Utils from '../../commons/utils/Utils';
-import {CustomEdError} from '../config/EdError';
 import {EHTTPStatus} from '../typings/server.enums';
-import Logger from "../config/Logger";
-import ProjectConfig from "../config/ProjectConfig";
+import ServerConfig from "../utils/ServerConfig";
+import Logger from "../utils/Logger";
+import {CustomEdError} from "../utils/EdError";
 
-export class DB {
+export default class DB {
    /**
     * Is database connected
     */
-   private _connected: boolean;
+   private static _connected: boolean = false;
 
    /**
     * Mongoose database instance
     */
-   private _instance: any;
+   private static _instance: any;
 
    /**
     * _instance getter
     * @return {any}
     */
-   public get instance() {
+   public static get instance() {
       return this._instance;
-   }
-
-   constructor() {
-      this._connected = false;
    }
 
    /**
     * Initialize database connexion
     * @return {Promise<any>}
     */
-   public init(): Q.Promise<any> {
+   public static init(): Q.Promise<any> {
       const defer: Q.Deferred<any> = q.defer();
 
       mongoose.Promise = global.Promise;
-      mongoose.connect('mongodb://localhost/' + ProjectConfig.dbName);
+      mongoose.connect('mongodb://localhost/' + ServerConfig.dbName);
       this._instance = mongoose.connection;
       this._instance.on('error', () => {
          Logger.error('Mongoose connection error');
       });
       this._instance.once('open', () => {
          this._loadModels(null);
-         this._loadModels(ProjectConfig.dbCollectionsPrefix, `${ProjectConfig.root}/server/schemas/`);
-         Logger.info(`Mongo database '${ProjectConfig.dbName}' connected`);
+         this._loadModels(ServerConfig.dbCollectionsPrefix, `${ServerConfig.root}/server/schemas/`);
+         Logger.info(`Mongo database '${ServerConfig.dbName}' connected`);
          defer.resolve();
       });
 
@@ -60,7 +56,7 @@ export class DB {
     * @param options
     * @return {"mongoose".Schema}
     */
-   public createSchema(data: any, deleted: boolean = true, options: any = null): mongoose.Schema {
+   public static createSchema(data: any, deleted: boolean = true, options: any = null): mongoose.Schema {
       data.creationDate = {type: Date, required: true, 'default': Date.now};
       data.updateDate = {type: Date, required: true};
       data.__v = {type: Number, select: false}; // Avoid VersionError with schema having arrays
@@ -72,7 +68,7 @@ export class DB {
       const schema = new mongoose.Schema(data, options || {
          toJSON: {
             transform: function (doc, ret) {
-               instance.transformUnpopulatedReferences(ret);
+               this.transformUnpopulatedReferences(ret);
                return ret;
             }
          }
@@ -114,7 +110,7 @@ export class DB {
     * @param populateOptions
     * @param model
     */
-   public saveItem(item: any, data = null, populateOptions = null, model = null) {
+   public static saveItem(item: any, data = null, populateOptions = null, model = null) {
       const defer = q.defer();
 
       if (!item) {
@@ -146,7 +142,7 @@ export class DB {
     * @param model
     * @return {any}
     */
-   public createItem(item: any, populateOptions = null, model = null) {
+   public static createItem(item: any, populateOptions = null, model = null) {
       return this.saveItem(item, null, populateOptions, model);
    }
 
@@ -155,7 +151,7 @@ export class DB {
     * This method is used in mongoose schema's toJSON & toObject methods
     * @param data
     */
-   public transformUnpopulatedReferences(data) {
+   public static transformUnpopulatedReferences(data) {
       const excludes = ['_id', 'id', 'creationUID', 'updateUID'];
       for (const key in data) {
          if (data.hasOwnProperty(key)) {
@@ -172,7 +168,7 @@ export class DB {
     * Load all models
     * @private
     */
-   private _loadModels(prefix: string, path = `${__dirname}/../schemas`, parent = null): void {
+   private static _loadModels(prefix: string, path = `${__dirname}/../schemas`, parent = null): void {
       for (const f of fs.readdirSync(path)) {
          const modelName = (prefix || '') + f.split('.')[0];
          if (modelName === 'ASchema') continue;
@@ -191,6 +187,3 @@ export class DB {
       }
    }
 }
-
-const instance = new DB();
-export default instance;

@@ -4,24 +4,16 @@ const fs = require("fs");
 const q = require("q");
 const _ = require("underscore");
 const CronJob_schema_1 = require("../schemas/CronJob.schema");
-const server_enums_1 = require("../typings/server.enums");
-const ProjectConfig_1 = require("../config/ProjectConfig");
-const Logger_1 = require("../config/Logger");
+const ServerConfig_1 = require("../utils/ServerConfig");
+const core_enums_1 = require("../../commons/core.enums");
+const Logger_1 = require("../utils/Logger");
 class CronManager {
-    constructor() {
-        /**
-         * Path of jobs folder
-         * @type {string}
-         * @private
-         */
-        this._jobsPath = `${ProjectConfig_1.default.root}/server/cron-jobs/`;
-    }
     /**
      * Load of services from folder _jobsPath and schedule cron jobs if needed
      * @private
      */
-    init() {
-        if (server_enums_1.EEnv.Prod !== ProjectConfig_1.default.env || parseInt(process.env.pm_id) === 1) {
+    static init() {
+        if (core_enums_1.EEnv.Prod !== ServerConfig_1.default.env || parseInt(process.env.pm_id) === 1) {
             CronJob_schema_1.default.getAll()
                 .then((dbItems) => {
                 this._list = [];
@@ -39,7 +31,7 @@ class CronManager {
                     }
                     else {
                         // Schedule only if there is not environment restriction or the restriction is matched
-                        item.isScheduled = !item.environments || !!~item.environments.indexOf(ProjectConfig_1.default.env);
+                        item.isScheduled = !item.environments || !!~item.environments.indexOf(ServerConfig_1.default.env);
                         promises.push(CronJob_schema_1.default.add(item)
                             .then((model) => {
                             item.setModel(model);
@@ -68,7 +60,7 @@ class CronManager {
      * Run job once
      * @param job
      */
-    runJob(job) {
+    static runJob(job) {
         for (const item of this._list) {
             if (item.name === job) {
                 item.run();
@@ -80,7 +72,7 @@ class CronManager {
      * Schedule job once
      * @param job
      */
-    scheduleJob(job) {
+    static scheduleJob(job) {
         for (const item of this._list) {
             if (item.name === job) {
                 item.schedule();
@@ -92,7 +84,7 @@ class CronManager {
      * Un-schedule job once
      * @param job
      */
-    unScheduleJob(job) {
+    static unScheduleJob(job) {
         for (const item of this._list) {
             if (item.name === job) {
                 item.unSchedule();
@@ -104,10 +96,15 @@ class CronManager {
      * Return list of jobs
      * @return {Array<CronJob>}
      */
-    jobs() {
+    static jobs() {
         return this._list;
     }
 }
-exports.CronManager = CronManager;
-exports.default = new CronManager();
+/**
+ * Path of jobs folder
+ * @type {string}
+ * @private
+ */
+CronManager._jobsPath = `${ServerConfig_1.default.root}/server/cron-jobs/`;
+exports.default = CronManager;
 //# sourceMappingURL=CronManager.js.map

@@ -3,13 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const q = require("q");
 const sizeof = require("object-sizeof");
 const Utils_1 = require("../../commons/utils/Utils");
-const Logger_1 = require("../config/Logger");
+const Logger_1 = require("../utils/Logger");
 class Cache {
-    constructor() {
-        this._data = {};
-        this._size = 0;
-        this._keys = 0;
-        this._maxSize = 1024 * 1024 * 50; // 50MB
+    static init() {
         setInterval(() => {
             this._removeExpired();
         }, 3600000);
@@ -18,7 +14,7 @@ class Cache {
      * Get cache item for given key
      * @param {string} key
      */
-    get(key) {
+    static get(key) {
         const entry = this._data[key];
         if (!entry)
             return null;
@@ -35,7 +31,7 @@ class Cache {
      * @param value
      * @param {number} TTL Time To Live (seconds)
      */
-    set(key, value, TTL = 0) {
+    static set(key, value, TTL = 0) {
         const previous = this._data[key];
         const entry = {
             t: TTL > 0 ? Date.now() + (TTL * 1000) : null,
@@ -64,7 +60,7 @@ class Cache {
      * @param expired
      * @param log
      */
-    remove(key, expired = false, log = true) {
+    static remove(key, expired = false, log = true) {
         const entry = this._data[key];
         if (entry) {
             delete this._data[key];
@@ -75,7 +71,7 @@ class Cache {
             }
         }
     }
-    _info() {
+    static _info() {
         return `(total: ${this._keys} keys - ${Utils_1.default.formatSize(this._size)})`;
     }
     /**
@@ -84,7 +80,7 @@ class Cache {
      * @return {Q.Promise<void>}
      * @private
      */
-    _checkCacheSize() {
+    static _checkCacheSize() {
         const defer = q.defer();
         if (this._maxSize && this._size > this._maxSize) {
             setTimeout(() => {
@@ -106,7 +102,7 @@ class Cache {
      * Remove expired cached values
      * @private
      */
-    _removeExpired() {
+    static _removeExpired() {
         const now = Date.now();
         for (const i in this._data) {
             if (this._data.hasOwnProperty(i) && this._data[i].t <= now) {
@@ -118,7 +114,7 @@ class Cache {
      * Remove oldest value from cache
      * @private
      */
-    _removeOldestValue() {
+    static _removeOldestValue() {
         let key = null;
         let date = null;
         for (const i in this._data) {
@@ -132,6 +128,22 @@ class Cache {
         }
     }
 }
-exports.Cache = Cache;
-exports.default = new Cache();
+/**
+ * Node cache instance
+ */
+Cache._data = {};
+/**
+ * Cache size in bytes
+ */
+Cache._size = 0;
+/**
+ * Number of keys in cache
+ */
+Cache._keys = 0;
+/**
+ * Cache max size (bytes)
+ */
+Cache._maxSize = 1024 * 1024 * 50; // 50MB
+exports.default = Cache;
+Cache.init();
 //# sourceMappingURL=Cache.js.map

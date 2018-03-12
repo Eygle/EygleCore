@@ -12,15 +12,14 @@ const cookieParser = require("cookie-parser");
 const connectMongo = require("connect-mongo");
 const csrf = require("csurf");
 const Permissions_1 = require("./modules/Permissions");
-const Utils_1 = require("../commons/utils/Utils");
 const DB_1 = require("./modules/DB");
-const EdError_1 = require("./config/EdError");
-const Routes_1 = require("./config/Routes");
-const server_enums_1 = require("./typings/server.enums");
-const ProjectConfig_1 = require("./config/ProjectConfig");
-const PassportConfig_1 = require("./config/PassportConfig");
 const CronManager_1 = require("./modules/CronManager");
-const Logger_1 = require("./config/Logger");
+const Logger_1 = require("./utils/Logger");
+const ServerConfig_1 = require("./utils/ServerConfig");
+const core_enums_1 = require("../commons/core.enums");
+const PassportConfig_1 = require("./utils/PassportConfig");
+const Routes_1 = require("./utils/Routes");
+const EdError_1 = require("./utils/EdError");
 const MongoStore = connectMongo(session);
 class EygleServer {
     constructor() {
@@ -61,15 +60,15 @@ class EygleServer {
             // connect-mongo instance
             this._mongoStore = new MongoStore({
                 mongooseConnection: DB_1.default.instance,
-                db: ProjectConfig_1.default.dbName
+                db: ServerConfig_1.default.dbName
             });
             // Common express session used in express and socket.io
             const sessionX = session({
-                name: Utils_1.default.sessionCookieName,
-                secret: Utils_1.default.sessionSecret,
+                name: ServerConfig_1.default.sessionCookieName,
+                secret: ServerConfig_1.default.sessionSecret,
                 cookie: {
                     maxAge: 2592000000,
-                    domain: server_enums_1.EEnv.Prod === ProjectConfig_1.default.env || server_enums_1.EEnv.Preprod === ProjectConfig_1.default.env ? ".mapui.fr" : undefined
+                    domain: core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env ? ".mapui.fr" : undefined
                 },
                 resave: true,
                 rolling: true,
@@ -77,7 +76,7 @@ class EygleServer {
                 store: this._mongoStore
             });
             this._app.set("view options", { layout: false });
-            this._app.set('port', ProjectConfig_1.default.port);
+            this._app.set('port', ServerConfig_1.default.port);
             this._app.disable('x-powered-by');
             this._app.use(bodyParser.urlencoded({ extended: true }));
             this._app.use(bodyParser.json({ limit: '50mb' }));
@@ -88,7 +87,7 @@ class EygleServer {
             // INIT PERMISSIONS
             this._app.use(Permissions_1.default.middleware());
             // INIT CSRF
-            if (ProjectConfig_1.default.activateCSRFSecurity) {
+            if (ServerConfig_1.default.activateCSRFSecurity) {
                 this._initCSRF(this._app);
             }
             // MANAGE FILE UPLOADS
@@ -97,13 +96,13 @@ class EygleServer {
                     fileSize: 10 * 1024 * 1024
                 }
             }));
-            if (ProjectConfig_1.default.implementsAuth) {
+            if (ServerConfig_1.default.implementsAuth) {
                 Logger_1.default.trace("Module Auth activated");
                 PassportConfig_1.default.init(this._app);
             }
             Routes_1.default.init(this._app, this._customRoutes);
             this._handleErrors(this._app); // Last errors handler
-            if (ProjectConfig_1.default.includeCronManager) {
+            if (ServerConfig_1.default.includeCronManager) {
                 Logger_1.default.trace("Module Cron Manager activated");
                 CronManager_1.default.init();
             }
@@ -119,13 +118,13 @@ class EygleServer {
      */
     _handleErrors(app) {
         app.use(function (err, req, res, next) {
-            if (err instanceof EdError_1.EdError || err.name === 'ValidationError') {
+            if (err instanceof EdError_1.default || err.name === 'ValidationError') {
                 Logger_1.default.error(`[user ${req.user ? req.user._id : '[null]'}] HTTP ${req.method.toUpperCase()} ${req.url} - Error ${err.status || 500}: ${err.message}`);
                 res.status(err.status || 500).send(err.message);
             }
             else {
                 Logger_1.default.error(`[user ${req.user ? req.user._id : '[null]'}] HTTP ${req.method.toUpperCase()} ${req.url} - Server Error ${err.status || 500}:`, err);
-                res.status(err.status || 500).send(new EdError_1.EdError(err.status || 500).message);
+                res.status(err.status || 500).send(new EdError_1.default(err.status || 500).message);
             }
         });
     }
@@ -138,11 +137,11 @@ class EygleServer {
         Logger_1.default.trace("Module CSRF activated");
         app.use(csrf({
             cookie: {
-                secure: server_enums_1.EEnv.Prod === ProjectConfig_1.default.env || server_enums_1.EEnv.Preprod === ProjectConfig_1.default.env // Only for productions
+                secure: core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env // Only for productions
             }
         }));
         app.use(function (req, res, next) {
-            res.cookie('XSRF-TOKEN', req.csrfToken(), { secure: server_enums_1.EEnv.Prod === ProjectConfig_1.default.env || server_enums_1.EEnv.Preprod === ProjectConfig_1.default.env });
+            res.cookie('XSRF-TOKEN', req.csrfToken(), { secure: core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env });
             next();
         });
         // Error handler
@@ -160,11 +159,11 @@ class EygleServer {
      * @private
      */
     _printHeader() {
-        const sentence = `===== START ${ProjectConfig_1.default.appName.toUpperCase()} SERVER =====`;
+        const sentence = `===== START ${ServerConfig_1.default.appName.toUpperCase()} SERVER =====`;
         Logger_1.default.info(`     ${'='.repeat(sentence.length)}`);
         Logger_1.default.info(`     ${sentence}`);
         Logger_1.default.info(`     ${'='.repeat(sentence.length)}\n`);
     }
 }
 exports.EygleServer = EygleServer;
-//# sourceMappingURL=EygleServerServer.js.map
+//# sourceMappingURL=EygleServer.js.map

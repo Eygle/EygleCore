@@ -1,12 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var EEnv;
-(function (EEnv) {
-    EEnv[EEnv["Prod"] = 0] = "Prod";
-    EEnv[EEnv["Preprod"] = 1] = "Preprod";
-    EEnv[EEnv["Dev"] = 2] = "Dev";
-    EEnv[EEnv["Test"] = 3] = "Test";
-})(EEnv = exports.EEnv || (exports.EEnv = {}));
 var EHTTPStatus;
 (function (EHTTPStatus) {
     EHTTPStatus[EHTTPStatus["BadRequest"] = 400] = "BadRequest";

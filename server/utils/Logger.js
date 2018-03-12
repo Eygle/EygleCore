@@ -1,61 +1,53 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tracer = require("tracer");
-const ProjectConfig_1 = require("./ProjectConfig");
+const ServerConfig_1 = require("./ServerConfig");
 class Logger {
-    constructor() {
-        switch (ProjectConfig_1.default.loggerType) {
-            case "console":
-                this._instance = tracer.colorConsole(ProjectConfig_1.default.logger);
-                break;
-            case "file":
-                this._instance = tracer.dailyfile(ProjectConfig_1.default.logger);
-                break;
-        }
-    }
     /**
      * Trace lvl
      * @param args
      */
-    trace(...args) {
+    static trace(...args) {
         this._instance.trace.apply(this, args);
     }
     /**
      * Log lvl
      * @param args
      */
-    log(...args) {
+    static log(...args) {
         this._instance.log.apply(this, args);
     }
     /**
      * Info lvl
      * @param args
      */
-    info(...args) {
+    static info(...args) {
         this._instance.info.apply(this, args);
     }
     /**
      * Debug lvl
      * @param args
      */
-    debug(...args) {
+    static debug(...args) {
         this._instance.debug.apply(this, args);
     }
     /**
      * Warn lvl
      * @param args
      */
-    warn(...args) {
+    static warn(...args) {
         this._instance.warn.apply(this, args);
     }
     /**
      * Error lvl
      * @param args
      */
-    error(...args) {
+    static error(...args) {
         this._instance.error.apply(this, args);
     }
 }
-exports.Logger = Logger;
-exports.default = new Logger();
+/**
+ * External logger instance
+ */
+Logger._instance = ServerConfig_1.default.generateLogger();
+exports.default = Logger;
 //# sourceMappingURL=Logger.js.map

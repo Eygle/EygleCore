@@ -11,16 +11,15 @@ import * as connectMongo from 'connect-mongo';
 import * as csrf from "csurf";
 
 import Permission from "./modules/Permissions";
-import Utils from "../commons/utils/Utils";
 import DB from './modules/DB';
-import {EdError} from "./config/EdError";
-import Routes from "./config/Routes";
-import {EEnv} from "./typings/server.enums";
-import ProjectConfig from "./config/ProjectConfig";
-import PassportConfig from "./config/PassportConfig";
 import CronManager from "./modules/CronManager";
-import Logger from "./config/Logger";
 import {CustomRoute} from "./models/CustomRoute";
+import Logger from "./utils/Logger";
+import ServerConfig from "./utils/ServerConfig";
+import {EEnv} from "../commons/core.enums";
+import PassportConfig from "./utils/PassportConfig";
+import Routes from "./utils/Routes";
+import EdError from "./utils/EdError";
 
 const MongoStore = connectMongo(session);
 
@@ -91,16 +90,16 @@ export class EygleServer {
          // connect-mongo instance
          this._mongoStore = new MongoStore(<any>{
             mongooseConnection: DB.instance,
-            db: ProjectConfig.dbName
+            db: ServerConfig.dbName
          });
 
          // Common express session used in express and socket.io
          const sessionX = session({
-            name: Utils.sessionCookieName,
-            secret: Utils.sessionSecret,
+            name: ServerConfig.sessionCookieName,
+            secret: ServerConfig.sessionSecret,
             cookie: {
                maxAge: 2592000000, // 30 days,
-               domain: EEnv.Prod === ProjectConfig.env || EEnv.Preprod === ProjectConfig.env ? ".mapui.fr" : undefined
+               domain: EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env ? ".mapui.fr" : undefined
             },
             resave: true,
             rolling: true,
@@ -109,7 +108,7 @@ export class EygleServer {
          });
 
          this._app.set("view options", {layout: false});
-         this._app.set('port', ProjectConfig.port);
+         this._app.set('port', ServerConfig.port);
          this._app.disable('x-powered-by');
 
          this._app.use((<any>bodyParser).urlencoded({extended: true}));
@@ -123,7 +122,7 @@ export class EygleServer {
          this._app.use(Permission.middleware());
 
          // INIT CSRF
-         if (ProjectConfig.activateCSRFSecurity) {
+         if (ServerConfig.activateCSRFSecurity) {
             this._initCSRF(this._app);
          }
 
@@ -134,13 +133,13 @@ export class EygleServer {
             }
          }));
 
-         if (ProjectConfig.implementsAuth) {
+         if (ServerConfig.implementsAuth) {
             Logger.trace("Module Auth activated");
             PassportConfig.init(this._app);
          }
          Routes.init(this._app, this._customRoutes);
          this._handleErrors(this._app); // Last errors handler
-         if (ProjectConfig.includeCronManager) {
+         if (ServerConfig.includeCronManager) {
             Logger.trace("Module Cron Manager activated");
             CronManager.init();
          }
@@ -176,12 +175,12 @@ export class EygleServer {
       Logger.trace("Module CSRF activated");
       app.use(csrf(<any>{
          cookie: {
-            secure: EEnv.Prod === ProjectConfig.env || EEnv.Preprod === ProjectConfig.env // Only for productions
+            secure: EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env // Only for productions
          }
       }));
 
       app.use(function (req, res, next) {
-         res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: EEnv.Prod === ProjectConfig.env || EEnv.Preprod === ProjectConfig.env});
+         res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env});
          next();
       });
 
@@ -201,7 +200,7 @@ export class EygleServer {
     * @private
     */
    private _printHeader() {
-      const sentence = `===== START ${ProjectConfig.appName.toUpperCase()} SERVER =====`;
+      const sentence = `===== START ${ServerConfig.appName.toUpperCase()} SERVER =====`;
       Logger.info(`     ${(<any>'=').repeat(sentence.length)}`);
       Logger.info(`     ${sentence}`);
       Logger.info(`     ${(<any>'=').repeat(sentence.length)}\n`);

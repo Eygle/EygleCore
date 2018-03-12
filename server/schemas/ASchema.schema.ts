@@ -3,7 +3,7 @@ import * as q from 'q';
 
 import DB from '../modules/DB';
 import Utils from '../../commons/utils/Utils';
-import {CustomEdError} from '../config/EdError';
+import {CustomEdError} from '../utils/EdError';
 import {EHTTPStatus} from '../typings/server.enums';
 import {AModel} from '../../commons/models/AModel';
 

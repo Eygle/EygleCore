@@ -2,35 +2,30 @@ import * as q from 'q';
 import * as sizeof from 'object-sizeof';
 
 import Utils from '../../commons/utils/Utils';
-import Logger from "../config/Logger";
+import Logger from "../utils/Logger";
 
-export class Cache {
+export default class Cache {
   /**
    * Node cache instance
    */
-  private _data: any;
+  private static _data: any = {};
 
   /**
    * Cache size in bytes
    */
-  private _size: number;
+  private static _size: number = 0;
 
   /**
    * Number of keys in cache
    */
-  private _keys: number;
+  private static _keys: number = 0;
 
   /**
    * Cache max size (bytes)
    */
-  private _maxSize: number;
+  private static _maxSize: number = 1024 * 1024 * 50; // 50MB
 
-  constructor() {
-    this._data = {};
-    this._size = 0;
-    this._keys = 0;
-    this._maxSize = 1024 * 1024 * 50; // 50MB
-
+  public static init() {
     setInterval(() => {
       this._removeExpired();
     }, 3600000);
@@ -40,7 +35,7 @@ export class Cache {
    * Get cache item for given key
    * @param {string} key
    */
-  public get(key: string): any {
+  public static get(key: string): any {
     const entry = this._data[key];
 
     if (!entry) return null;
@@ -58,7 +53,7 @@ export class Cache {
    * @param value
    * @param {number} TTL Time To Live (seconds)
    */
-  public set(key: string, value: any, TTL: number = 0): void {
+  public static set(key: string, value: any, TTL: number = 0): void {
     const previous = this._data[key];
     const entry = {
       t: TTL > 0 ? Date.now() + (TTL * 1000) : null,
@@ -90,7 +85,7 @@ export class Cache {
    * @param expired
    * @param log
    */
-  public remove(key: string, expired: boolean = false, log = true): void {
+  public static remove(key: string, expired: boolean = false, log = true): void {
     const entry = this._data[key];
 
     if (entry) {
@@ -103,7 +98,7 @@ export class Cache {
     }
   }
 
-  private _info() {
+  private static _info() {
     return `(total: ${this._keys} keys - ${Utils.formatSize(this._size)})`;
   }
 
@@ -113,7 +108,7 @@ export class Cache {
    * @return {Q.Promise<void>}
    * @private
    */
-  private _checkCacheSize(): q.Promise<any> {
+  private static _checkCacheSize(): q.Promise<any> {
     const defer = q.defer();
 
     if (this._maxSize && this._size > this._maxSize) {
@@ -138,7 +133,7 @@ export class Cache {
    * Remove expired cached values
    * @private
    */
-  private _removeExpired() {
+  private static _removeExpired() {
     const now = Date.now();
     for (const i in this._data) {
       if (this._data.hasOwnProperty(i) && this._data[i].t <= now) {
@@ -151,7 +146,7 @@ export class Cache {
    * Remove oldest value from cache
    * @private
    */
-  private _removeOldestValue() {
+  private static _removeOldestValue() {
     let key = null;
     let date = null;
     for (const i in this._data) {
@@ -167,4 +162,4 @@ export class Cache {
   }
 }
 
-export default new Cache();
+Cache.init();

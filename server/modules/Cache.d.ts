@@ -1,33 +1,33 @@
-export declare class Cache {
+export default class Cache {
     /**
      * Node cache instance
      */
-    private _data;
+    private static _data;
     /**
      * Cache size in bytes
      */
-    private _size;
+    private static _size;
     /**
      * Number of keys in cache
      */
-    private _keys;
+    private static _keys;
     /**
      * Cache max size (bytes)
      */
-    private _maxSize;
-    constructor();
+    private static _maxSize;
+    static init(): void;
     /**
      * Get cache item for given key
      * @param {string} key
      */
-    get(key: string): any;
+    static get(key: string): any;
     /**
      * Set cache item for given key
      * @param {string} key
      * @param value
      * @param {number} TTL Time To Live (seconds)
      */
-    set(key: string, value: any, TTL?: number): void;
+    static set(key: string, value: any, TTL?: number): void;
     /**
      * Remove key from cache
      * @param {string} key
@@ -35,25 +35,23 @@ export declare class Cache {
      * @param expired
      * @param log
      */
-    remove(key: string, expired?: boolean, log?: boolean): void;
-    private _info();
+    static remove(key: string, expired?: boolean, log?: boolean): void;
+    private static _info();
     /**
      * Check cache size and remove oldest items if size exceed maximum
      * @param {number} size
      * @return {Q.Promise<void>}
      * @private
      */
-    private _checkCacheSize();
+    private static _checkCacheSize();
     /**
      * Remove expired cached values
      * @private
      */
-    private _removeExpired();
+    private static _removeExpired();
     /**
      * Remove oldest value from cache
      * @private
      */
-    private _removeOldestValue();
+    private static _removeOldestValue();
 }
-declare const _default: Cache;
-export default _default;

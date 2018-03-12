@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Config_schema_1 = require("../schemas/Config.schema");
-const Logger_1 = require("../config/Logger");
+const Logger_1 = require("../utils/Logger");
 /**
  * List of permissions
  */
@@ -10,7 +10,7 @@ class Permissions {
     /**
      * Permission middleware
      */
-    middleware() {
+    static middleware() {
         return (req, res, next) => {
             if (!list) {
                 Config_schema_1.default.getPermissions()
@@ -34,7 +34,7 @@ class Permissions {
      * @param accessRole
      * @return {boolean}
      */
-    ensureAuthorized(user, accessRole) {
+    static ensureAuthorized(user, accessRole) {
         const memberRights = user.roles || ['public'];
         if (!!~memberRights.indexOf('admin')) {
             return true;
@@ -54,7 +54,5 @@ class Permissions {
         return false;
     }
 }
-exports.Permissions = Permissions;
-const permission = new Permissions(); // Accessible via static methods
-exports.default = permission;
+exports.default = Permissions;
 //# sourceMappingURL=Permissions.js.map

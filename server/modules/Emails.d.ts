@@ -1,35 +1,32 @@
 import { User } from '../../commons/models/User';
-export declare class Emails {
-    private _siteURL;
-    constructor();
+export default class Emails {
+    private static _siteURL;
     /**
      * TODO
      */
-    sendWelcome(dest: User): void;
+    static sendWelcome(dest: User): void;
     /**
      * TODO
      */
-    sendPasswordRecovery(dest: User): void;
+    static sendPasswordRecovery(dest: User): void;
     /**
      * TODO
      */
-    sendLockedAccount(dest: User): void;
+    static sendLockedAccount(dest: User): void;
     /**
      * TODO
      */
-    sendUnlockedAccount(dest: User): void;
+    static sendUnlockedAccount(dest: User): void;
     /**
      * Do send email with template
      * @param locals
      * @private
      */
-    private _sendTemplateMail(locals);
+    private static _sendTemplateMail(locals);
     /**
      * Create SMTP connexion
      * @return {Transporter}
      * @private
      */
-    private _smtpConnect();
+    private static _smtpConnect();
 }
-declare const _default: Emails;
-export default _default;

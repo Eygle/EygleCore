@@ -1,31 +1,27 @@
 import * as passport from 'passport';
 import * as _ from 'underscore';
 
-import Utils from '../../commons/utils/Utils';
-import {CustomEdError, EdError} from '../config/EdError';
 import Emails from '../modules/Emails';
 import UserSchema from '../schemas/User.schema';
 import Permission from '../modules/Permissions';
-import {EEnv, EHTTPStatus} from '../typings/server.enums';
+import {EHTTPStatus} from '../typings/server.enums';
 import {User} from '../../commons/models/User';
 import {ILoginAttempt} from "../typings/server.interfaces";
-import Logger from "../config/Logger";
-import ProjectConfig from "../config/ProjectConfig";
+import Logger from "../utils/Logger";
+import {CustomEdError, default as EdError} from "../utils/EdError";
+import {EEnv} from "../../commons/core.enums";
+import ServerConfig from "../utils/ServerConfig";
 
-export class Auth {
+export default class Auth {
   /**
    * Users login attempts failed
    */
-  private _attempts: _.Dictionary<ILoginAttempt>;
-
-  constructor() {
-    this._attempts = <_.Dictionary<ILoginAttempt>>{};
-  }
+  private static _attempts: _.Dictionary<ILoginAttempt> = {};
 
   /**
    * @return {(req:any, res:any, next:any)} Login middleware
    */
-  public loginMiddleware() {
+  public static loginMiddleware() {
     return (req, res, next) => {
       passport.authenticate('local', (err, user) => {
         if (err) return next(err);
@@ -48,7 +44,7 @@ export class Auth {
   /**
    * @return {(req:any, res:any, next:any)} Logout middleware
    */
-  public logoutMiddleware() {
+  public static logoutMiddleware() {
     return (req, res) => {
        Logger.log(`User ${req.user ?
         req.user.fullName || req.user.email :
@@ -61,7 +57,7 @@ export class Auth {
   /**
    * @return {(req:any, res:any, next:any)} Register middleware
    */
-  public registerMiddleware() {
+  public static registerMiddleware() {
     return (req, res, next) => {
       UserSchema.add({
         email: req.body.email,
@@ -91,7 +87,7 @@ export class Auth {
   /**
    * @return {(req:any, res:any, next:any)} Forgot password middleware
    */
-  public forgotPasswordMiddleware() {
+  public static forgotPasswordMiddleware() {
     return (req, res, next) => {
       UserSchema.findOneByEmail(req.body.email).then((user: User) => {
         if (!user) return res.status(404).send('UserSchema not found');
@@ -110,7 +106,7 @@ export class Auth {
   /**
    * @return {(req:any, res:any, next:any)} Change password middleware
    */
-  public changePasswordMiddleware() {
+  public static changePasswordMiddleware() {
     return (req, res, next) => {
       const p = req.url.split('/');
       const id = p[p.length - 1];
@@ -135,7 +131,7 @@ export class Auth {
    * This security will lock accounts after a certain amount of tries
    * @return {(req:any, res:any, next:any)} Login limit middleware
    */
-  public loginLimitMiddleware() {
+  public static loginLimitMiddleware() {
     return (req, res, next) => {
       const username = req.body.username;
 
@@ -157,7 +153,7 @@ export class Auth {
    * This security will lock accounts after a certain amount of tries
    * @return {(req:any, res:any, next:any)} Login limit middleware
    */
-  public unlockAccountMiddleware() {
+  public static unlockAccountMiddleware() {
     return (req, res, next) => {
       const p = req.url.split('/');
       const id = p[p.length - 1];
@@ -184,10 +180,10 @@ export class Auth {
    * @param res
    * @param user
    */
-  public addUserCookie(res, user) {
+  public static addUserCookie(res, user) {
     res.cookie('user',
       JSON.stringify(this._generateUserCookieData(user)),
-       {secure: EEnv.Dev !== ProjectConfig.env && EEnv.Test !== ProjectConfig.env});
+       {secure: EEnv.Dev !== ServerConfig.env && EEnv.Test !== ServerConfig.env});
   }
 
   /**
@@ -196,7 +192,7 @@ export class Auth {
    * @return any
    * @private
    */
-  private _generateUserCookieData(user) {
+  private static _generateUserCookieData(user) {
     return user ? {
       _id: user._id.toString(),
       userName: user.userName,
@@ -216,7 +212,7 @@ export class Auth {
    * @param next
    * @private
    */
-  private _addLoginFailedAttempt(user, req, res, next) {
+  private static _addLoginFailedAttempt(user, req, res, next) {
     const username = req.body.username;
     this._addAttempt(username);
 
@@ -248,7 +244,7 @@ export class Auth {
    * @param username
    * @private
    */
-  private _cleanAttempts(username) {
+  private static _cleanAttempts(username) {
     if ((<any>this._attempts).hasOwnProperty(username)) {
        this._attempts[username] = <ILoginAttempt>{list: [], locked: false};
     }
@@ -259,16 +255,16 @@ export class Auth {
    * @param username
    * @private
    */
-  private _addAttempt(username: string) {
+  private static _addAttempt(username: string) {
     if (!(<any>this._attempts).hasOwnProperty(username)) {
       this._attempts[username] = <ILoginAttempt>{list: [], locked: false};
     }
     this._attempts[username].list.push(Date.now());
 
-    if (!this._attempts[username].locked && this._attempts[username].list.length >= Utils.maxLoginAttempts) {
+    if (!this._attempts[username].locked && this._attempts[username].list.length >= ServerConfig.maxLoginAttempts) {
       this._attempts[username].locked = true;
     }
-    if (this._attempts[username].list.length > Utils.maxLoginAttempts) {
+    if (this._attempts[username].list.length > ServerConfig.maxLoginAttempts) {
       this._attempts[username].list.splice(0, 1);
     }
   }
@@ -276,19 +272,17 @@ export class Auth {
   /**
    * Remove all expired attempts
    */
-  private _cleanExpiredAttempts(username) {
+  private static _cleanExpiredAttempts(username) {
     if (!(<any>this._attempts).hasOwnProperty(username)) return;
     const now = Date.now();
     const userAttempts: any = this._attempts[username].list;
 
     for (const idx in userAttempts) {
       if (userAttempts.hasOwnProperty(idx)) {
-        if (now - userAttempts[idx] >= Utils.loginAttemptsExpire) {
+        if (now - userAttempts[idx] >= ServerConfig.loginAttemptsExpire) {
           userAttempts.splice(idx, 1);
         }
       }
     }
   }
 }
-
-export default new Auth();

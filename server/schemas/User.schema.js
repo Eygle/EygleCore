@@ -8,7 +8,7 @@ const Cache_1 = require("../modules/Cache");
 const Utils_1 = require("../../commons/utils/Utils");
 const ASchema_schema_1 = require("./ASchema.schema");
 const server_enums_1 = require("../typings/server.enums");
-const EdError_1 = require("../config/EdError");
+const EdError_1 = require("../utils/EdError");
 const core_enums_1 = require("../../commons/core.enums");
 const _schema = DB_1.default.createSchema({
     email: {

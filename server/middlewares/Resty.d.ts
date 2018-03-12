@@ -1,7 +1,7 @@
 import { EPermission } from '../../commons/core.enums';
 import { User } from '../../commons/models/User';
 import { IRestyContext, IRoutePermissions } from '../typings/resty.interface';
-declare class Resty {
+export default class Resty {
     private static _resources;
     /**
      * Express middleware used for http connexions
@@ -35,7 +35,6 @@ declare class Resty {
      */
     private static _addResources(resourceDir, resources);
 }
-export default Resty;
 export declare class RoutePermissions implements IRoutePermissions {
     'default': string;
     get: string;

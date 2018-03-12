@@ -3,16 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tracer = require("tracer");
 const cron = require("node-schedule");
 const CronJob_schema_1 = require("../schemas/CronJob.schema");
-const server_enums_1 = require("../typings/server.enums");
-const ProjectConfig_1 = require("../config/ProjectConfig");
-const Logger_1 = require("../config/Logger");
+const ServerConfig_1 = require("../utils/ServerConfig");
+const core_enums_1 = require("../../commons/core.enums");
+const Logger_1 = require("../utils/Logger");
 class AJob {
     constructor(name) {
         this.name = name;
         this.logFilename = `mapui-${this._formatName()}`;
-        if (server_enums_1.EEnv.Prod === ProjectConfig_1.default.env || server_enums_1.EEnv.Preprod === ProjectConfig_1.default.env) {
+        if (core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env) {
             this.logger = tracer.dailyfile({
-                root: `${ProjectConfig_1.default.root}/logs`,
+                root: `${ServerConfig_1.default.root}/logs`,
                 maxLogFiles: 10,
                 allLogsFileName: this.logFilename,
                 format: "{{timestamp}} <{{title}}> {{message}}",

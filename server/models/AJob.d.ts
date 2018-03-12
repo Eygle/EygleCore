@@ -1,6 +1,6 @@
 import { CronJob } from "../../commons/models/CronJob";
-import { EEnv } from "../typings/server.enums";
 import { ILogger } from "../typings/server.interfaces";
+import { EEnv } from "../../commons/core.enums";
 declare abstract class AJob implements CronJob {
     /**
      * Log file name

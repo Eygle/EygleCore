@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const q = require("q");
 const DB_1 = require("../modules/DB");
 const Utils_1 = require("../../commons/utils/Utils");
-const EdError_1 = require("../config/EdError");
+const EdError_1 = require("../utils/EdError");
 const server_enums_1 = require("../typings/server.enums");
 class ASchema {
     constructor(encryptKeys = null) {

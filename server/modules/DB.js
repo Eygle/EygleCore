@@ -4,37 +4,34 @@ const mongoose = require("mongoose");
 const q = require("q");
 const fs = require("fs");
 const Utils_1 = require("../../commons/utils/Utils");
-const EdError_1 = require("../config/EdError");
 const server_enums_1 = require("../typings/server.enums");
-const Logger_1 = require("../config/Logger");
-const ProjectConfig_1 = require("../config/ProjectConfig");
+const ServerConfig_1 = require("../utils/ServerConfig");
+const Logger_1 = require("../utils/Logger");
+const EdError_1 = require("../utils/EdError");
 class DB {
     /**
      * _instance getter
      * @return {any}
      */
-    get instance() {
+    static get instance() {
         return this._instance;
-    }
-    constructor() {
-        this._connected = false;
     }
     /**
      * Initialize database connexion
      * @return {Promise<any>}
      */
-    init() {
+    static init() {
         const defer = q.defer();
         mongoose.Promise = global.Promise;
-        mongoose.connect('mongodb://localhost/' + ProjectConfig_1.default.dbName);
+        mongoose.connect('mongodb://localhost/' + ServerConfig_1.default.dbName);
         this._instance = mongoose.connection;
         this._instance.on('error', () => {
             Logger_1.default.error('Mongoose connection error');
         });
         this._instance.once('open', () => {
             this._loadModels(null);
-            this._loadModels(ProjectConfig_1.default.dbCollectionsPrefix, `${ProjectConfig_1.default.root}/server/schemas/`);
-            Logger_1.default.info(`Mongo database '${ProjectConfig_1.default.dbName}' connected`);
+            this._loadModels(ServerConfig_1.default.dbCollectionsPrefix, `${ServerConfig_1.default.root}/server/schemas/`);
+            Logger_1.default.info(`Mongo database '${ServerConfig_1.default.dbName}' connected`);
             defer.resolve();
         });
         return defer.promise;
@@ -46,7 +43,7 @@ class DB {
      * @param options
      * @return {"mongoose".Schema}
      */
-    createSchema(data, deleted = true, options = null) {
+    static createSchema(data, deleted = true, options = null) {
         data.creationDate = { type: Date, required: true, 'default': Date.now };
         data.updateDate = { type: Date, required: true };
         data.__v = { type: Number, select: false }; // Avoid VersionError with schema having arrays
@@ -56,7 +53,7 @@ class DB {
         const schema = new mongoose.Schema(data, options || {
             toJSON: {
                 transform: function (doc, ret) {
-                    instance.transformUnpopulatedReferences(ret);
+                    this.transformUnpopulatedReferences(ret);
                     return ret;
                 }
             }
@@ -94,7 +91,7 @@ class DB {
      * @param populateOptions
      * @param model
      */
-    saveItem(item, data = null, populateOptions = null, model = null) {
+    static saveItem(item, data = null, populateOptions = null, model = null) {
         const defer = q.defer();
         if (!item) {
             defer.reject(new EdError_1.CustomEdError('Item not found', server_enums_1.EHTTPStatus.BadRequest));
@@ -126,7 +123,7 @@ class DB {
      * @param model
      * @return {any}
      */
-    createItem(item, populateOptions = null, model = null) {
+    static createItem(item, populateOptions = null, model = null) {
         return this.saveItem(item, null, populateOptions, model);
     }
     /**
@@ -134,7 +131,7 @@ class DB {
      * This method is used in mongoose schema's toJSON & toObject methods
      * @param data
      */
-    transformUnpopulatedReferences(data) {
+    static transformUnpopulatedReferences(data) {
         const excludes = ['_id', 'id', 'creationUID', 'updateUID'];
         for (const key in data) {
             if (data.hasOwnProperty(key)) {
@@ -151,7 +148,7 @@ class DB {
      * Load all models
      * @private
      */
-    _loadModels(prefix, path = `${__dirname}/../schemas`, parent = null) {
+    static _loadModels(prefix, path = `${__dirname}/../schemas`, parent = null) {
         for (const f of fs.readdirSync(path)) {
             const modelName = (prefix || '') + f.split('.')[0];
             if (modelName === 'ASchema')
@@ -170,7 +167,9 @@ class DB {
         }
     }
 }
-exports.DB = DB;
-const instance = new DB();
-exports.default = instance;
+/**
+ * Is database connected
+ */
+DB._connected = false;
+exports.default = DB;
 //# sourceMappingURL=DB.js.map

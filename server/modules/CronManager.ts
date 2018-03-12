@@ -2,31 +2,31 @@ import * as fs from 'fs';
 import * as q from 'q';
 import * as _ from 'underscore';
 import CronJobSchema from '../schemas/CronJob.schema';
-import {EEnv} from '../typings/server.enums';
 import AJob from '../models/AJob';
 import {CronJob} from '../../commons/models/CronJob';
-import ProjectConfig from "../config/ProjectConfig";
-import Logger from "../config/Logger";
+import ServerConfig from "../utils/ServerConfig";
+import {EEnv} from "../../commons/core.enums";
+import Logger from "../utils/Logger";
 
-export class CronManager {
+export default class CronManager {
   /**
    * Path of jobs folder
    * @type {string}
    * @private
    */
-  private _jobsPath = `${ProjectConfig.root}/server/cron-jobs/`;
+  private static _jobsPath = `${ServerConfig.root}/server/cron-jobs/`;
 
   /**
    * All [[AJob]]s
    */
-  private _list: Array<AJob>;
+  private static _list: Array<AJob>;
 
   /**
    * Load of services from folder _jobsPath and schedule cron jobs if needed
    * @private
    */
-  public init(): void {
-     if (EEnv.Prod !== ProjectConfig.env || parseInt(process.env.pm_id) === 1) { // Limit to a pm2 single instance for prod
+  public static init(): void {
+     if (EEnv.Prod !== ServerConfig.env || parseInt(process.env.pm_id) === 1) { // Limit to a pm2 single instance for prod
       CronJobSchema.getAll()
         .then((dbItems: Array<CronJob>) => {
           this._list = [];
@@ -46,7 +46,7 @@ export class CronManager {
               item.setModel(dbItem);
             } else {
               // Schedule only if there is not environment restriction or the restriction is matched
-               item.isScheduled = !item.environments || !!~item.environments.indexOf(ProjectConfig.env);
+               item.isScheduled = !item.environments || !!~item.environments.indexOf(ServerConfig.env);
               promises.push(
                 CronJobSchema.add(item)
                   .then((model: CronJob) => {
@@ -80,7 +80,7 @@ export class CronManager {
    * Run job once
    * @param job
    */
-  public runJob(job: string): void {
+  public static runJob(job: string): void {
     for (const item of this._list) {
       if (item.name === job) {
         item.run();
@@ -93,7 +93,7 @@ export class CronManager {
    * Schedule job once
    * @param job
    */
-  public scheduleJob(job: string): void {
+  public static scheduleJob(job: string): void {
     for (const item of this._list) {
       if (item.name === job) {
         item.schedule();
@@ -106,7 +106,7 @@ export class CronManager {
    * Un-schedule job once
    * @param job
    */
-  public unScheduleJob(job: string): void {
+  public static unScheduleJob(job: string): void {
     for (const item of this._list) {
       if (item.name === job) {
         item.unSchedule();
@@ -119,9 +119,7 @@ export class CronManager {
    * Return list of jobs
    * @return {Array<CronJob>}
    */
-  public jobs(): Array<CronJob> {
+  public static jobs(): Array<CronJob> {
     return this._list;
   }
 }
-
-export default new CronManager();

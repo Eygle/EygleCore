@@ -7,39 +7,36 @@ const handlebars = require("handlebars");
 const fs = require("fs");
 const q = require("q");
 const EmailTemplate = require("email-templates");
-const server_enums_1 = require("../typings/server.enums");
-const ProjectConfig_1 = require("../config/ProjectConfig");
-const Logger_1 = require("../config/Logger");
+const ServerConfig_1 = require("../utils/ServerConfig");
+const Logger_1 = require("../utils/Logger");
+const core_enums_1 = require("../../commons/core.enums");
 class Emails {
-    constructor() {
-        this._siteURL = 'https://www.dl.eygle.fr';
+    /**
+     * TODO
+     */
+    static sendWelcome(dest) {
     }
     /**
      * TODO
      */
-    sendWelcome(dest) {
+    static sendPasswordRecovery(dest) {
     }
     /**
      * TODO
      */
-    sendPasswordRecovery(dest) {
+    static sendLockedAccount(dest) {
     }
     /**
      * TODO
      */
-    sendLockedAccount(dest) {
-    }
-    /**
-     * TODO
-     */
-    sendUnlockedAccount(dest) {
+    static sendUnlockedAccount(dest) {
     }
     /**
      * Do send email with template
      * @param locals
      * @private
      */
-    _sendTemplateMail(locals) {
+    static _sendTemplateMail(locals) {
         const defer = q.defer();
         const transporter = this._smtpConnect();
         const template = new EmailTemplate(`${__dirname}/../templates/${locals.template}`);
@@ -52,7 +49,7 @@ class Emails {
             }
             return conditional % 2 === 0 ? options.fn(this) : options.inverse(this);
         });
-        if (ProjectConfig_1.default.env !== server_enums_1.EEnv.Prod) {
+        if (ServerConfig_1.default.env !== core_enums_1.EEnv.Prod) {
             locals.email = 'dev@eygle.fr';
             locals.bccmail = '';
         }
@@ -62,11 +59,11 @@ class Emails {
                 defer.reject(err);
             }
             else {
-                if (ProjectConfig_1.default.env === server_enums_1.EEnv.Dev || ProjectConfig_1.default.env === server_enums_1.EEnv.Test) {
+                if (ServerConfig_1.default.env === core_enums_1.EEnv.Dev || ServerConfig_1.default.env === core_enums_1.EEnv.Test) {
                     transporter.use('stream', require('nodemailer-dkim').signer({
                         domainName: 'eygle.fr',
                         keySelector: 'key1',
-                        privateKey: fs.readFileSync(`${ProjectConfig_1.default.root}/server/misc/key1.eygle.fr.pem`)
+                        privateKey: fs.readFileSync(`${ServerConfig_1.default.root}/server/misc/key1.eygle.fr.pem`)
                     }));
                 }
                 const optSendMail = {
@@ -98,8 +95,8 @@ class Emails {
      * @return {Transporter}
      * @private
      */
-    _smtpConnect() {
-        if (server_enums_1.EEnv.Dev === ProjectConfig_1.default.env || server_enums_1.EEnv.Test === ProjectConfig_1.default.env) {
+    static _smtpConnect() {
+        if (core_enums_1.EEnv.Dev === ServerConfig_1.default.env || core_enums_1.EEnv.Test === ServerConfig_1.default.env) {
             return nodemailer.createTransport(smtpTransport({
                 host: 'smtp.free.fr',
                 port: 465,
@@ -115,6 +112,6 @@ class Emails {
         }
     }
 }
-exports.Emails = Emails;
-exports.default = new Emails();
+Emails._siteURL = 'https://www.dl.eygle.fr';
+exports.default = Emails;
 //# sourceMappingURL=Emails.js.map

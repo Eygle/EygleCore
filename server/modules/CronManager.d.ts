@@ -1,40 +1,38 @@
 import { CronJob } from '../../commons/models/CronJob';
-export declare class CronManager {
+export default class CronManager {
     /**
      * Path of jobs folder
      * @type {string}
      * @private
      */
-    private _jobsPath;
+    private static _jobsPath;
     /**
      * All [[AJob]]s
      */
-    private _list;
+    private static _list;
     /**
      * Load of services from folder _jobsPath and schedule cron jobs if needed
      * @private
      */
-    init(): void;
+    static init(): void;
     /**
      * Run job once
      * @param job
      */
-    runJob(job: string): void;
+    static runJob(job: string): void;
     /**
      * Schedule job once
      * @param job
      */
-    scheduleJob(job: string): void;
+    static scheduleJob(job: string): void;
     /**
      * Un-schedule job once
      * @param job
      */
-    unScheduleJob(job: string): void;
+    static unScheduleJob(job: string): void;
     /**
      * Return list of jobs
      * @return {Array<CronJob>}
      */
-    jobs(): Array<CronJob>;
+    static jobs(): Array<CronJob>;
 }
-declare const _default: CronManager;
-export default _default;
