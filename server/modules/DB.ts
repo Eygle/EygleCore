@@ -6,6 +6,7 @@ import {EHTTPStatus} from '../typings/server.enums';
 import ServerConfig from "../utils/ServerConfig";
 import Logger from "../utils/Logger";
 import {CustomEdError} from "../utils/EdError";
+import * as path from "path";
 
 export default class DB {
    /**
@@ -39,8 +40,8 @@ export default class DB {
          Logger.error('Mongoose connection error');
       });
       this._instance.once('open', () => {
-         this._loadModels(null);
-         this._loadModels(ServerConfig.dbCollectionsPrefix, `${ServerConfig.root}/server/schemas/`);
+          this._loadModels(`${__dirname}/../db`, 'EygleCore');
+          this._loadModels(`${ServerConfig.root}/server/db`, ServerConfig.appName, ServerConfig.dbCollectionsPrefix);
          Logger.info(`Mongo database '${ServerConfig.dbName}' connected`);
          defer.resolve();
       });
@@ -163,26 +164,33 @@ export default class DB {
       }
    }
 
-   /**
-    * Load all models
-    * @private
-    */
-   private static _loadModels(prefix: string, path = `${__dirname}/../schemas`, parent = null): void {
-      for (const f of fs.readdirSync(path)) {
-         const modelName = (prefix || '') + f.split('.')[0];
-         if (modelName === 'ASchema') continue;
+    /**
+     * Load all models
+     * @private
+     */
+    private static _loadModels(dir: string, appName: string, prefix: string = '', parent: any = null): void {
+        if (!fs.existsSync(dir)) return null;
+        for (let f of fs.readdirSync(dir)) {
+            const file = `${dir}/${f}`;
+            const stat = fs.statSync(file);
+            if (stat.isDirectory()) {
+                this._loadModels(file, appName, f);
+                continue;
+            }
 
-         const file = `${path}/${f}`;
-         const stat = fs.statSync(file);
-         if (stat.isDirectory()) {
-            this._loadModels(prefix, file, f);
-            continue;
-         }
-         const model = require(file).schema.importSchema(modelName);
-         model.on('error', (err) => {
-            Logger.error(`Mongo error: [${err.name}] ${err.message}`, err.errors);
-         });
-         Logger.trace(`Model ${parent ? `${parent}/${modelName}` : modelName} loaded`);
-      }
-   }
+            if (path.extname(f) !== '.js') continue;
+
+            let modelName = prefix + f.split('.')[0];
+            if (modelName === 'ADBModel') continue;
+
+            if (modelName.endsWith('DB')) {
+                modelName = modelName.substr(0, modelName.length - 2);
+            }
+            const model = require(file).schema.importSchema(modelName);
+            model.on('error', (err: any) => {
+                Logger.error(`Mongo error: [${err.name}] ${err.message}`, err.errors);
+            });
+            Logger.trace(`Model ${appName}/${parent ? `${parent}/${modelName}` : modelName} loaded`);
+        }
+    };
 }

@@ -1,20 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose = require("mongoose");
 const q = require("q");
-const DB_1 = require("../modules/DB");
-const ASchema_schema_1 = require("./ASchema.schema");
 const core_enums_1 = require("../../commons/core.enums");
-const _schema = DB_1.default.createSchema({
-    name: { type: String, required: true, unique: true },
-    data: mongoose.Schema.Types.Mixed
-}, false);
-class ConfigSchema extends ASchema_schema_1.default {
+const ADBModel_1 = require("./ADBModel");
+const config_schema_1 = require("../schemas/config.schema");
+class ConfigDB extends ADBModel_1.default {
     /**
      * Get list of permissions
      * @return {Promise<Array<Permission>>}
      */
-    getPermissions() {
+    static getPermissions() {
         const defer = q.defer();
         this._model.findOne({ name: 'permissions' })
             .exec((err, permission) => {
@@ -29,7 +24,7 @@ class ConfigSchema extends ASchema_schema_1.default {
      * @returns {{}[]}
      * @private
      */
-    _fill() {
+    static _fill() {
         const permissions = [{
                 name: core_enums_1.EPermission.SeeHome,
                 roles: [core_enums_1.ERole.Guest, core_enums_1.ERole.User]
@@ -118,16 +113,8 @@ class ConfigSchema extends ASchema_schema_1.default {
         });
         return permissions;
     }
-    /**
-     * Get FileSchema schema
-     * @return {"mongoose".Schema}
-     */
-    getSchema() {
-        return _schema;
-    }
 }
-exports.ConfigSchema = ConfigSchema;
-const instance = new ConfigSchema();
-module.exports.schema = instance; // Used by DB models loader (need require)
-exports.default = instance; // Used anywhere else
-//# sourceMappingURL=Config.schema.js.map
+exports.default = ConfigDB;
+ConfigDB.init(config_schema_1.configSchema);
+module.exports.schema = ConfigDB; // Used by MongoDB models loader (need require)
+//# sourceMappingURL=ConfigDB.js.map

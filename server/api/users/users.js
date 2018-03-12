@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const User_schema_1 = require("../../schemas/User.schema");
+const UserDB_1 = require("../../db/UserDB");
 const Resty_1 = require("../../middlewares/Resty");
 class Resource extends Resty_1.ARoute {
     /**
@@ -9,7 +9,7 @@ class Resource extends Resty_1.ARoute {
      * @param next
      */
     get(id, next) {
-        User_schema_1.default.getFullCached(id)
+        UserDB_1.default.getFullCached(id)
             .then((items) => {
             next(items);
         })
@@ -24,7 +24,7 @@ class Collection extends Resty_1.ARoute {
      * @param next
      */
     get(next) {
-        User_schema_1.default.getAll()
+        UserDB_1.default.getAll()
             .then((items) => {
             next(items);
         })

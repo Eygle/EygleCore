@@ -2,7 +2,7 @@ import * as passport from 'passport';
 import * as bcrypt from 'bcrypt';
 import * as local from 'passport-local';
 
-import UserSchema from '../schemas/User.schema';
+import UserDB from '../db/UserDB';
 import {User} from '../../commons/models/User';
 import Logger from "./Logger";
 
@@ -29,7 +29,7 @@ class PassportConfig {
       username = username.replace(' ', '');
       username = username.toLowerCase();
 
-      UserSchema.findOneByUserNameOrEmail(username, true)
+      UserDB.findOneByUserNameOrEmail(username, true)
         .then((user: User) => {
           if (!user) {
              Logger.log(`User '${username}' login failed (no such username or email)`);
@@ -68,7 +68,7 @@ class PassportConfig {
    */
   private static _deserializeUser() {
     return (id, done) => {
-      UserSchema.getFullCached(id)
+      UserDB.getFullCached(id)
         .then((user: User) => {
           if (!user) return done(null, false);
           done(null, user);

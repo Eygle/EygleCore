@@ -55,5 +55,5 @@ export default class DB {
      * Load all models
      * @private
      */
-    private static _loadModels(prefix, path?, parent?);
+    private static _loadModels(dir, appName, prefix?, parent?);
 }

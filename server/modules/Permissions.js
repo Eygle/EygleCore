@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Config_schema_1 = require("../schemas/Config.schema");
+const ConfigDB_1 = require("../db/ConfigDB");
 const Logger_1 = require("../utils/Logger");
 /**
  * List of permissions
@@ -13,7 +13,7 @@ class Permissions {
     static middleware() {
         return (req, res, next) => {
             if (!list) {
-                Config_schema_1.default.getPermissions()
+                ConfigDB_1.default.getPermissions()
                     .then((permissions) => {
                     list = permissions;
                     next();

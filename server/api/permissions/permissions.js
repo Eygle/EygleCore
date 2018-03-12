@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Config_schema_1 = require("../../schemas/Config.schema");
+const ConfigDB_1 = require("../../db/ConfigDB");
 const Resty_1 = require("../../middlewares/Resty");
 class Collection extends Resty_1.ARoute {
     /**
@@ -8,7 +8,7 @@ class Collection extends Resty_1.ARoute {
      * @param next
      */
     get(next) {
-        Config_schema_1.default.getPermissions()
+        ConfigDB_1.default.getPermissions()
             .then((items) => {
             next(items);
         })

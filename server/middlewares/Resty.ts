@@ -17,14 +17,13 @@ export default class Resty {
 
    /**
     * Express middleware used for http connexions
-    * @param resourceDir
     * @return {(req:any, res:any)=>undefined}
     */
-   public static httpMiddleware(resourceDir): Function {
+   public static httpMiddleware(): Function {
       try {
          if (!this._resources) {
             this._resources = {};
-            this._addResources(resourceDir, this._resources);
+            this._addResources(`${__dirname}/../api`, this._resources);
             this._addResources(ServerConfig.apiRoot, this._resources);
          }
 

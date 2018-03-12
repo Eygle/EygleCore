@@ -21,7 +21,7 @@ class Routes {
       }
 
       // API ENTRY POINT
-      app.all('/api/*', [Resty.httpMiddleware(`${__dirname}/../api`)]);
+      app.all('/api/*', [Resty.httpMiddleware()]);
 
       // AUTH
       if (ServerConfig.implementsAuth) {

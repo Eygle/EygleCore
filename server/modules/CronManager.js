@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const q = require("q");
 const _ = require("underscore");
-const CronJob_schema_1 = require("../schemas/CronJob.schema");
+const CronJobDB_1 = require("../db/CronJobDB");
 const ServerConfig_1 = require("../utils/ServerConfig");
 const core_enums_1 = require("../../commons/core.enums");
 const Logger_1 = require("../utils/Logger");
+const path = require("path");
 class CronManager {
     /**
      * Load of services from folder _jobsPath and schedule cron jobs if needed
@@ -14,12 +15,15 @@ class CronManager {
      */
     static init() {
         if (core_enums_1.EEnv.Prod !== ServerConfig_1.default.env || parseInt(process.env.pm_id) === 1) {
-            CronJob_schema_1.default.getAll()
+            CronJobDB_1.default.getAll()
                 .then((dbItems) => {
                 this._list = [];
                 const promises = [];
                 const added = [];
                 for (const filename of fs.readdirSync(this._jobsPath)) {
+                    if (path.extname(filename) !== '.js') {
+                        continue;
+                    }
                     const item = require(this._jobsPath + filename);
                     const dbItem = _.find(dbItems, (i) => {
                         return i.name === item.name;
@@ -32,7 +36,7 @@ class CronManager {
                     else {
                         // Schedule only if there is not environment restriction or the restriction is matched
                         item.isScheduled = !item.environments || !!~item.environments.indexOf(ServerConfig_1.default.env);
-                        promises.push(CronJob_schema_1.default.add(item)
+                        promises.push(CronJobDB_1.default.add(item)
                             .then((model) => {
                             item.setModel(model);
                         }));
@@ -40,7 +44,7 @@ class CronManager {
                 }
                 for (const item of dbItems) {
                     if (!~added.indexOf(item.name)) {
-                        CronJob_schema_1.default.remove(item);
+                        CronJobDB_1.default.remove(item);
                     }
                 }
                 q.allSettled(promises)

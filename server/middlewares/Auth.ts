@@ -2,7 +2,7 @@ import * as passport from 'passport';
 import * as _ from 'underscore';
 
 import Emails from '../modules/Emails';
-import UserSchema from '../schemas/User.schema';
+import UserDB from '../db/UserDB';
 import Permission from '../modules/Permissions';
 import {EHTTPStatus} from '../typings/server.enums';
 import {User} from '../../commons/models/User';
@@ -59,7 +59,7 @@ export default class Auth {
    */
   public static registerMiddleware() {
     return (req, res, next) => {
-      UserSchema.add({
+      UserDB.add({
         email: req.body.email,
          userName: req.body.username,
         password: req.body.password
@@ -89,11 +89,11 @@ export default class Auth {
    */
   public static forgotPasswordMiddleware() {
     return (req, res, next) => {
-      UserSchema.findOneByEmail(req.body.email).then((user: User) => {
-        if (!user) return res.status(404).send('UserSchema not found');
+      UserDB.findOneByEmail(req.body.email).then((user: User) => {
+        if (!user) return res.status(404).send('UserDB not found');
         user.password = null; // set password has null to force validMail generation
-        UserSchema.save(user).then((userSaved: User) => {
-          UserSchema.getPasswordsById(userSaved._id.toString()).then(userWPwd => {
+        UserDB.save(user).then((userSaved: User) => {
+          UserDB.getPasswordsById(userSaved._id.toString()).then(userWPwd => {
             Emails.sendPasswordRecovery(userWPwd);
              Logger.log(`User ${req.body.email} recovered password`);
             res.sendStatus(200);
@@ -117,7 +117,7 @@ export default class Auth {
           '[null]'}`, EHTTPStatus.Forbidden));
       }
 
-      UserSchema.changePasswordById(id, req.body.oldPwd, req.body.password)
+      UserDB.changePasswordById(id, req.body.oldPwd, req.body.password)
         .then((user) => {
            Logger.log(`User ${req.user.email} changed password`);
           res.status(200).json(user);
@@ -162,7 +162,7 @@ export default class Auth {
         return next(new EdError(EHTTPStatus.Forbidden));
       }
 
-      UserSchema.saveById(id, {
+      UserDB.saveById(id, {
         locked: false
       }).then((user: User) => {
         this._cleanAttempts(user.userName);
@@ -217,10 +217,10 @@ export default class Auth {
     this._addAttempt(username);
 
     if (this._attempts[username].locked) {
-      UserSchema.findOneByUserNameOrEmail(username).then((userRes: User) => {
+      UserDB.findOneByUserNameOrEmail(username).then((userRes: User) => {
         if (userRes && !userRes.locked) {
           userRes.locked = true;
-          UserSchema.save(userRes).then((userSaved: User) => {
+          UserDB.save(userRes).then((userSaved: User) => {
             Emails.sendLockedAccount(userSaved);
              Logger.warn(`User ${username} account is locked due to too many login attempts`);
           }).catch(err => next(err));

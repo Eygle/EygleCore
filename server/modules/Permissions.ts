@@ -1,4 +1,4 @@
-import ConfigSchema from '../schemas/Config.schema';
+import ConfigDB from '../db/ConfigDB';
 import {User} from '../../commons/models/User';
 import {Permission} from "../models/Config";
 import Logger from "../utils/Logger";
@@ -16,7 +16,7 @@ export default class Permissions {
   public static middleware(): Function {
     return (req, res, next) => {
       if (!list) {
-        ConfigSchema.getPermissions()
+        ConfigDB.getPermissions()
           .then((permissions: Array<Permission>) => {
             list = permissions;
             next();

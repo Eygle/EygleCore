@@ -1,4 +1,4 @@
-import ConfigSchema from '../../schemas/Config.schema';
+import ConfigDB from '../../db/ConfigDB';
 import {ARoute} from '../../middlewares/Resty';
 import {RestyCallback} from '../../typings/resty.interface';
 import {Permission} from '../../models/Config';
@@ -9,7 +9,7 @@ class Collection extends ARoute {
     * @param next
     */
    public get(next: RestyCallback): void {
-      ConfigSchema.getPermissions()
+      ConfigDB.getPermissions()
          .then((items: Array<Permission>) => {
             next(items);
          })

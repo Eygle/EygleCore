@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 const local = require("passport-local");
-const User_schema_1 = require("../schemas/User.schema");
+const UserDB_1 = require("../db/UserDB");
 const Logger_1 = require("./Logger");
 class PassportConfig {
     /**
@@ -26,7 +26,7 @@ class PassportConfig {
             console.log(username, password);
             username = username.replace(' ', '');
             username = username.toLowerCase();
-            User_schema_1.default.findOneByUserNameOrEmail(username, true)
+            UserDB_1.default.findOneByUserNameOrEmail(username, true)
                 .then((user) => {
                 if (!user) {
                     Logger_1.default.log(`User '${username}' login failed (no such username or email)`);
@@ -61,7 +61,7 @@ class PassportConfig {
      */
     static _deserializeUser() {
         return (id, done) => {
-            User_schema_1.default.getFullCached(id)
+            UserDB_1.default.getFullCached(id)
                 .then((user) => {
                 if (!user)
                     return done(null, false);

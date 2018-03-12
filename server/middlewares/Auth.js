@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const passport = require("passport");
 const Emails_1 = require("../modules/Emails");
-const User_schema_1 = require("../schemas/User.schema");
+const UserDB_1 = require("../db/UserDB");
 const Permissions_1 = require("../modules/Permissions");
 const server_enums_1 = require("../typings/server.enums");
 const Logger_1 = require("../utils/Logger");
@@ -49,7 +49,7 @@ class Auth {
      */
     static registerMiddleware() {
         return (req, res, next) => {
-            User_schema_1.default.add({
+            UserDB_1.default.add({
                 email: req.body.email,
                 userName: req.body.username,
                 password: req.body.password
@@ -77,12 +77,12 @@ class Auth {
      */
     static forgotPasswordMiddleware() {
         return (req, res, next) => {
-            User_schema_1.default.findOneByEmail(req.body.email).then((user) => {
+            UserDB_1.default.findOneByEmail(req.body.email).then((user) => {
                 if (!user)
-                    return res.status(404).send('UserSchema not found');
+                    return res.status(404).send('UserDB not found');
                 user.password = null; // set password has null to force validMail generation
-                User_schema_1.default.save(user).then((userSaved) => {
-                    User_schema_1.default.getPasswordsById(userSaved._id.toString()).then(userWPwd => {
+                UserDB_1.default.save(user).then((userSaved) => {
+                    UserDB_1.default.getPasswordsById(userSaved._id.toString()).then(userWPwd => {
                         Emails_1.default.sendPasswordRecovery(userWPwd);
                         Logger_1.default.log(`User ${req.body.email} recovered password`);
                         res.sendStatus(200);
@@ -103,7 +103,7 @@ class Auth {
                     req.user.fullName || req.user.email :
                     '[null]'}`, server_enums_1.EHTTPStatus.Forbidden));
             }
-            User_schema_1.default.changePasswordById(id, req.body.oldPwd, req.body.password)
+            UserDB_1.default.changePasswordById(id, req.body.oldPwd, req.body.password)
                 .then((user) => {
                 Logger_1.default.log(`User ${req.user.email} changed password`);
                 res.status(200).json(user);
@@ -141,7 +141,7 @@ class Auth {
             if (!Permissions_1.default.ensureAuthorized(req.user, 'admin')) {
                 return next(new EdError_1.default(server_enums_1.EHTTPStatus.Forbidden));
             }
-            User_schema_1.default.saveById(id, {
+            UserDB_1.default.saveById(id, {
                 locked: false
             }).then((user) => {
                 this._cleanAttempts(user.userName);
@@ -190,10 +190,10 @@ class Auth {
         const username = req.body.username;
         this._addAttempt(username);
         if (this._attempts[username].locked) {
-            User_schema_1.default.findOneByUserNameOrEmail(username).then((userRes) => {
+            UserDB_1.default.findOneByUserNameOrEmail(username).then((userRes) => {
                 if (userRes && !userRes.locked) {
                     userRes.locked = true;
-                    User_schema_1.default.save(userRes).then((userSaved) => {
+                    UserDB_1.default.save(userRes).then((userSaved) => {
                         Emails_1.default.sendLockedAccount(userSaved);
                         Logger_1.default.warn(`User ${username} account is locked due to too many login attempts`);
                     }).catch(err => next(err));

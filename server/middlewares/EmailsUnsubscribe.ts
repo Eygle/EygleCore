@@ -2,7 +2,7 @@ import * as Twig from 'twig';
 import * as fs from 'fs';
 import * as bcrypt from 'bcrypt';
 
-import UserSchema from '../schemas/User.schema';
+import UserDB from '../db/UserDB';
 import {EHTTPStatus} from '../typings/server.enums';
 import {User} from '../../commons/models/User';
 import {CustomEdError} from "../utils/EdError";
@@ -65,7 +65,7 @@ export default class EmailsUnsubscribe {
    */
   private static _checkUser(email, hash, success, error) {
     hash = hash.replace(new RegExp('\\+', 'g'), '/');
-    UserSchema.findOneByEmail(email)
+    UserDB.findOneByEmail(email)
       .then((user: User) => {
         if (!user) return error(new CustomEdError('Email not found', EHTTPStatus.BadRequest));
 

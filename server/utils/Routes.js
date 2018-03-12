@@ -17,7 +17,7 @@ class Routes {
             app.use('/bower_components', express.static(`${ServerConfig_1.default.root}/../bower_components`));
         }
         // API ENTRY POINT
-        app.all('/api/*', [Resty_1.default.httpMiddleware(`${__dirname}/../api`)]);
+        app.all('/api/*', [Resty_1.default.httpMiddleware()]);
         // AUTH
         if (ServerConfig_1.default.implementsAuth) {
             app.post('/register', [Auth_1.default.registerMiddleware()]);

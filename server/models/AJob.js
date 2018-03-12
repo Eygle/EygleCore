@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tracer = require("tracer");
 const cron = require("node-schedule");
-const CronJob_schema_1 = require("../schemas/CronJob.schema");
+const CronJobDB_1 = require("../db/CronJobDB");
 const ServerConfig_1 = require("../utils/ServerConfig");
 const core_enums_1 = require("../../commons/core.enums");
 const Logger_1 = require("../utils/Logger");
@@ -91,7 +91,7 @@ class AJob {
         this._model.isScheduled = this.isScheduled;
         this._model.isRunning = this.isRunning;
         this._model.lastRun = this.lastRun;
-        CronJob_schema_1.default.save(this._model)
+        CronJobDB_1.default.save(this._model)
             .catch(Logger_1.default.error);
     }
     /**

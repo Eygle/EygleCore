@@ -14,14 +14,13 @@ const EdError_1 = require("../utils/EdError");
 class Resty {
     /**
      * Express middleware used for http connexions
-     * @param resourceDir
      * @return {(req:any, res:any)=>undefined}
      */
-    static httpMiddleware(resourceDir) {
+    static httpMiddleware() {
         try {
             if (!this._resources) {
                 this._resources = {};
-                this._addResources(resourceDir, this._resources);
+                this._addResources(`${__dirname}/../api`, this._resources);
                 this._addResources(ServerConfig_1.default.apiRoot, this._resources);
             }
             return (req, res, next) => {

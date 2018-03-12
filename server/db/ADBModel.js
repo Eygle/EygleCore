@@ -3,20 +3,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 const q = require("q");
 const DB_1 = require("../modules/DB");
-const Utils_1 = require("../../commons/utils/Utils");
+const Permissions_1 = require("../modules/Permissions");
 const EdError_1 = require("../utils/EdError");
 const server_enums_1 = require("../typings/server.enums");
-class ASchema {
-    constructor(encryptKeys = null) {
-        this._encryptKeys = encryptKeys;
+const Utils_1 = require("../../commons/utils/Utils");
+class ADBModel {
+    /**
+     * Initialise class
+     * @param {mongoose.Schema} schema
+     * @param {string[]} encryptKeys
+     */
+    static init(schema, encryptKeys = null) {
+        this._schema = schema;
     }
     /**
-     * Method called from DB.ts in
+     * Method called from MongoDB.ts in
      * @param name
      * @return {mongoose.Model<any>}
      */
-    importSchema(name) {
-        this._model = mongoose.model(name, this.getSchema(), name);
+    static importSchema(name) {
+        this._model = mongoose.model(name, this._schema, name);
         return this._model;
     }
     /**
@@ -25,7 +31,7 @@ class ASchema {
      * @param queryParams
      * @return {Promise<T>}
      */
-    get(id, queryParams = null) {
+    static get(id, queryParams = null) {
         const defer = q.defer();
         if (!Utils_1.default.isMongoId(id)) {
             defer.reject(new Error(`Invalid mongo id ${id}`));
@@ -47,7 +53,7 @@ class ASchema {
      * Get all model
      * @return {Promise<T>}
      */
-    getAll(queryParams = null) {
+    static getAll(queryParams = null) {
         const defer = q.defer();
         const query = this._model.find();
         this.applyQueryParams(query, queryParams);
@@ -61,41 +67,35 @@ class ASchema {
     /**
      * Create new model instance
      * @param data
-     * @param exclude
-     * @return {Promise<T>}
-     */
-    create(data, exclude = null) {
-        return new this._model(this.formatData(data, exclude));
-    }
-    /**
-     * Create new model instance and save it
-     * @param data
+     * @param user
      * @param exclude
      * @param populateOptions
      * @return {Promise<T>}
      */
-    add(data, exclude = null, populateOptions = null) {
-        return DB_1.default.createItem(this.create(data, exclude), populateOptions, this._model);
+    static add(data, exclude = null, populateOptions = null) {
+        return DB_1.default.createItem(new this._model(this.formatData(data, exclude)), populateOptions, this._model);
     }
     /**
      * Save model instance
      * @param item
+     * @param user
      * @param data
      * @param exclude
      * @param populateOptions
      */
-    save(item, data = null, exclude = null, populateOptions = null) {
+    static save(item, data = null, exclude = null, populateOptions = null) {
         return DB_1.default.saveItem(item, this.formatData(data, exclude), populateOptions, this._model);
     }
     /**
      * Find model instance by id and save it
      * @param id
+     * @param user
      * @param data
      * @param exclude
      * @param populateOptions
      * @return {Promise<T>}
      */
-    saveById(id, data = null, exclude = null, populateOptions = null) {
+    static saveById(id, data = null, exclude = null, populateOptions = null) {
         const defer = q.defer();
         if (data && data.hasOwnProperty('_id')) {
             delete data._id;
@@ -103,7 +103,7 @@ class ASchema {
         this.get(id, {})
             .then(item => {
             this.save(item, data, exclude, populateOptions)
-                .then(res => defer.resolve(res))
+                .then(item => defer.resolve(item))
                 .catch(err => defer.reject(err));
         })
             .catch(err => defer.reject(err));
@@ -112,30 +112,39 @@ class ASchema {
     /**
      * Mark item as deleted (without really deleting it)
      * @param item
+     * @param user
+     * @param checkIsAuthor
      * @return {Promise<T>}
      */
-    setDeleted(item) {
+    static setDeleted(item, user = null, checkIsAuthor = true) {
         const defer = q.defer();
         if (!item) {
             defer.reject(new Error('Item not found'));
         }
         else {
-            DB_1.default.saveItem(item, { deleted: true })
-                .then(res => defer.resolve(res))
-                .catch(err => defer.reject(err));
+            if (checkIsAuthor && !Permissions_1.default.ensureAuthorized(user, 'admin') && item.creationUID !== user._id.toString()) {
+                defer.reject(new Error('Permission denied'));
+            }
+            else {
+                DB_1.default.saveItem(item, user, { deleted: true })
+                    .then(item => defer.resolve(item))
+                    .catch(err => defer.reject(err));
+            }
         }
         return defer.promise;
     }
     /**
      * Mark item as deleted (without really deleting it)
      * @param id
+     * @param user
+     * @param checkIsAuthor
      */
-    setDeletedById(id) {
+    static setDeletedById(id, user = null, checkIsAuthor = false) {
         const defer = q.defer();
         this.get(id, {})
             .then(item => {
-            this.setDeleted(item)
-                .then((res) => defer.resolve(res))
+            this.setDeleted(item, user, checkIsAuthor)
+                .then((item) => defer.resolve(item))
                 .catch(err => defer.reject(err));
         })
             .catch(err => defer.reject(err));
@@ -144,32 +153,41 @@ class ASchema {
     /**
      * Delete item
      * @param item
+     * @param user
+     * @param checkIsAuthor
      * @return {Promise<T>}
      */
-    remove(item) {
+    static remove(item, user = null, checkIsAuthor = true) {
         const defer = q.defer();
         if (!item) {
             defer.reject(new Error('Item not found'));
         }
         else {
-            item.remove((err) => {
-                if (err)
-                    return defer.reject(err);
-                defer.resolve();
-            });
+            if (checkIsAuthor && !Permissions_1.default.ensureAuthorized(user, 'admin') && item.creationUID !== user._id.toString()) {
+                defer.reject(new Error('Permission denied'));
+            }
+            else {
+                item.remove((err) => {
+                    if (err)
+                        return defer.reject(err);
+                    defer.resolve();
+                });
+            }
         }
         return defer.promise;
     }
     /**
      * Delete item by id
      * @param id
+     * @param user
+     * @param checkIsAuthor
      */
-    removeById(id) {
+    static removeById(id, user = null, checkIsAuthor = false) {
         const defer = q.defer();
         this.get(id, {})
             .then(item => {
-            this.remove(item)
-                .then((res) => defer.resolve(res))
+            this.remove(item, user, checkIsAuthor)
+                .then((item) => defer.resolve(item))
                 .catch(err => defer.reject(err));
         })
             .catch(err => defer.reject(err));
@@ -180,21 +198,21 @@ class ASchema {
      * @param body
      * @param exclude
      */
-    formatData(body, exclude = null) {
+    static formatData(body, exclude = null) {
         if (!body)
             return null;
         if (exclude) {
-            for (const e of exclude) {
+            for (let e of exclude) {
                 if (body.hasOwnProperty(e)) {
                     delete body[e];
                 }
             }
         }
-        for (const idx in body) {
+        for (let idx in body) {
             if (body.hasOwnProperty(idx)) {
                 const value = body[idx];
                 if (value instanceof Array) {
-                    for (const i in value) {
+                    for (let i in value) {
                         if (value.hasOwnProperty(i) && value[i] && value[i].hasOwnProperty('_id')) {
                             value[i] = value[i]._id;
                         }
@@ -216,18 +234,25 @@ class ASchema {
      * @param queryParams
      * @private
      */
-    applyQueryParams(query, queryParams) {
+    static applyQueryParams(query, queryParams) {
         if (queryParams) {
             if (queryParams.select) {
                 queryParams.select = queryParams.select instanceof Array ? queryParams.select : [queryParams.select];
-                for (const select of queryParams.select) {
+                for (let select of queryParams.select) {
                     query.select(select);
                 }
             }
             if (queryParams.populate) {
                 queryParams.populate = queryParams.populate instanceof Array ? queryParams.populate : [queryParams.populate];
-                for (const populate of queryParams.populate) {
+                for (let populate of queryParams.populate) {
                     query.populate(populate);
+                }
+            }
+            if (queryParams.where) {
+                for (const i in queryParams.where) {
+                    if (queryParams.where.hasOwnProperty(i)) {
+                        query.where(i).equals(queryParams.where[i]);
+                    }
                 }
             }
             if (queryParams.sort) {
@@ -239,5 +264,5 @@ class ASchema {
         }
     }
 }
-exports.default = ASchema;
-//# sourceMappingURL=ASchema.schema.js.map
+exports.default = ADBModel;
+//# sourceMappingURL=ADBModel.js.map

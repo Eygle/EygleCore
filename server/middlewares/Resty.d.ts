@@ -5,10 +5,9 @@ export default class Resty {
     private static _resources;
     /**
      * Express middleware used for http connexions
-     * @param resourceDir
      * @return {(req:any, res:any)=>undefined}
      */
-    static httpMiddleware(resourceDir: any): Function;
+    static httpMiddleware(): Function;
     /**
      * Send response
      * @param res

@@ -1,4 +1,4 @@
-import UserSchema from '../../schemas/User.schema';
+import UserDB from '../../db/UserDB';
 import {ARoute} from '../../middlewares/Resty';
 import {RestyCallback} from '../../typings/resty.interface';
 import {User} from "../../../commons/models/User";
@@ -10,7 +10,7 @@ class Resource extends ARoute {
     * @param next
     */
    public get(id: string, next: RestyCallback): void {
-      UserSchema.getFullCached(id)
+      UserDB.getFullCached(id)
          .then((items: Array<User>) => {
             next(items);
          })
@@ -26,7 +26,7 @@ class Collection extends ARoute {
     * @param next
     */
    public get(next: RestyCallback): void {
-      UserSchema.getAll()
+      UserDB.getAll()
          .then((items: Array<User>) => {
             next(items);
          })

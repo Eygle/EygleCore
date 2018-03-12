@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Twig = require("twig");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
-const User_schema_1 = require("../schemas/User.schema");
+const UserDB_1 = require("../db/UserDB");
 const server_enums_1 = require("../typings/server.enums");
 const EdError_1 = require("../utils/EdError");
 const ServerConfig_1 = require("../utils/ServerConfig");
@@ -59,7 +59,7 @@ class EmailsUnsubscribe {
      */
     static _checkUser(email, hash, success, error) {
         hash = hash.replace(new RegExp('\\+', 'g'), '/');
-        User_schema_1.default.findOneByEmail(email)
+        UserDB_1.default.findOneByEmail(email)
             .then((user) => {
             if (!user)
                 return error(new EdError_1.CustomEdError('Email not found', server_enums_1.EHTTPStatus.BadRequest));

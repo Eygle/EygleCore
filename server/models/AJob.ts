@@ -1,6 +1,6 @@
 import * as tracer from "tracer";
 import * as cron from "node-schedule";
-import CronJobSchema from "../schemas/CronJob.schema";
+import CronJobDB from "../db/CronJobDB";
 import {CronJob} from "../../commons/models/CronJob";
 import {ILogger} from "../typings/server.interfaces";
 import ServerConfig from "../utils/ServerConfig";
@@ -146,7 +146,7 @@ abstract class AJob implements CronJob {
       this._model.isScheduled = this.isScheduled;
       this._model.isRunning = this.isRunning;
       this._model.lastRun = this.lastRun;
-      CronJobSchema.save(this._model)
+      CronJobDB.save(this._model)
          .catch(Logger.error);
    }
 
