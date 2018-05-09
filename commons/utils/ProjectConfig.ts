@@ -49,7 +49,6 @@ export default class ProjectConfig {
         this._addToConf(this.server, {
             includeEmailUnsubscribe: false,
             activateCSRFSecurity: false,
-            includeCronManager: false,
 
             root: rootPath,
             port: process.env.PORT,
@@ -99,6 +98,7 @@ export default class ProjectConfig {
         // Add default common configuration
         this._addToConf(target, {
             implementsAuth: false,
+            includeCronManager: false,
             appName: process.env.NODE_APP,
             debug: false
         });

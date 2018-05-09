@@ -52,14 +52,14 @@ export class EygleServer {
 
     /**
      * Constructor
-     * @param conf
-     * @param {string} configFilePath Project configuration file path
+     * @param root
+     * @param {string} config Project configuration file path
      */
-    constructor(conf: any, configFilePath: string) {
+    constructor(root: string, config: any) {
         this._customRoutes = [];
         this._customModules = [];
         this._app = express();
-        ProjectConfig.initForServer(conf, configFilePath, process.env.NODE_ENV);
+        ProjectConfig.initForServer(root, config, process.env.NODE_ENV);
         ServerConfig.init();
         Logger.init();
     }
