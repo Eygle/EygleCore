@@ -22,10 +22,10 @@ export declare class EygleServer {
     private _customModules;
     /**
      * Constructor
-     * @param conf
-     * @param {string} configFilePath Project configuration file path
+     * @param root
+     * @param {string} config Project configuration file path
      */
-    constructor(conf: any, configFilePath: string);
+    constructor(root: string, config: any);
     /**
      * Start node Express server
      */

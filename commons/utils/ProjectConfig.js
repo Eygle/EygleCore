@@ -30,7 +30,6 @@ class ProjectConfig {
         this._addToConf(this.server, {
             includeEmailUnsubscribe: false,
             activateCSRFSecurity: false,
-            includeCronManager: false,
             root: rootPath,
             port: process.env.PORT,
             sessionCookieName: 'mapui-connect.sid',
@@ -71,6 +70,7 @@ class ProjectConfig {
         // Add default common configuration
         this._addToConf(target, {
             implementsAuth: false,
+            includeCronManager: false,
             appName: process.env.NODE_APP,
             debug: false
         });
