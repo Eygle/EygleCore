@@ -25,7 +25,6 @@ class PassportConfig {
    */
   private static _localStrategy() {
      return new local.Strategy({passReqToCallback: true, usernameField: 'email'}, (req, username, password, done) => {
-        console.log(username, password);
       username = username.replace(' ', '');
       username = username.toLowerCase();
 
