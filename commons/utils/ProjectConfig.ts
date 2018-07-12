@@ -21,13 +21,12 @@ export default class ProjectConfig {
     /**
      * Initialize
      * This method MUST BE called before the class is imported anywhere ! (static issues)
-     * @param {string} rootPath
-     * @param conf
-     * @param {string} envName
      */
-    public static init(rootPath: string, conf: any, envName: string) {
-        this._initForServer(path.resolve(rootPath), conf, envName);
-        this._initForClient(conf, envName);
+    public static init() {
+        const root = path.dirname(process.mainModule.filename);
+        const conf = require(`${root}/commons/eygle-conf.js`);
+        this._initForServer(root, conf, process.env.NODE_ENV);
+        this._initForClient(conf, process.env.NODE_ENV);
     }
 
     /**
@@ -261,11 +260,11 @@ export interface IProjectConfigServer extends IProjectConfigCommon {
     loggerAllLogsFileName: string;
 }
 
+ProjectConfig.init();
+
 export interface IProjectConfigClient extends IProjectConfigCommon {
     /**
      * Logger level (all logs starting at given level will be displayed)
      */
     loggerLvl: ELoggerLvl;
 }
-
-module.exports = ProjectConfig; // used in other projects
