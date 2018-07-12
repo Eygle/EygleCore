@@ -5,7 +5,6 @@ import CronJobDB from '../db/CronJobDB';
 import AJob from '../models/AJob';
 import {CronJob} from '../../commons/models/CronJob';
 import ServerConfig from "../utils/ServerConfig";
-import {EEnv} from "../../commons/core.enums";
 import Logger from "../utils/Logger";
 import * as path from "path";
 
@@ -27,58 +26,56 @@ export default class CronManager {
      * @private
      */
     public static init(): void {
-        if (EEnv.Prod !== ServerConfig.env || parseInt(process.env.pm_id) === 1) { // Limit to a pm2 single instance for prod
-            CronJobDB.getAll()
-                .then((dbItems: Array<CronJob>) => {
-                    this._list = [];
-                    const promises = [];
-                    const added = [];
+        CronJobDB.getAll()
+            .then((dbItems: Array<CronJob>) => {
+                this._list = [];
+                const promises = [];
+                const added = [];
 
-                    for (const filename of fs.readdirSync(this._jobsPath)) {
-                        if (path.extname(filename) !== '.js') {
-                            continue;
-                        }
-
-                        const item: AJob = require(this._jobsPath + filename);
-                        const dbItem: CronJob = _.find(dbItems, (i) => {
-                            return i.name === item.name;
-                        });
-
-                        this._list.push(item);
-                        added.push(item.name);
-
-                        if (dbItem) {
-                            item.setModel(dbItem);
-                        } else {
-                            // Schedule only if there is not environment restriction or the restriction is matched
-                            item.isScheduled = !item.environments || !!~item.environments.indexOf(ServerConfig.env);
-                            promises.push(
-                                CronJobDB.add(item)
-                                    .then((model: CronJob) => {
-                                        item.setModel(model);
-                                    })
-                            );
-                        }
+                for (const filename of fs.readdirSync(this._jobsPath)) {
+                    if (path.extname(filename) !== '.js') {
+                        continue;
                     }
 
-                    for (const item of dbItems) {
-                        if (!~added.indexOf(item.name)) {
-                            CronJobDB.remove(item);
-                        }
-                    }
+                    const item: AJob = require(this._jobsPath + filename);
+                    const dbItem: CronJob = _.find(dbItems, (i) => {
+                        return i.name === item.name;
+                    });
 
-                    q.allSettled(promises)
-                        .then(() => {
-                            for (const item of this._list) {
-                                if (item.isScheduled) {
-                                    item.schedule();
-                                }
+                    this._list.push(item);
+                    added.push(item.name);
+
+                    if (dbItem) {
+                        item.setModel(dbItem);
+                    } else {
+                        // Schedule only if there is not environment restriction or the restriction is matched
+                        item.isScheduled = !item.environments || !!~item.environments.indexOf(ServerConfig.env);
+                        promises.push(
+                            CronJobDB.add(item)
+                                .then((model: CronJob) => {
+                                    item.setModel(model);
+                                })
+                        );
+                    }
+                }
+
+                for (const item of dbItems) {
+                    if (!~added.indexOf(item.name)) {
+                        CronJobDB.remove(item);
+                    }
+                }
+
+                q.allSettled(promises)
+                    .then(() => {
+                        for (const item of this._list) {
+                            if (item.isScheduled) {
+                                item.schedule();
                             }
-                            Logger.log('Crontab ready\n');
-                        });
-                })
-                .catch(err => Logger.error);
-        }
+                        }
+                        Logger.log('Crontab ready\n');
+                    });
+            })
+            .catch(err => Logger.error);
     }
 
     /**

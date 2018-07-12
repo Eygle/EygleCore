@@ -1,64 +1,9 @@
-import { ICustomModule, ICustomRoute } from "./typings/customs.interface";
 export declare class EygleServer {
     /**
-     * Express application instance
+     * Initialize first (root)
+     * @param {string} root
+     * @param config
+     * @return {any}
      */
-    private _app;
-    /**
-     * HTTP server
-     */
-    private _http;
-    /**
-     * Mongo store instance
-     */
-    private _mongoStore;
-    /**
-     * List of custom routes
-     */
-    private _customRoutes;
-    /**
-     * List of custom modules
-     */
-    private _customModules;
-    /**
-     * Constructor
-     * @param root
-     * @param {string} config Project configuration file path
-     */
-    constructor(root: string, config: any);
-    /**
-     * Start node Express server
-     */
-    start(): void;
-    /**
-     * Add custom routes
-     * @param route
-     */
-    addRoute(route: ICustomRoute): this;
-    /**
-     * Add custom routes
-     * @param {ICustomModule} module
-     */
-    addModule(module: ICustomModule): this;
-    /**
-     * Initialize server
-     * @private
-     */
-    private _init();
-    /**
-     * Handle error
-     * @param app
-     */
-    private _handleErrors(app);
-    /**
-     * Init CSRF token checker
-     * @param app
-     * @private
-     */
-    private _initCSRF(app);
-    /**
-     * Print header in logs
-     * @private
-     */
-    private _printHeader();
+    static init(root: string, config: any): any;
 }
