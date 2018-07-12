@@ -23,7 +23,7 @@ export default class ProjectConfig {
      * This method MUST BE called before the class is imported anywhere ! (static issues)
      */
     public static init() {
-        const root = path.dirname(process.mainModule.filename);
+        const root = path.resolve(`${path.dirname(process.mainModule.filename)}/..`);
         const conf = require(`${root}/commons/eygle-conf.js`);
         this._initForServer(root, conf, process.env.NODE_ENV);
         this._initForClient(conf, process.env.NODE_ENV);
