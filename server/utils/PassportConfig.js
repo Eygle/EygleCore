@@ -22,7 +22,10 @@ class PassportConfig {
      * @private
      */
     static _localStrategy() {
-        return new local.Strategy({ passReqToCallback: true, usernameField: 'email' }, (req, username, password, done) => {
+        return new local.Strategy({
+            passReqToCallback: true,
+            usernameField: 'email'
+        }, (req, username, password, done) => {
             username = username.replace(' ', '');
             username = username.toLowerCase();
             UserDB_1.default.findOneByUserNameOrEmail(username, true)

@@ -62,7 +62,7 @@ class UserDB extends ADBModel_1.default {
         const query = this._model.findOne()
             .or([{ userName: value.toLowerCase() }, { email: value.toLowerCase() }]);
         if (includePassword) {
-            query.select('+password');
+            query.select('+password +roles');
         }
         query.exec((err, user) => {
             if (err)

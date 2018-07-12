@@ -70,7 +70,7 @@ export default class UserDB extends ADBModel {
             .or([{userName: value.toLowerCase()}, {email: value.toLowerCase()}]);
 
         if (includePassword) {
-            query.select('+password');
+            query.select('+password +roles');
         }
 
         query.exec((err, user) => {
