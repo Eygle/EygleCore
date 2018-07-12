@@ -10,8 +10,8 @@ class ProjectConfig {
     static init() {
         const root = path.resolve(`${path.dirname(process.mainModule.filename)}/..`);
         const conf = require(`${root}/commons/eygle-conf.js`);
-        this._initForServer(root, conf, process.env.NODE_ENV);
-        this._initForClient(conf, process.env.NODE_ENV);
+        ProjectConfig._initForServer(root, conf, process.env.NODE_ENV);
+        ProjectConfig._initForClient(conf, process.env.NODE_ENV);
     }
     /**
      *
@@ -19,14 +19,14 @@ class ProjectConfig {
      * @param {string} envName
      */
     static _initForClient(conf, envName) {
-        this._addCommons(this.client, conf, envName);
-        this._addToConf(this.client, {
+        ProjectConfig._addCommons(ProjectConfig.client, conf, envName);
+        ProjectConfig._addToConf(ProjectConfig.client, {
             loggerLvl: core_enums_1.ELoggerLvl.WARN
         });
         if (conf.client) {
-            this._addToConf(this.client, conf.client);
+            ProjectConfig._addToConf(ProjectConfig.client, conf.client);
             if (conf.client.hasOwnProperty(envName)) {
-                this._addToConf(this.client, conf.client[envName]);
+                ProjectConfig._addToConf(ProjectConfig.client, conf.client[envName]);
             }
         }
     }
@@ -37,8 +37,8 @@ class ProjectConfig {
      * @param {string} envName
      */
     static _initForServer(rootPath, conf, envName) {
-        this._addCommons(this.server, conf, envName);
-        this._addToConf(this.server, {
+        ProjectConfig._addCommons(ProjectConfig.server, conf, envName);
+        ProjectConfig._addToConf(ProjectConfig.server, {
             includeEmailUnsubscribe: false,
             activateCSRFSecurity: false,
             root: rootPath,
@@ -57,17 +57,17 @@ class ProjectConfig {
             loggerAllLogsFileName: '{{appName}}-{{env}}-{{pmId}}.log'
         });
         if (conf.server) {
-            this._addToConf(this.server, conf.server);
+            ProjectConfig._addToConf(ProjectConfig.server, conf.server);
             if (conf.server.hasOwnProperty(envName)) {
-                this._addToConf(this.server, conf.server[envName]);
+                ProjectConfig._addToConf(ProjectConfig.server, conf.server[envName]);
             }
         }
-        this.server.clientRoot = this._formatConfStr(this.server.clientRoot);
-        this.server.serverRoot = this._formatConfStr(this.server.serverRoot);
-        this.server.apiRoot = this._formatConfStr(this.server.apiRoot);
-        this.server.filesRoot = this._formatConfStr(this.server.filesRoot);
-        this.server.loggerRoot = this._formatConfStr(this.server.loggerRoot);
-        this.server.loggerAllLogsFileName = this._formatConfStr(this.server.loggerAllLogsFileName);
+        ProjectConfig.server.clientRoot = ProjectConfig._formatConfStr(ProjectConfig.server.clientRoot);
+        ProjectConfig.server.serverRoot = ProjectConfig._formatConfStr(ProjectConfig.server.serverRoot);
+        ProjectConfig.server.apiRoot = ProjectConfig._formatConfStr(ProjectConfig.server.apiRoot);
+        ProjectConfig.server.filesRoot = ProjectConfig._formatConfStr(ProjectConfig.server.filesRoot);
+        ProjectConfig.server.loggerRoot = ProjectConfig._formatConfStr(ProjectConfig.server.loggerRoot);
+        ProjectConfig.server.loggerAllLogsFileName = ProjectConfig._formatConfStr(ProjectConfig.server.loggerAllLogsFileName);
     }
     /**
      * Add common default values
@@ -77,17 +77,17 @@ class ProjectConfig {
      * @private
      */
     static _addCommons(target, json, envName) {
-        this.envName = envName || 'production';
+        ProjectConfig.envName = envName || 'production';
         // Add default common configuration
-        this._addToConf(target, {
+        ProjectConfig._addToConf(target, {
             implementsAuth: false,
             includeCronManager: false,
             appName: process.env.NODE_APP,
             debug: false
         });
-        this._addToConf(target, json);
+        ProjectConfig._addToConf(target, json);
         if (json.hasOwnProperty(envName)) {
-            this._addToConf(target, json[envName]);
+            ProjectConfig._addToConf(target, json[envName]);
         }
     }
     /**
@@ -110,9 +110,9 @@ class ProjectConfig {
      * @private
      */
     static _formatConfStr(str) {
-        str = str.replace('{{root}}', this.server.root);
-        str = str.replace('{{appName}}', this.server.appName || this.client.appName);
-        str = str.replace('{{env}}', this.envName);
+        str = str.replace('{{root}}', ProjectConfig.server.root);
+        str = str.replace('{{appName}}', ProjectConfig.server.appName || ProjectConfig.client.appName);
+        str = str.replace('{{env}}', ProjectConfig.envName);
         str = str.replace('{{pmId}}', process.env.pm_id);
         return str;
     }
