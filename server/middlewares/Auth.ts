@@ -181,7 +181,7 @@ export default class Auth {
    * @param user
    */
   public static addUserCookie(res, user) {
-    res.cookie('user',
+    res.cookie('ey-user',
       JSON.stringify(this._generateUserCookieData(user)),
        {secure: EEnv.Dev !== ServerConfig.env && EEnv.Test !== ServerConfig.env});
   }

@@ -60,7 +60,7 @@ abstract class AJob implements CronJob {
 
    constructor(name: string) {
       this.name = name;
-      this.logFilename = `mapui-${this._formatName()}`;
+      this.logFilename = `eygle-${this._formatName()}`;
       if (EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env) {
          this.logger = (<any>tracer).dailyfile({
             root: `${ServerConfig.root}/logs`,

@@ -52,7 +52,7 @@ export default class ProjectConfig {
 
             root: rootPath,
             port: process.env.PORT,
-            sessionCookieName: 'mapui-connect.sid',
+            sessionCookieName: 'eygle-connect.sid',
 
             clientRoot: '{{root}}/client',
             serverRoot: '{{root}}/server',

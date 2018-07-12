@@ -124,7 +124,7 @@ export class EygleServer {
             secret: ServerConfig.sessionSecret,
             cookie: {
                maxAge: 2592000000, // 30 days,
-               domain: EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env ? ".mapui.fr" : undefined
+               domain: EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env ? ".eygle.fr" : undefined
             },
             resave: true,
             rolling: true,
