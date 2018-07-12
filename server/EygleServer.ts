@@ -60,7 +60,6 @@ export class EygleServer {
         this._customRoutes = [];
         this._customModules = [];
         this._app = express();
-        ServerConfig.init();
         Logger.init();
     }
 

@@ -33,7 +33,6 @@ class EygleServer {
         this._customRoutes = [];
         this._customModules = [];
         this._app = express();
-        ServerConfig_1.default.init();
         Logger_1.default.init();
     }
     /**
