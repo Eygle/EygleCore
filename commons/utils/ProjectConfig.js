@@ -1,13 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const path = require("path");
 const core_enums_1 = require("../core.enums");
 class ProjectConfig {
+    /**
+     * Initialize
+     * This method MUST BE called before the class is imported anywhere ! (static issues)
+     * @param {string} rootPath
+     * @param conf
+     * @param {string} envName
+     */
+    static init(rootPath, conf, envName) {
+        this._initForServer(path.resolve(rootPath), conf, envName);
+        this._initForClient(conf, envName);
+    }
     /**
      *
      * @param conf
      * @param {string} envName
      */
-    static initForClient(conf, envName) {
+    static _initForClient(conf, envName) {
         this._addCommons(this.client, conf, envName);
         this._addToConf(this.client, {
             loggerLvl: core_enums_1.ELoggerLvl.WARN
@@ -25,7 +37,7 @@ class ProjectConfig {
      * @param conf
      * @param {string} envName
      */
-    static initForServer(rootPath, conf, envName) {
+    static _initForServer(rootPath, conf, envName) {
         this._addCommons(this.server, conf, envName);
         this._addToConf(this.server, {
             includeEmailUnsubscribe: false,
@@ -115,4 +127,5 @@ ProjectConfig.server = {};
  */
 ProjectConfig.client = {};
 exports.default = ProjectConfig;
+module.exports = ProjectConfig; // used in other projects
 //# sourceMappingURL=ProjectConfig.js.map

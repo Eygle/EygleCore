@@ -13,18 +13,26 @@ export default class ProjectConfig {
      */
     static envName: string;
     /**
+     * Initialize
+     * This method MUST BE called before the class is imported anywhere ! (static issues)
+     * @param {string} rootPath
+     * @param conf
+     * @param {string} envName
+     */
+    static init(rootPath: string, conf: any, envName: string): void;
+    /**
      *
      * @param conf
      * @param {string} envName
      */
-    static initForClient(conf: any, envName: string): void;
+    private static _initForClient(conf, envName);
     /**
      * initialise for server
      * @param {string} rootPath
      * @param conf
      * @param {string} envName
      */
-    static initForServer(rootPath: string, conf: any, envName: string): void;
+    private static _initForServer(rootPath, conf, envName);
     /**
      * Add common default values
      * @param target

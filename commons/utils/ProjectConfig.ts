@@ -1,3 +1,4 @@
+import * as path from 'path';
 import {ELoggerLvl} from '../core.enums';
 
 export default class ProjectConfig {
@@ -18,11 +19,23 @@ export default class ProjectConfig {
     public static envName: string;
 
     /**
+     * Initialize
+     * This method MUST BE called before the class is imported anywhere ! (static issues)
+     * @param {string} rootPath
+     * @param conf
+     * @param {string} envName
+     */
+    public static init(rootPath: string, conf: any, envName: string) {
+        this._initForServer(path.resolve(rootPath), conf, envName);
+        this._initForClient(conf, envName);
+    }
+
+    /**
      *
      * @param conf
      * @param {string} envName
      */
-    public static initForClient(conf: any, envName: string) {
+    private static _initForClient(conf: any, envName: string) {
         this._addCommons(this.client, conf, envName);
         this._addToConf(this.client, {
             loggerLvl: ELoggerLvl.WARN
@@ -43,7 +56,7 @@ export default class ProjectConfig {
      * @param conf
      * @param {string} envName
      */
-    public static initForServer(rootPath: string, conf: any, envName: string) {
+    private static _initForServer(rootPath: string, conf: any, envName: string) {
 
         this._addCommons(this.server, conf, envName);
         this._addToConf(this.server, {
@@ -254,3 +267,5 @@ export interface IProjectConfigClient extends IProjectConfigCommon {
      */
     loggerLvl: ELoggerLvl;
 }
+
+module.exports = ProjectConfig; // used in other projects
