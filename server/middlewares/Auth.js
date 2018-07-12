@@ -159,7 +159,7 @@ class Auth {
      * @param user
      */
     static addUserCookie(res, user) {
-        res.cookie('user', JSON.stringify(this._generateUserCookieData(user)), { secure: core_enums_1.EEnv.Dev !== ServerConfig_1.default.env && core_enums_1.EEnv.Test !== ServerConfig_1.default.env });
+        res.cookie('ey-user', JSON.stringify(this._generateUserCookieData(user)), { secure: core_enums_1.EEnv.Dev !== ServerConfig_1.default.env && core_enums_1.EEnv.Test !== ServerConfig_1.default.env });
     }
     /**
      * Generate user data used in clients

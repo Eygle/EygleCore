@@ -32,7 +32,7 @@ class ProjectConfig {
             activateCSRFSecurity: false,
             root: rootPath,
             port: process.env.PORT,
-            sessionCookieName: 'mapui-connect.sid',
+            sessionCookieName: 'eygle-connect.sid',
             clientRoot: '{{root}}/client',
             serverRoot: '{{root}}/server',
             apiRoot: '{{root}}/server/api',

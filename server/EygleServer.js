@@ -87,7 +87,7 @@ class EygleServer {
                 secret: ServerConfig_1.default.sessionSecret,
                 cookie: {
                     maxAge: 2592000000,
-                    domain: core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env ? ".mapui.fr" : undefined
+                    domain: core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env ? ".eygle.fr" : undefined
                 },
                 resave: true,
                 rolling: true,

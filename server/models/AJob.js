@@ -9,7 +9,7 @@ const Logger_1 = require("../utils/Logger");
 class AJob {
     constructor(name) {
         this.name = name;
-        this.logFilename = `mapui-${this._formatName()}`;
+        this.logFilename = `eygle-${this._formatName()}`;
         if (core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env) {
             this.logger = tracer.dailyfile({
                 root: `${ServerConfig_1.default.root}/logs`,
