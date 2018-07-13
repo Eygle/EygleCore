@@ -20,11 +20,6 @@ export default class DB {
     private static _instance: any;
 
     /**
-     * List of core models names
-     */
-    private static _coreModelNames: string[] = [];
-
-    /**
      * _instance getter
      * @return {any}
      */
@@ -192,11 +187,7 @@ export default class DB {
                 modelName = modelName.substr(0, modelName.length - 2);
             }
 
-            if (!prefix.length) {
-                DB._coreModelNames.push(modelName);
-            }
-
-            const model = require(file).schema.importSchema(modelName, prefix, DB._coreModelNames);
+            const model = require(file).schema.importSchema(modelName);
             model.on('error', (err: any) => {
                 Logger.error(`Mongo error: [${err.name}] ${err.message}`, err.errors);
             });

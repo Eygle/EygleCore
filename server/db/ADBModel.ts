@@ -26,22 +26,17 @@ export default abstract class ADBModel {
      * @param {string[]} encryptKeys
      */
     public static init(schema: mongoose.Schema, encryptKeys: string[] = null) {
-        ADBModel._schema = schema;
+        this._schema = schema;
     }
 
     /**
      * Method called from MongoDB.ts in
      * @param name
-     * @param prefix
-     * @param exclude
      * @return {mongoose.Model<any>}
      */
-    public static importSchema(name: string, prefix, exclude) {
-        if (prefix.length) {
-            ADBModel._addPrefix(ADBModel._schema, prefix, exclude);
-        }
-        ADBModel._model = mongoose.model(name, ADBModel._schema, name);
-        return ADBModel._model;
+    public static importSchema(name: string) {
+        this._model = mongoose.model(name, ADBModel._schema, name);
+        return this._model;
     }
 
     /**
@@ -306,25 +301,6 @@ export default abstract class ADBModel {
             }
             if (queryParams.limit) {
                 query.sort(queryParams.limit);
-            }
-        }
-    }
-
-    /**
-     * Add prefix to all references to non un-prefixed models
-     * @param obj
-     * @param prefix
-     * @param exclude
-     * @private
-     */
-    private static _addPrefix(obj, prefix, exclude) {
-        for (const idx in obj) {
-            if (obj.hasOwnProperty(idx)) {
-                if (typeof obj[idx] === "object" && !obj[idx].ref) {
-                    ADBModel._addPrefix(obj[idx], prefix, exclude);
-                } else if (obj[idx] === "object" && !~exclude.indexOf(obj[idx].ref)) {
-                    obj[idx].ref = prefix + obj[idx].ref;
-                }
             }
         }
     }
