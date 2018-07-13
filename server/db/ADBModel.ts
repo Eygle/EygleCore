@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 import * as q from 'q';
-import * as _ from 'underscore';
 
 import DB from '../modules/DB';
 import Permission from '../modules/Permissions';
@@ -27,17 +26,22 @@ export default abstract class ADBModel {
      * @param {string[]} encryptKeys
      */
     public static init(schema: mongoose.Schema, encryptKeys: string[] = null) {
-        this._schema = schema;
+        ADBModel._schema = schema;
     }
 
     /**
      * Method called from MongoDB.ts in
      * @param name
+     * @param prefix
+     * @param exclude
      * @return {mongoose.Model<any>}
      */
-    public static importSchema(name: string) {
-        this._model = mongoose.model(name, this._schema, name);
-        return this._model;
+    public static importSchema(name: string, prefix, exclude) {
+        if (prefix.length) {
+            ADBModel._addPrefix(ADBModel._schema, prefix, exclude);
+        }
+        ADBModel._model = mongoose.model(name, ADBModel._schema, name);
+        return ADBModel._model;
     }
 
     /**
@@ -53,8 +57,8 @@ export default abstract class ADBModel {
             defer.reject(new Error(`Invalid mongo id ${id}`));
         }
         else {
-            const query = this._model.findById(id);
-            this.applyQueryParams(query, queryParams);
+            const query = ADBModel._model.findById(id);
+            ADBModel.applyQueryParams(query, queryParams);
             query.exec((err, item) => {
                 if (err) return defer.reject(err);
                 if (!item) return defer.reject(new CustomEdError('No such item', EHTTPStatus.BadRequest));
@@ -71,8 +75,8 @@ export default abstract class ADBModel {
     public static getAll(queryParams: any = null): q.Promise<AModel[]> {
         const defer = <q.Deferred<Array<AModel>>>q.defer();
 
-        const query = this._model.find();
-        this.applyQueryParams(query, queryParams);
+        const query = ADBModel._model.find();
+        ADBModel.applyQueryParams(query, queryParams);
         query.exec((err, items) => {
             if (err) return defer.reject(err);
             defer.resolve(items);
@@ -88,7 +92,7 @@ export default abstract class ADBModel {
      * @return mongoose.Model<any>
      */
     public static create(data: any, exclude = null) {
-        return new this._model(this.formatData(data, exclude));
+        return new ADBModel._model(ADBModel.formatData(data, exclude));
     }
 
     /**
@@ -99,7 +103,7 @@ export default abstract class ADBModel {
      * @return {Promise<T>}
      */
     public static add(data: any, exclude: string[] = null, populateOptions: any[] = null) {
-        return DB.createItem(new this._model(this.formatData(data, exclude)), populateOptions, this._model);
+        return DB.createItem(new ADBModel._model(ADBModel.formatData(data, exclude)), populateOptions, ADBModel._model);
     }
 
     /**
@@ -110,7 +114,7 @@ export default abstract class ADBModel {
      * @param populateOptions
      */
     public static save(item: any, data: any = null, exclude: string[] = null, populateOptions: any[] = null) {
-        return DB.saveItem(item, this.formatData(data, exclude), populateOptions, this._model);
+        return DB.saveItem(item, ADBModel.formatData(data, exclude), populateOptions, ADBModel._model);
     }
 
     /**
@@ -127,9 +131,9 @@ export default abstract class ADBModel {
         if (data && data.hasOwnProperty('_id')) {
             delete data._id;
         }
-        this.get(id, {})
+        ADBModel.get(id, {})
             .then(item => {
-                this.save(item, data, exclude, populateOptions)
+                ADBModel.save(item, data, exclude, populateOptions)
                     .then(item => defer.resolve(item))
                     .catch(err => defer.reject(err));
             })
@@ -174,9 +178,9 @@ export default abstract class ADBModel {
     public static setDeletedById(id: string, user: User = null, checkIsAuthor = false) {
         const defer = q.defer();
 
-        this.get(id, {})
+        ADBModel.get(id, {})
             .then(item => {
-                this.setDeleted(item, user, checkIsAuthor)
+                ADBModel.setDeleted(item, user, checkIsAuthor)
                     .then((item) => defer.resolve(item))
                     .catch(err => defer.reject(err));
             })
@@ -222,9 +226,9 @@ export default abstract class ADBModel {
     public static removeById(id: string, user: User = null, checkIsAuthor = false) {
         const defer = q.defer();
 
-        this.get(id, {})
+        ADBModel.get(id, {})
             .then(item => {
-                this.remove(item, user, checkIsAuthor)
+                ADBModel.remove(item, user, checkIsAuthor)
                     .then((item) => defer.resolve(item))
                     .catch(err => defer.reject(err));
             })
@@ -302,6 +306,25 @@ export default abstract class ADBModel {
             }
             if (queryParams.limit) {
                 query.sort(queryParams.limit);
+            }
+        }
+    }
+
+    /**
+     * Add prefix to all references to non un-prefixed models
+     * @param obj
+     * @param prefix
+     * @param exclude
+     * @private
+     */
+    private static _addPrefix(obj, prefix, exclude) {
+        for (const idx in obj) {
+            if (obj.hasOwnProperty(idx)) {
+                if (typeof obj[idx] === "object" && !obj[idx].ref) {
+                    ADBModel._addPrefix(obj[idx], prefix, exclude);
+                } else if (obj[idx] === "object" && !~exclude.indexOf(obj[idx].ref)) {
+                    obj[idx].ref = prefix + obj[idx].ref;
+                }
             }
         }
     }

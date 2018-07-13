@@ -22,9 +22,11 @@ export default abstract class ADBModel {
     /**
      * Method called from MongoDB.ts in
      * @param name
+     * @param prefix
+     * @param exclude
      * @return {mongoose.Model<any>}
      */
-    static importSchema(name: string): mongoose.Model<any>;
+    static importSchema(name: string, prefix: any, exclude: any): mongoose.Model<any>;
     /**
      * Get model by id
      * @param id
@@ -112,4 +114,12 @@ export default abstract class ADBModel {
      * @private
      */
     protected static applyQueryParams(query: any, queryParams: any): void;
+    /**
+     * Add prefix to all references to non un-prefixed models
+     * @param obj
+     * @param prefix
+     * @param exclude
+     * @private
+     */
+    private static _addPrefix(obj, prefix, exclude);
 }

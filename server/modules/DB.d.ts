@@ -12,6 +12,10 @@ export default class DB {
      */
     private static _instance;
     /**
+     * List of core models names
+     */
+    private static _coreModelNames;
+    /**
      * _instance getter
      * @return {any}
      */

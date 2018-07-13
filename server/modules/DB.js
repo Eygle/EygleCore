@@ -166,7 +166,10 @@ class DB {
             if (modelName.endsWith('DB')) {
                 modelName = modelName.substr(0, modelName.length - 2);
             }
-            const model = require(file).schema.importSchema(modelName);
+            if (!prefix.length) {
+                DB._coreModelNames.push(modelName);
+            }
+            const model = require(file).schema.importSchema(modelName, prefix, DB._coreModelNames);
             model.on('error', (err) => {
                 Logger_1.default.error(`Mongo error: [${err.name}] ${err.message}`, err.errors);
             });
@@ -179,5 +182,9 @@ class DB {
  * Is database connected
  */
 DB._connected = false;
+/**
+ * List of core models names
+ */
+DB._coreModelNames = [];
 exports.default = DB;
 //# sourceMappingURL=DB.js.map
