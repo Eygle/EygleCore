@@ -24,7 +24,7 @@ export default class DB {
     * @return {any}
     */
    public static get instance() {
-      return this._instance;
+      return DB._instance;
    }
 
    /**
@@ -35,13 +35,13 @@ export default class DB {
       const defer: Q.Deferred<any> = q.defer();
 
       mongoose.connect('mongodb://localhost/' + ServerConfig.dbName);
-      this._instance = mongoose.connection;
-      this._instance.on('error', () => {
+      DB._instance = mongoose.connection;
+      DB._instance.on('error', () => {
          Logger.error('Mongoose connection error');
       });
-      this._instance.once('open', () => {
-          this._loadModels(`${__dirname}/../db`, 'EygleCore');
-          this._loadModels(`${ServerConfig.root}/server/db`, ServerConfig.appName, ServerConfig.dbCollectionsPrefix);
+      DB._instance.once('open', () => {
+          DB._loadModels(`${__dirname}/../db`, 'EygleCore');
+          DB._loadModels(`${ServerConfig.root}/server/db`, ServerConfig.appName, ServerConfig.dbCollectionsPrefix);
          Logger.info(`Mongo database '${ServerConfig.dbName}' connected`);
          defer.resolve();
       });
@@ -68,21 +68,21 @@ export default class DB {
       const schema = new mongoose.Schema(data, options || {
          toJSON: {
             transform: function (doc, ret) {
-               this.transformUnpopulatedReferences(ret);
+               DB.transformUnpopulatedReferences(ret);
                return ret;
             }
          }
       });
 
       schema.pre('save', function (next) { // DO NOT use big arrow (=>)
-         this.updateDate = new Date();
+          this.updateDate = new Date();
          next();
       });
 
       if (deleted) {
          schema.pre('find', function (next) { // DO NOT use big arrow (=>)
             if (!this._conditions.hasOwnProperty('_id') && !this._conditions.hasOwnProperty('deleted')) {
-               this.where('deleted').equals(false);
+                this.where('deleted').equals(false);
             } else if (this._conditions.hasOwnProperty('deleted') && this._conditions.deleted === null) {
                delete this._conditions.deleted; // remove deleted condition (include all, deleted or not)
             }
@@ -92,7 +92,7 @@ export default class DB {
 
          schema.pre('findOne', function (next) { // DO NOT use big arrow (=>)
             if (!this._conditions.hasOwnProperty('deleted')) {
-               this.where('deleted').equals(false);
+                this.where('deleted').equals(false);
             } else if (this._conditions.hasOwnProperty('deleted') && this._conditions.deleted === null) {
                delete this._conditions.deleted; // remove deleted condition (include all, deleted or not)
             }
@@ -143,7 +143,7 @@ export default class DB {
     * @return {any}
     */
    public static createItem(item: any, populateOptions = null, model = null) {
-      return this.saveItem(item, null, populateOptions, model);
+      return DB.saveItem(item, null, populateOptions, model);
    }
 
    /**
@@ -158,7 +158,7 @@ export default class DB {
             if (typeof data[key] === 'string' && !~excludes.indexOf(key) && Utils.isMongoId(data[key])) {
                data[key] = {_id: data[key]};
             } else if (data[key] instanceof Object) {
-               this.transformUnpopulatedReferences(data[key]);
+               DB.transformUnpopulatedReferences(data[key]);
             }
          }
       }
@@ -174,7 +174,7 @@ export default class DB {
             const file = `${dir}/${f}`;
             const stat = fs.statSync(file);
             if (stat.isDirectory()) {
-                this._loadModels(file, appName, f);
+                DB._loadModels(file, appName, f);
                 continue;
             }
 

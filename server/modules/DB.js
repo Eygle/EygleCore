@@ -15,7 +15,7 @@ class DB {
      * @return {any}
      */
     static get instance() {
-        return this._instance;
+        return DB._instance;
     }
     /**
      * Initialize database connexion
@@ -24,13 +24,13 @@ class DB {
     static init() {
         const defer = q.defer();
         mongoose.connect('mongodb://localhost/' + ServerConfig_1.default.dbName);
-        this._instance = mongoose.connection;
-        this._instance.on('error', () => {
+        DB._instance = mongoose.connection;
+        DB._instance.on('error', () => {
             Logger_1.default.error('Mongoose connection error');
         });
-        this._instance.once('open', () => {
-            this._loadModels(`${__dirname}/../db`, 'EygleCore');
-            this._loadModels(`${ServerConfig_1.default.root}/server/db`, ServerConfig_1.default.appName, ServerConfig_1.default.dbCollectionsPrefix);
+        DB._instance.once('open', () => {
+            DB._loadModels(`${__dirname}/../db`, 'EygleCore');
+            DB._loadModels(`${ServerConfig_1.default.root}/server/db`, ServerConfig_1.default.appName, ServerConfig_1.default.dbCollectionsPrefix);
             Logger_1.default.info(`Mongo database '${ServerConfig_1.default.dbName}' connected`);
             defer.resolve();
         });
@@ -53,7 +53,7 @@ class DB {
         const schema = new mongoose.Schema(data, options || {
             toJSON: {
                 transform: function (doc, ret) {
-                    this.transformUnpopulatedReferences(ret);
+                    DB.transformUnpopulatedReferences(ret);
                     return ret;
                 }
             }
@@ -124,7 +124,7 @@ class DB {
      * @return {any}
      */
     static createItem(item, populateOptions = null, model = null) {
-        return this.saveItem(item, null, populateOptions, model);
+        return DB.saveItem(item, null, populateOptions, model);
     }
     /**
      * Change all unpopulated references from String to Object ({_id: String}) (recursively)
@@ -139,7 +139,7 @@ class DB {
                     data[key] = { _id: data[key] };
                 }
                 else if (data[key] instanceof Object) {
-                    this.transformUnpopulatedReferences(data[key]);
+                    DB.transformUnpopulatedReferences(data[key]);
                 }
             }
         }
@@ -155,7 +155,7 @@ class DB {
             const file = `${dir}/${f}`;
             const stat = fs.statSync(file);
             if (stat.isDirectory()) {
-                this._loadModels(file, appName, f);
+                DB._loadModels(file, appName, f);
                 continue;
             }
             if (path.extname(f) !== '.js')
