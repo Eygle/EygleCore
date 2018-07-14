@@ -65,13 +65,16 @@ export default abstract class ADBModel {
 
     /**
      * Get all model
-     * @return {Promise<T>}
+     * @return {Promise<AModel[]>}
      */
-    public static getAll(queryParams: any = null): q.Promise<AModel[]> {
+    public static getAll(queryParams: any = null, limit: number = null): q.Promise<AModel[]> {
         const defer = <q.Deferred<Array<AModel>>>q.defer();
 
        const query = this._model.find();
        this.applyQueryParams(query, queryParams);
+        if (limit) {
+            query.limit(limit);
+        }
         query.exec((err, items) => {
             if (err) return defer.reject(err);
             defer.resolve(items);

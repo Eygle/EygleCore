@@ -53,10 +53,13 @@ class ADBModel {
      * Get all model
      * @return {Promise<T>}
      */
-    static getAll(queryParams = null) {
+    static getAll(queryParams = null, limit = null) {
         const defer = q.defer();
         const query = this._model.find();
         this.applyQueryParams(query, queryParams);
+        if (limit) {
+            query.limit(limit);
+        }
         query.exec((err, items) => {
             if (err)
                 return defer.reject(err);

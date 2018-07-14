@@ -2,8 +2,9 @@
 /// <reference types="q" />
 import * as mongoose from 'mongoose';
 import * as q from 'q';
-import { AModel } from '../../commons/models/AModel';
-import { User } from '../../commons/models/User';
+import {AModel} from '../../commons/models/AModel';
+import {User} from '../../commons/models/User';
+
 export default abstract class ADBModel {
     /**
      * Current schema's mongoose model
@@ -36,7 +37,7 @@ export default abstract class ADBModel {
      * Get all model
      * @return {Promise<T>}
      */
-    static getAll(queryParams?: any): q.Promise<AModel[]>;
+    static getAll(queryParams?: any, limit?: number): q.Promise<AModel[]>;
     /**
      * Create new model instance
      * @param data
