@@ -37,8 +37,8 @@ class ADBModel {
             defer.reject(new Error(`Invalid mongo id ${id}`));
         }
         else {
-            const query = ADBModel._model.findById(id);
-            ADBModel.applyQueryParams(query, queryParams);
+           const query = this._model.findById(id);
+           this.applyQueryParams(query, queryParams);
             query.exec((err, item) => {
                 if (err)
                     return defer.reject(err);
@@ -55,8 +55,8 @@ class ADBModel {
      */
     static getAll(queryParams = null) {
         const defer = q.defer();
-        const query = ADBModel._model.find();
-        ADBModel.applyQueryParams(query, queryParams);
+       const query = this._model.find();
+       this.applyQueryParams(query, queryParams);
         query.exec((err, items) => {
             if (err)
                 return defer.reject(err);
@@ -71,7 +71,7 @@ class ADBModel {
      * @return mongoose.Model<any>
      */
     static create(data, exclude = null) {
-        return new ADBModel._model(ADBModel.formatData(data, exclude));
+       return new this._model(this.formatData(data, exclude));
     }
     /**
      * Create new model instance
@@ -81,7 +81,7 @@ class ADBModel {
      * @return {Promise<T>}
      */
     static add(data, exclude = null, populateOptions = null) {
-        return DB_1.default.createItem(new ADBModel._model(ADBModel.formatData(data, exclude)), populateOptions, ADBModel._model);
+       return DB_1.default.createItem(new this._model(this.formatData(data, exclude)), populateOptions, this._model);
     }
     /**
      * Save model instance
@@ -91,7 +91,7 @@ class ADBModel {
      * @param populateOptions
      */
     static save(item, data = null, exclude = null, populateOptions = null) {
-        return DB_1.default.saveItem(item, ADBModel.formatData(data, exclude), populateOptions, ADBModel._model);
+       return DB_1.default.saveItem(item, this.formatData(data, exclude), populateOptions, this._model);
     }
     /**
      * Find model instance by id and save it
@@ -106,9 +106,9 @@ class ADBModel {
         if (data && data.hasOwnProperty('_id')) {
             delete data._id;
         }
-        ADBModel.get(id, {})
+       this.get(id, {})
             .then(item => {
-            ADBModel.save(item, data, exclude, populateOptions)
+          this.save(item, data, exclude, populateOptions)
                 .then(item => defer.resolve(item))
                 .catch(err => defer.reject(err));
         })
@@ -147,9 +147,9 @@ class ADBModel {
      */
     static setDeletedById(id, user = null, checkIsAuthor = false) {
         const defer = q.defer();
-        ADBModel.get(id, {})
+       this.get(id, {})
             .then(item => {
-            ADBModel.setDeleted(item, user, checkIsAuthor)
+          this.setDeleted(item, user, checkIsAuthor)
                 .then((item) => defer.resolve(item))
                 .catch(err => defer.reject(err));
         })
@@ -190,9 +190,9 @@ class ADBModel {
      */
     static removeById(id, user = null, checkIsAuthor = false) {
         const defer = q.defer();
-        ADBModel.get(id, {})
+       this.get(id, {})
             .then(item => {
-            ADBModel.remove(item, user, checkIsAuthor)
+          this.remove(item, user, checkIsAuthor)
                 .then((item) => defer.resolve(item))
                 .catch(err => defer.reject(err));
         })
