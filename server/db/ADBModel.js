@@ -51,15 +51,12 @@ class ADBModel {
     }
     /**
      * Get all model
-     * @return {Promise<T>}
+     * @return {Promise<AModel[]>}
      */
-    static getAll(queryParams = null, limit = null) {
+    static getAll(queryParams = null) {
         const defer = q.defer();
         const query = this._model.find();
         this.applyQueryParams(query, queryParams);
-        if (limit) {
-            query.limit(limit);
-        }
         query.exec((err, items) => {
             if (err)
                 return defer.reject(err);
@@ -268,7 +265,10 @@ class ADBModel {
                 query.sort(queryParams.sort);
             }
             if (queryParams.limit) {
-                query.sort(queryParams.limit);
+                query.limit(parseInt(queryParams.limit));
+            }
+            if (queryParams.skip) {
+                query.skip(parseInt(queryParams.skip));
             }
         }
     }

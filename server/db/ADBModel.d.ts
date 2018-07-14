@@ -35,9 +35,9 @@ export default abstract class ADBModel {
     static get(id: string, queryParams?: any): q.Promise<{}>;
     /**
      * Get all model
-     * @return {Promise<T>}
+     * @return {Promise<AModel[]>}
      */
-    static getAll(queryParams?: any, limit?: number): q.Promise<AModel[]>;
+    static getAll(queryParams?: any): q.Promise<AModel[]>;
     /**
      * Create new model instance
      * @param data
