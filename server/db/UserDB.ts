@@ -4,7 +4,7 @@ import Cache from '../modules/Cache';
 import {EHTTPStatus} from '../typings/server.enums';
 import {CustomEdError} from '../utils/EdError';
 import {User} from '../../commons/models/User';
-import {userSchema} from "../schemas/User.schema";
+import {userSchema} from "../schemas/user.schema";
 import ADBModel from "./ADBModel";
 
 export default class UserDB extends ADBModel {

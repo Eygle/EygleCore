@@ -5,7 +5,7 @@ const q = require("q");
 const Cache_1 = require("../modules/Cache");
 const server_enums_1 = require("../typings/server.enums");
 const EdError_1 = require("../utils/EdError");
-const User_schema_1 = require("../schemas/User.schema");
+const user_schema_1 = require("../schemas/user.schema");
 const ADBModel_1 = require("./ADBModel");
 class UserDB extends ADBModel_1.default {
     /**
@@ -115,6 +115,6 @@ class UserDB extends ADBModel_1.default {
     }
 }
 exports.default = UserDB;
-UserDB.init(User_schema_1.userSchema);
+UserDB.init(user_schema_1.userSchema);
 module.exports.schema = UserDB; // Used by MongoDB models loader (need require)
 //# sourceMappingURL=UserDB.js.map

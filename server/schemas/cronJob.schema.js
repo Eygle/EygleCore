@@ -9,4 +9,4 @@ exports.cronJobSchema = DB_1.default.createSchema({
     isRunning: { type: Boolean, 'default': false },
     lastRun: Date
 }, false);
-//# sourceMappingURL=CronJob.schema.js.map
+//# sourceMappingURL=cronJob.schema.js.map

@@ -1,5 +1,5 @@
 import ADBModel from "./ADBModel";
-import {cronJobSchema} from "../schemas/CronJob.schema";
+import {cronJobSchema} from "../schemas/cronJob.schema";
 
 export default class CronJobDB extends ADBModel {
 }

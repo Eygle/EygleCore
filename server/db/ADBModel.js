@@ -22,7 +22,7 @@ class ADBModel {
      * @return {mongoose.Model<any>}
      */
     static importSchema(name) {
-        this._model = mongoose.model(name, ADBModel._schema, name);
+       this._model = mongoose.model(name, this._schema, name);
         return this._model;
     }
     /**

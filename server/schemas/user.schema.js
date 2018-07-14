@@ -100,4 +100,4 @@ exports.userSchema.post('save', function (error, doc, next) {
 exports.userSchema.post('save', function (doc) {
     Cache_1.default.remove(this._id.toString());
 });
-//# sourceMappingURL=User.schema.js.map
+//# sourceMappingURL=user.schema.js.map
