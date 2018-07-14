@@ -3,11 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tracer = require("tracer");
 const cron = require("node-schedule");
 const CronJobDB_1 = require("../db/CronJobDB");
+const CronJob_1 = require("../../commons/models/CronJob");
 const ServerConfig_1 = require("../utils/ServerConfig");
 const core_enums_1 = require("../../commons/core.enums");
 const Logger_1 = require("../utils/Logger");
-class AJob {
+class AJob extends CronJob_1.CronJob {
     constructor(name) {
+        super();
         this.name = name;
         this.logFilename = `eygle-${this._formatName()}`;
         if (core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env) {
@@ -25,11 +27,6 @@ class AJob {
                 dateformat: "HH:MM:ss.L"
             });
         }
-    }
-    /**
-     * Free memory at the end of the job processing
-     */
-    clean() {
     }
     /**
      * Set database model

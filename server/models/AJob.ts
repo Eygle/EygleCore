@@ -7,7 +7,7 @@ import ServerConfig from "../utils/ServerConfig";
 import {EEnv} from "../../commons/core.enums";
 import Logger from "../utils/Logger";
 
-abstract class AJob implements CronJob {
+abstract class AJob extends CronJob {
    /**
     * Log file name
     */
@@ -59,6 +59,7 @@ abstract class AJob implements CronJob {
    private _model: CronJob;
 
    constructor(name: string) {
+      super();
       this.name = name;
       this.logFilename = `eygle-${this._formatName()}`;
       if (EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env) {
@@ -81,9 +82,7 @@ abstract class AJob implements CronJob {
    /**
     * Free memory at the end of the job processing
     */
-   protected clean() {
-
-   }
+   abstract clean();
 
    /**
     * Set database model

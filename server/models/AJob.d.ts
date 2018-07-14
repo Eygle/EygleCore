@@ -1,7 +1,7 @@
 import { CronJob } from "../../commons/models/CronJob";
 import { ILogger } from "../typings/server.interfaces";
 import { EEnv } from "../../commons/core.enums";
-declare abstract class AJob implements CronJob {
+declare abstract class AJob extends CronJob {
     /**
      * Log file name
      */
@@ -46,7 +46,7 @@ declare abstract class AJob implements CronJob {
     /**
      * Free memory at the end of the job processing
      */
-    protected clean(): void;
+    abstract clean(): any;
     /**
      * Set database model
      * @param {CronJob} model
