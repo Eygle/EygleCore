@@ -1,6 +1,7 @@
 import {AModel} from "./AModel";
 
 export class CronJob extends AModel {
+
     /**
      * Service name
      */
