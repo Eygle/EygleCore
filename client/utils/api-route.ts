@@ -90,7 +90,7 @@ export class ApiRoute {
         url.push(p);
       } else if (args[match[1]]) {
         url.push(args[match[1]]);
-        delete args[match[1]]
+          delete args[match[1]];
       }
     }
 
@@ -153,9 +153,9 @@ export class ApiRoute {
   private _formatDates(data) {
     for (const idx in data) {
       if (data.hasOwnProperty(idx)) {
-        if (typeof data[idx] === "object") {
+          if (typeof data[idx] === 'object') {
           this._formatDates(data[idx]);
-        } else if (typeof data[idx] === "string") {
+          } else if (typeof data[idx] === 'string') {
           if (data[idx].match(/\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}.\d{1,3}Z/)) {
             data[idx] = new Date(data[idx]);
           }

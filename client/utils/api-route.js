@@ -129,10 +129,10 @@ var ApiRoute = (function () {
     ApiRoute.prototype._formatDates = function (data) {
         for (var idx in data) {
             if (data.hasOwnProperty(idx)) {
-                if (typeof data[idx] === "object") {
+                if (typeof data[idx] === 'object') {
                     this._formatDates(data[idx]);
                 }
-                else if (typeof data[idx] === "string") {
+                else if (typeof data[idx] === 'string') {
                     if (data[idx].match(/\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}.\d{1,3}Z/)) {
                         data[idx] = new Date(data[idx]);
                     }

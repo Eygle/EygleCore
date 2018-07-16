@@ -49,7 +49,7 @@ var EygleServer = (function () {
             Logger_1.default.info("Node v" + process.versions.node);
             Logger_1.default.info("Environment: " + (process.env.NODE_ENV || 'production'));
             var inst = _this._http.listen(_this._app.get('port'), _this._app.get('ip'), function () {
-                Logger_1.default.info("Express server listening on port %d\n", _this._app.get('port'));
+                Logger_1.default.info('Express server listening on port %d\n', _this._app.get('port'));
             });
         });
     };
@@ -87,14 +87,14 @@ var EygleServer = (function () {
                 secret: ServerConfig_1.default.sessionSecret,
                 cookie: {
                     maxAge: 2592000000,
-                    domain: core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env ? ".eygle.fr" : undefined
+                    domain: core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env ? '.eygle.fr' : undefined
                 },
                 resave: true,
                 rolling: true,
                 saveUninitialized: true,
                 store: this._mongoStore
             });
-            this._app.set("view options", { layout: false });
+            this._app.set('view options', {layout: false});
             this._app.set('port', ServerConfig_1.default.port);
             this._app.disable('x-powered-by');
             this._app.use(bodyParser.urlencoded({ extended: true }));
@@ -116,13 +116,13 @@ var EygleServer = (function () {
                 }
             }));
             if (ServerConfig_1.default.implementsAuth) {
-                Logger_1.default.trace("Module Auth activated");
+                Logger_1.default.trace('Module Auth activated');
                 PassportConfig_1.default.init(this._app);
             }
             Routes_1.default.init(this._app, this._customRoutes);
             this._handleErrors(this._app); // Last errors handler
             if (ServerConfig_1.default.includeCronManager) {
-                Logger_1.default.trace("Module Cron Manager activated");
+                Logger_1.default.trace('Module Cron Manager activated');
                 CronManager_1.default.init();
             }
             // Initialize all custom modeules
@@ -131,7 +131,7 @@ var EygleServer = (function () {
                 Logger_1.default.trace("Module " + module_1.name + " activated");
                 module_1.init(this._app);
             }
-            Logger_1.default.info("All modules are loaded and activated\n");
+            Logger_1.default.info('All modules are loaded and activated\n');
         }
         catch (err) {
             console.error(err);
@@ -159,7 +159,7 @@ var EygleServer = (function () {
      * @private
      */
     EygleServer.prototype._initCSRF = function (app) {
-        Logger_1.default.trace("Module CSRF activated");
+        Logger_1.default.trace('Module CSRF activated');
         app.use(csrf({
             cookie: {
                 secure: core_enums_1.EEnv.Prod === ServerConfig_1.default.env || core_enums_1.EEnv.Preprod === ServerConfig_1.default.env // Only for productions

@@ -1,17 +1,17 @@
 import * as path from 'path';
-import {ELoggerLvl} from '../core.enums';
+import {EEnv, ELoggerLvl} from '../core.enums';
 
 export default class ProjectConfig {
 
     /**
      * Server configuration
      */
-    public static server: IProjectConfigServer = <IProjectConfigServer>{};
+    public static server: AProjectConfigServer = <AProjectConfigServer>{};
 
     /**
      * Client configuration
      */
-    public static client: IProjectConfigClient = <IProjectConfigClient>{};
+    public static client: AProjectConfigClient = <AProjectConfigClient>{};
 
     /**
      * Current running environment name
@@ -23,10 +23,11 @@ export default class ProjectConfig {
      * This method MUST BE called before the class is imported anywhere ! (static issues)
      */
     public static init() {
-        const root = path.resolve(`${path.dirname(process.mainModule.filename)}/..`);
-        const conf = require(`${root}/commons/eygle-conf.js`);
-        ProjectConfig._initForServer(root, conf, process.env.NODE_ENV);
-        ProjectConfig._initForClient(conf, process.env.NODE_ENV);
+        if (process) {
+            const root = path.resolve(`${path.dirname(process.mainModule.filename)}/..`);
+            const conf = require(`${root}/commons/eygle-conf.js`);
+            ProjectConfig._initForServer(root, conf, process.env.NODE_ENV);
+        }
     }
 
     /**
@@ -34,7 +35,7 @@ export default class ProjectConfig {
      * @param conf
      * @param {string} envName
      */
-    private static _initForClient(conf: any, envName: string) {
+    public static initForClient(conf: any, envName: string) {
         ProjectConfig._addCommons(ProjectConfig.client, conf, envName);
         ProjectConfig._addToConf(ProjectConfig.client, {
             loggerLvl: ELoggerLvl.WARN
@@ -128,7 +129,7 @@ export default class ProjectConfig {
      * @private
      */
     private static _addToConf(conf: any, data: any): void {
-        for (let i in data) {
+        for (const i in data) {
             if (data.hasOwnProperty(i) && typeof data[i] !== 'object') {
                 conf[i] = data[i];
             }
@@ -151,7 +152,13 @@ export default class ProjectConfig {
     }
 }
 
-export interface IProjectConfigCommon {
+export abstract class AProjectConfigCommon {
+
+    /**
+     * Current environment
+     */
+    public env: EEnv;
+
     /**
      * Include implementsAuth
      */
@@ -173,7 +180,7 @@ export interface IProjectConfigCommon {
     debug: boolean;
 }
 
-export interface IProjectConfigServer extends IProjectConfigCommon {
+export abstract class AProjectConfigServer extends AProjectConfigCommon {
 
     /**
      * Include email subscription managment
@@ -262,7 +269,7 @@ export interface IProjectConfigServer extends IProjectConfigCommon {
 
 ProjectConfig.init();
 
-export interface IProjectConfigClient extends IProjectConfigCommon {
+export abstract class AProjectConfigClient extends AProjectConfigCommon {
     /**
      * Logger level (all logs starting at given level will be displayed)
      */

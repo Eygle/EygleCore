@@ -1,13 +1,13 @@
-import { ELoggerLvl } from '../core.enums';
+import { EEnv, ELoggerLvl } from '../core.enums';
 export default class ProjectConfig {
     /**
      * Server configuration
      */
-    static server: IProjectConfigServer;
+    static server: AProjectConfigServer;
     /**
      * Client configuration
      */
-    static client: IProjectConfigClient;
+    static client: AProjectConfigClient;
     /**
      * Current running environment name
      */
@@ -22,7 +22,7 @@ export default class ProjectConfig {
      * @param conf
      * @param {string} envName
      */
-    private static _initForClient(conf, envName);
+    static initForClient(conf: any, envName: string): void;
     /**
      * initialise for server
      * @param {string} rootPath
@@ -53,7 +53,11 @@ export default class ProjectConfig {
      */
     private static _formatConfStr(str);
 }
-export interface IProjectConfigCommon {
+export declare abstract class AProjectConfigCommon {
+    /**
+     * Current environment
+     */
+    env: EEnv;
     /**
      * Include implementsAuth
      */
@@ -71,7 +75,7 @@ export interface IProjectConfigCommon {
      */
     debug: boolean;
 }
-export interface IProjectConfigServer extends IProjectConfigCommon {
+export declare abstract class AProjectConfigServer extends AProjectConfigCommon {
     /**
      * Include email subscription managment
      */
@@ -141,7 +145,7 @@ export interface IProjectConfigServer extends IProjectConfigCommon {
      */
     loggerAllLogsFileName: string;
 }
-export interface IProjectConfigClient extends IProjectConfigCommon {
+export declare abstract class AProjectConfigClient extends AProjectConfigCommon {
     /**
      * Logger level (all logs starting at given level will be displayed)
      */

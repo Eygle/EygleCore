@@ -1,4 +1,14 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var path = require("path");
 var core_enums_1 = require("../core.enums");
@@ -10,17 +20,18 @@ var ProjectConfig = (function () {
      * This method MUST BE called before the class is imported anywhere ! (static issues)
      */
     ProjectConfig.init = function () {
-        var root = path.resolve(path.dirname(process.mainModule.filename) + "/..");
-        var conf = require(root + "/commons/eygle-conf.js");
-        ProjectConfig._initForServer(root, conf, process.env.NODE_ENV);
-        ProjectConfig._initForClient(conf, process.env.NODE_ENV);
+        if (process) {
+            var root = path.resolve(path.dirname(process.mainModule.filename) + "/..");
+            var conf = require(root + "/commons/eygle-conf.js");
+            ProjectConfig._initForServer(root, conf, process.env.NODE_ENV);
+        }
     };
     /**
      *
      * @param conf
      * @param {string} envName
      */
-    ProjectConfig._initForClient = function (conf, envName) {
+    ProjectConfig.initForClient = function (conf, envName) {
         ProjectConfig._addCommons(ProjectConfig.client, conf, envName);
         ProjectConfig._addToConf(ProjectConfig.client, {
             loggerLvl: core_enums_1.ELoggerLvl.WARN
@@ -129,5 +140,27 @@ var ProjectConfig = (function () {
     return ProjectConfig;
 }());
 exports.default = ProjectConfig;
+var AProjectConfigCommon = (function () {
+    function AProjectConfigCommon() {
+    }
+    return AProjectConfigCommon;
+}());
+exports.AProjectConfigCommon = AProjectConfigCommon;
+var AProjectConfigServer = (function (_super) {
+    __extends(AProjectConfigServer, _super);
+    function AProjectConfigServer() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return AProjectConfigServer;
+}(AProjectConfigCommon));
+exports.AProjectConfigServer = AProjectConfigServer;
 ProjectConfig.init();
+var AProjectConfigClient = (function (_super) {
+    __extends(AProjectConfigClient, _super);
+    function AProjectConfigClient() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return AProjectConfigClient;
+}(AProjectConfigCommon));
+exports.AProjectConfigClient = AProjectConfigClient;
 //# sourceMappingURL=ProjectConfig.js.map

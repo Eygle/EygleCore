@@ -1,4 +1,5 @@
-import { ICustomModule, ICustomRoute } from "./typings/customs.interface";
+import {ICustomModule, ICustomRoute} from './typings/customs.interface';
+
 /**
  * Entry point
  * WARNING: the ProjectConfig MUST be initialized before even importing this file!

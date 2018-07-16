@@ -3,10 +3,10 @@ import * as q from 'q';
 import * as fs from 'fs';
 import Utils from '../../commons/utils/Utils';
 import {EHTTPStatus} from '../typings/server.enums';
-import ServerConfig from "../utils/ServerConfig";
-import Logger from "../utils/Logger";
-import {CustomEdError} from "../utils/EdError";
-import * as path from "path";
+import ServerConfig from '../utils/ServerConfig';
+import Logger from '../utils/Logger';
+import {CustomEdError} from '../utils/EdError';
+import * as path from 'path';
 
 export default class DB {
     /**
@@ -170,7 +170,7 @@ export default class DB {
      */
     private static _loadModels(dir: string, appName: string, prefix: string = '', parent: any = null): void {
         if (!fs.existsSync(dir)) return null;
-        for (let f of fs.readdirSync(dir)) {
+        for (const f of fs.readdirSync(dir)) {
             const file = `${dir}/${f}`;
             const stat = fs.statSync(file);
             if (stat.isDirectory()) {

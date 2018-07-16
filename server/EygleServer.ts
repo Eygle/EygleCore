@@ -2,24 +2,24 @@ import * as express from 'express';
 import * as http from 'http';
 import * as session from 'express-session';
 import * as q from 'q';
-import * as compress from "compression";
-import * as bodyParser from "body-parser";
-import * as busboy from "connect-busboy";
-import * as methodOverride from "method-override";
-import * as cookieParser from "cookie-parser";
+import * as compress from 'compression';
+import * as bodyParser from 'body-parser';
+import * as busboy from 'connect-busboy';
+import * as methodOverride from 'method-override';
+import * as cookieParser from 'cookie-parser';
 import * as connectMongo from 'connect-mongo';
-import * as csrf from "csurf";
+import * as csrf from 'csurf';
 
-import Permission from "./modules/Permissions";
+import Permission from './modules/Permissions';
 import DB from './modules/DB';
-import CronManager from "./modules/CronManager";
-import Logger from "./utils/Logger";
-import ServerConfig from "./utils/ServerConfig";
-import {EEnv} from "../commons/core.enums";
-import PassportConfig from "./utils/PassportConfig";
-import Routes from "./utils/Routes";
-import EdError from "./utils/EdError";
-import {ICustomModule, ICustomRoute} from "./typings/customs.interface";
+import CronManager from './modules/CronManager';
+import Logger from './utils/Logger';
+import ServerConfig from './utils/ServerConfig';
+import {EEnv} from '../commons/core.enums';
+import PassportConfig from './utils/PassportConfig';
+import Routes from './utils/Routes';
+import EdError from './utils/EdError';
+import {ICustomModule, ICustomRoute} from './typings/customs.interface';
 
 const MongoStore = connectMongo(session);
 
@@ -80,7 +80,7 @@ export class EygleServer {
          Logger.info(`Environment: ${process.env.NODE_ENV || 'production'}`);
 
          const inst = this._http.listen(this._app.get('port'), this._app.get('ip'), () => {
-            Logger.info("Express server listening on port %d\n", this._app.get('port'));
+             Logger.info('Express server listening on port %d\n', this._app.get('port'));
          });
       });
    }
@@ -123,7 +123,7 @@ export class EygleServer {
             secret: ServerConfig.sessionSecret,
             cookie: {
                maxAge: 2592000000, // 30 days,
-               domain: EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env ? ".eygle.fr" : undefined
+                domain: EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env ? '.eygle.fr' : undefined
             },
             resave: true,
             rolling: true,
@@ -131,7 +131,7 @@ export class EygleServer {
             store: this._mongoStore
          });
 
-         this._app.set("view options", {layout: false});
+          this._app.set('view options', {layout: false});
          this._app.set('port', ServerConfig.port);
          this._app.disable('x-powered-by');
 
@@ -158,13 +158,13 @@ export class EygleServer {
          }));
 
          if (ServerConfig.implementsAuth) {
-            Logger.trace("Module Auth activated");
+             Logger.trace('Module Auth activated');
             PassportConfig.init(this._app);
          }
          Routes.init(this._app, this._customRoutes);
          this._handleErrors(this._app); // Last errors handler
          if (ServerConfig.includeCronManager) {
-            Logger.trace("Module Cron Manager activated");
+             Logger.trace('Module Cron Manager activated');
             CronManager.init();
          }
 
@@ -174,7 +174,7 @@ export class EygleServer {
               module.init(this._app);
           }
 
-         Logger.info("All modules are loaded and activated\n");
+          Logger.info('All modules are loaded and activated\n');
       } catch (err) {
          console.error(err);
       }
@@ -203,7 +203,7 @@ export class EygleServer {
     * @private
     */
    private _initCSRF(app) {
-      Logger.trace("Module CSRF activated");
+       Logger.trace('Module CSRF activated');
       app.use(csrf(<any>{
          cookie: {
             secure: EEnv.Prod === ServerConfig.env || EEnv.Preprod === ServerConfig.env // Only for productions
