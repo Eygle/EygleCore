@@ -8,7 +8,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {Router} from '@angular/router';
 import {User} from '../../commons/models/User';
 import {ApiRoute} from '../utils/api-route';
-import {environment} from '../environment';
+import {coreEnvironment} from '../core-environment';
 import {ERole} from '../../commons/core.enums';
 
 const httpOptions = {
@@ -39,7 +39,7 @@ export class AuthService {
     this._allPermissions = this._getObjectFromCookie('ey-permissions', []);
     this._permApi = new ApiRoute(this.http, '/api/permissions');
 
-    if (!environment.production) {
+    if (!coreEnvironment.production) {
       // If not in prod express is not used to serve the client and thus
       // the 'user' and 'permissions' cookies are not transmitted in the index.html page
       this._permApi.get()

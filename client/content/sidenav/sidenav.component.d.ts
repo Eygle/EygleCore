@@ -1,6 +1,7 @@
+import { OnInit } from '@angular/core';
 import { AuthService } from "../../services/auth.service";
 import { IRouteItem } from "../../core-routes";
-export declare class SidenavComponent {
+export declare class SidenavComponent implements OnInit {
     private Auth;
     routes: IRouteItem[];
     navItems: [{
@@ -8,6 +9,7 @@ export declare class SidenavComponent {
         items: [IRouteItem];
     }];
     constructor(Auth: AuthService);
+    ngOnInit(): void;
     /**
      * Generate menu from routes list
      * @private

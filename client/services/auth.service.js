@@ -16,7 +16,7 @@ var of_1 = require("rxjs/observable/of");
 var ngx_cookie_service_1 = require("ngx-cookie-service");
 var router_1 = require("@angular/router");
 var api_route_1 = require("../utils/api-route");
-var environment_1 = require("../environment");
+var core_environment_1 = require("../core-environment");
 var core_enums_1 = require("../../commons/core.enums");
 var httpOptions = {
     headers: new http_1.HttpHeaders({ 'Content-Type': 'application/json;charset=UTF-8' }),
@@ -31,7 +31,7 @@ var AuthService = (function () {
         this.user = this._getObjectFromCookie('ey-user', {});
         this._allPermissions = this._getObjectFromCookie('ey-permissions', []);
         this._permApi = new api_route_1.ApiRoute(this.http, '/api/permissions');
-        if (!environment_1.environment.production) {
+        if (!core_environment_1.coreEnvironment.production) {
             // If not in prod express is not used to serve the client and thus
             // the 'user' and 'permissions' cookies are not transmitted in the index.html page
             this._permApi.get()

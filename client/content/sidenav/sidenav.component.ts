@@ -1,5 +1,5 @@
 import * as _ from 'underscore';
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {IRouteItem} from "../../core-routes";
 
@@ -8,13 +8,16 @@ import {IRouteItem} from "../../core-routes";
     template: require('./sidenav.component.html'),
     styles: [require('./sidenav.component.scss')]
 })
-export class SidenavComponent {
+export class SidenavComponent implements OnInit {
 
     @Input() routes: IRouteItem[];
 
     navItems: [{ label?: string, items: [IRouteItem] }];
 
     constructor(private Auth: AuthService) {
+    }
+
+    ngOnInit() {
         console.log("Generate sidenav with routes", this.routes);
         this._generateMenu();
     }

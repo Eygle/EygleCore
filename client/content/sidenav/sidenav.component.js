@@ -15,9 +15,11 @@ var auth_service_1 = require("../../services/auth.service");
 var SidenavComponent = (function () {
     function SidenavComponent(Auth) {
         this.Auth = Auth;
+    }
+    SidenavComponent.prototype.ngOnInit = function () {
         console.log("Generate sidenav with routes", this.routes);
         this._generateMenu();
-    }
+    };
     /**
      * Generate menu from routes list
      * @private
