@@ -38,7 +38,7 @@ LoginComponent = __decorate([
     core_1.Component({
         selector: 'ems-login',
         templateUrl: require('./login.component.html'),
-        styleUrls: [require('./login.component.scss')]
+        styleUrls: [require('../auth-common.scss')]
     }),
     __metadata("design:paramtypes", [config_service_1.ConfigService, auth_service_1.AuthService])
 ], LoginComponent);

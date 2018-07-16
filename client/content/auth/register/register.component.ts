@@ -5,7 +5,7 @@ import {ConfigService} from '../../../services/config.service';
 @Component({
   selector: 'ems-register',
   templateUrl: require('./register.component.html'),
-  styleUrls: [require('./register.component.scss')]
+  styleUrls: [require('../auth-common.scss')]
 })
 export class RegisterComponent {
   /**

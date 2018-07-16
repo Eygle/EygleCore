@@ -35,7 +35,7 @@ RegisterComponent = __decorate([
     core_1.Component({
         selector: 'ems-register',
         templateUrl: require('./register.component.html'),
-        styleUrls: [require('./register.component.scss')]
+        styleUrls: [require('../auth-common.scss')]
     }),
     __metadata("design:paramtypes", [config_service_1.ConfigService, auth_service_1.AuthService])
 ], RegisterComponent);
