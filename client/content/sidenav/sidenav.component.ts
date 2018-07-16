@@ -5,8 +5,8 @@ import {IRouteItem} from "../../core-routes";
 
 @Component({
     selector: 'ems-sidenav',
-    templateUrl: require('./sidenav.component.html'),
-    styleUrls: [require('./sidenav.component.scss')]
+    template: require('./sidenav.component.html'),
+    styles: [require('./sidenav.component.scss')]
 })
 export class SidenavComponent {
 

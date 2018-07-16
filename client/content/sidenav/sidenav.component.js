@@ -59,8 +59,8 @@ __decorate([
 SidenavComponent = __decorate([
     core_1.Component({
         selector: 'ems-sidenav',
-        templateUrl: require('./sidenav.component.html'),
-        styleUrls: [require('./sidenav.component.scss')]
+        template: require('./sidenav.component.html'),
+        styles: [require('./sidenav.component.scss')]
     }),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], SidenavComponent);
