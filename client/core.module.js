@@ -25,6 +25,9 @@ EygleCoreModule = __decorate([
         imports: [
             http_1.HttpClientModule
         ],
+        exports: [
+            sidenav_component_1.SidenavComponent
+        ],
         entryComponents: [],
         providers: [
             config_service_1.ConfigService,

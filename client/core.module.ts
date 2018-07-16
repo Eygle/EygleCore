@@ -16,7 +16,9 @@ import {ConfigService} from './services/config.service';
     imports: [
         HttpClientModule
     ],
-    entryComponents: [],
+    exports: [
+        SidenavComponent
+    ],
     providers: [
         ConfigService,
         CookieService
