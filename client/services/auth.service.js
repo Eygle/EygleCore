@@ -29,14 +29,14 @@ var AuthService = (function () {
         this.cookie = cookie;
         this.router = router;
         this.user = this._getObjectFromCookie('ey-user', {});
-        this._allPermissions = this._getObjectFromCookie('ey-permissions', []);
+        this.permissions = this._getObjectFromCookie('ey-permissions', []);
         this._permApi = new api_route_1.ApiRoute(this.http, '/api/permissions');
         if (!core_environment_1.coreEnvironment.production) {
             // If not in prod express is not used to serve the client and thus
             // the 'user' and 'permissions' cookies are not transmitted in the index.html page
             this._permApi.get()
                 .subscribe(function (permissions) {
-                _this._allPermissions = permissions;
+                _this.permissions = permissions;
                 if (permissions) {
                     _this.cookie.set('ey-permissions', JSON.stringify(permissions), null, '/');
                 }
@@ -69,10 +69,10 @@ var AuthService = (function () {
         if (!!~memberRights.indexOf(core_enums_1.ERole.Admin)) {
             return true;
         }
-        if (!this._allPermissions || !this._allPermissions.length) {
+        if (!this.permissions || !this.permissions.length) {
             return false;
         }
-        for (var _i = 0, _a = this._allPermissions; _i < _a.length; _i++) {
+        for (var _i = 0, _a = this.permissions; _i < _a.length; _i++) {
             var perm = _a[_i];
             if (perm.name === accessLevel) {
                 for (var _b = 0, memberRights_1 = memberRights; _b < memberRights_1.length; _b++) {

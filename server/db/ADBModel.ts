@@ -35,7 +35,7 @@ export default abstract class ADBModel {
      * @return {mongoose.Model<any>}
      */
     public static importSchema(name: string) {
-       this._model = mongoose.model(name, this._schema, name);
+        this._model = mongoose.model(name, this._schema, name);
         return this._model;
     }
 
@@ -52,8 +52,8 @@ export default abstract class ADBModel {
             defer.reject(new Error(`Invalid mongo id ${id}`));
         }
         else {
-           const query = this._model.findById(id);
-           this.applyQueryParams(query, queryParams);
+            const query = this._model.findById(id);
+            this.applyQueryParams(query, queryParams);
             query.exec((err, item) => {
                 if (err) return defer.reject(err);
                 if (!item) return defer.reject(new CustomEdError('No such item', EHTTPStatus.BadRequest));
@@ -69,9 +69,9 @@ export default abstract class ADBModel {
      */
     public static getAll(queryParams: any = null): q.Promise<AModel[]> {
         const defer = <q.Deferred<Array<AModel>>>q.defer();
+        const query = this._model.find();
 
-       const query = this._model.find();
-       this.applyQueryParams(query, queryParams);
+        this.applyQueryParams(query, queryParams);
         query.exec((err, items) => {
             if (err) return defer.reject(err);
             defer.resolve(items);
@@ -87,7 +87,7 @@ export default abstract class ADBModel {
      * @return mongoose.Model<any>
      */
     public static create(data: any, exclude = null) {
-       return new this._model(this.formatData(data, exclude));
+        return new this._model(this.formatData(data, exclude));
     }
 
     /**
@@ -98,7 +98,7 @@ export default abstract class ADBModel {
      * @return {Promise<T>}
      */
     public static add(data: any, exclude: string[] = null, populateOptions: any[] = null) {
-       return DB.createItem(new this._model(this.formatData(data, exclude)), populateOptions, this._model);
+        return DB.createItem(new this._model(this.formatData(data, exclude)), populateOptions, this._model);
     }
 
     /**
@@ -109,7 +109,7 @@ export default abstract class ADBModel {
      * @param populateOptions
      */
     public static save(item: any, data: any = null, exclude: string[] = null, populateOptions: any[] = null) {
-       return DB.saveItem(item, this.formatData(data, exclude), populateOptions, this._model);
+        return DB.saveItem(item, this.formatData(data, exclude), populateOptions, this._model);
     }
 
     /**
@@ -126,9 +126,9 @@ export default abstract class ADBModel {
         if (data && data.hasOwnProperty('_id')) {
             delete data._id;
         }
-       this.get(id, {})
+        this.get(id, {})
             .then(item => {
-               this.save(item, data, exclude, populateOptions)
+                this.save(item, data, exclude, populateOptions)
                     .then(item => defer.resolve(item))
                     .catch(err => defer.reject(err));
             })
@@ -173,9 +173,9 @@ export default abstract class ADBModel {
     public static setDeletedById(id: string, user: User = null, checkIsAuthor = false) {
         const defer = q.defer();
 
-       this.get(id, {})
+        this.get(id, {})
             .then(item => {
-               this.setDeleted(item, user, checkIsAuthor)
+                this.setDeleted(item, user, checkIsAuthor)
                     .then((item) => defer.resolve(item))
                     .catch(err => defer.reject(err));
             })
@@ -221,9 +221,9 @@ export default abstract class ADBModel {
     public static removeById(id: string, user: User = null, checkIsAuthor = false) {
         const defer = q.defer();
 
-       this.get(id, {})
+        this.get(id, {})
             .then(item => {
-               this.remove(item, user, checkIsAuthor)
+                this.remove(item, user, checkIsAuthor)
                     .then((item) => defer.resolve(item))
                     .catch(err => defer.reject(err));
             })

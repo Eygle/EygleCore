@@ -14,7 +14,7 @@ export declare class AuthService {
     /**
      * List of permissions
      */
-    private _allPermissions;
+    permissions: [any];
     /**
      * Permissions API
      */

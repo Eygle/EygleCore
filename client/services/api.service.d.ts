@@ -1,5 +1,5 @@
-import { HttpClient } from "@angular/common/http";
-import { ApiRoute } from "../utils/api-route";
+import { HttpClient } from '@angular/common/http';
+import { ApiRoute } from '../utils/api-route';
 export declare abstract class ApiService {
     /**
      * ApiRoute instance
