@@ -21,21 +21,17 @@ EygleCoreModule = __decorate([
         declarations: [
             sidenav_component_1.SidenavComponent,
             login_component_1.LoginComponent,
-            register_component_1.RegisterComponent,
-            auth_service_1.AuthService,
-            config_service_1.ConfigService
+            register_component_1.RegisterComponent
         ],
         imports: [
             http_1.HttpClientModule
         ],
         exports: [
-            sidenav_component_1.SidenavComponent,
-            auth_service_1.AuthService,
-            config_service_1.ConfigService
+            sidenav_component_1.SidenavComponent
         ],
         providers: [
-            config_service_1.ConfigService,
             ngx_cookie_service_1.CookieService,
+            config_service_1.ConfigService,
             auth_service_1.AuthService
         ]
     })
