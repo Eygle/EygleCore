@@ -1,5 +1,6 @@
-import { EEnv } from "../core.enums";
+import { EEnv } from '../core.enums';
 export default class Utils {
+    static roles: string[];
     /**
      * TMDB Api token
      */

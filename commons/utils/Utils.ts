@@ -1,18 +1,24 @@
-import * as _ from "underscore";
-import ProjectConfig from "./ProjectConfig";
-import {EEnv} from "../core.enums";
+import * as _ from 'underscore';
+import ProjectConfig from './ProjectConfig';
+import {EEnv} from '../core.enums';
 
 export default class Utils {
+
+    public static roles: string[] = [
+        'guest',
+        'user',
+        'admin',
+    ];
 
     /**
      * TMDB Api token
      */
-    public static tmdbToken: string = '22e2817ba73ca94f0b3971f847acefc6';
+    public static tmdbToken = '22e2817ba73ca94f0b3971f847acefc6';
 
     /**
      * TVDB Api token
      */
-    public static tvdbToken: string = '72FB8B2E308C7EE1';
+    public static tvdbToken = '72FB8B2E308C7EE1';
 
     /**
      * Is value a mongoId (24 chars hexadecimal string)
@@ -48,7 +54,7 @@ export default class Utils {
      * @return {boolean}
      */
     public static isString(value: any) {
-        return typeof value === "string";
+        return typeof value === 'string';
     }
 
     /**
@@ -85,7 +91,7 @@ export default class Utils {
      */
     public static generateValidMail(): string {
         return Math.random().toString().slice(-10);
-    };
+    }
 
     /**
      * Format size from bytes to human readable string
@@ -110,7 +116,7 @@ export default class Utils {
         const m = Math.floor((duration - (h * 3600)) / 60);
         const s = duration - (h * 3600) - (m * 60);
 
-        return (h < 10 ? "0" + h : h) + ':' + (m < 10 ? "0" + m : m) + ':' + (s < 10 ? "0" + s : s);
+        return (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
     }
 
     /**
@@ -122,10 +128,10 @@ export default class Utils {
      */
     public static forEachNewObject(oArr: Array<any>, nArr: Array<any>, callback, idx = '_id'): void {
         if (!oArr || !nArr) return;
-        for (let item of nArr) {
+        for (const item of nArr) {
             if (!_.find(oArr, (i) => {
                     if (idx === '_id') {
-                        return this.compareIds(i, item)
+                        return this.compareIds(i, item);
                     } else if (idx) {
                         return i[idx] && i[idx] === item[idx];
                     } else {
@@ -168,9 +174,9 @@ export default class Utils {
         if (!str) return null;
         str = str.toLowerCase();
 
-        const allowedCharacters = "abcdefghijklmnopqrstuvwxyz0123456789-";
+        const allowedCharacters = 'abcdefghijklmnopqrstuvwxyz0123456789-';
 
-        for (let v of this._defaultDiacriticsRemovalMap) {
+        for (const v of this._defaultDiacriticsRemovalMap) {
             str = str.replace(v.letters, v.base);
         }
 

@@ -37,7 +37,7 @@ var Utils = (function () {
      * @return {boolean}
      */
     Utils.isString = function (value) {
-        return typeof value === "string";
+        return typeof value === 'string';
     };
     /**
      * Check if objects are defined and populated then compare their ids
@@ -74,7 +74,6 @@ var Utils = (function () {
     Utils.generateValidMail = function () {
         return Math.random().toString().slice(-10);
     };
-    ;
     /**
      * Format size from bytes to human readable string
      * @param {number} bytes
@@ -97,7 +96,7 @@ var Utils = (function () {
         var h = Math.floor(duration / 3600);
         var m = Math.floor((duration - (h * 3600)) / 60);
         var s = duration - (h * 3600) - (m * 60);
-        return (h < 10 ? "0" + h : h) + ':' + (m < 10 ? "0" + m : m) + ':' + (s < 10 ? "0" + s : s);
+        return (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
     };
     /**
      * Compare two arrays and call callback function when a new item is found
@@ -161,7 +160,7 @@ var Utils = (function () {
         if (!str)
             return null;
         str = str.toLowerCase();
-        var allowedCharacters = "abcdefghijklmnopqrstuvwxyz0123456789-";
+        var allowedCharacters = 'abcdefghijklmnopqrstuvwxyz0123456789-';
         for (var _i = 0, _a = this._defaultDiacriticsRemovalMap; _i < _a.length; _i++) {
             var v = _a[_i];
             str = str.replace(v.letters, v.base);
@@ -184,6 +183,11 @@ var Utils = (function () {
         }
         return str;
     };
+    Utils.roles = [
+        'guest',
+        'user',
+        'admin',
+    ];
     /**
      * TMDB Api token
      */
