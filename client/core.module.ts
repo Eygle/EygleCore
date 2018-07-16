@@ -12,7 +12,10 @@ import {AuthService} from "./services/auth.service";
     declarations: [
         SidenavComponent,
         LoginComponent,
-        RegisterComponent
+        RegisterComponent,
+
+        AuthService,
+        ConfigService
     ],
     imports: [
         HttpClientModule
