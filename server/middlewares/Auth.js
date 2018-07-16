@@ -52,7 +52,8 @@ class Auth {
             UserDB_1.default.add({
                 email: req.body.email,
                 userName: req.body.username,
-                password: req.body.password
+                password: req.body.password,
+                desc: req.body.desc
             })
                 .then((user) => {
                 Emails_1.default.sendWelcome(user);

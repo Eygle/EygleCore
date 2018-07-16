@@ -21,11 +21,7 @@ export const userSchema: mongoose.Schema = DB.createSchema({
         }
     },
 
-    userName: {
-        type: String,
-        maxlength: 10,
-        minlength: 2
-    },
+    userName: {type: String, required: false, maxlength: 10, minlength: 2},
 
     password: {
         type: String,

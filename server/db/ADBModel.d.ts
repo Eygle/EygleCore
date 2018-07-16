@@ -2,9 +2,8 @@
 /// <reference types="q" />
 import * as mongoose from 'mongoose';
 import * as q from 'q';
-import {AModel} from '../../commons/models/AModel';
-import {User} from '../../commons/models/User';
-
+import { AModel } from '../../commons/models/AModel';
+import { User } from '../../commons/models/User';
 export default abstract class ADBModel {
     /**
      * Current schema's mongoose model
