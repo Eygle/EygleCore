@@ -1,0 +1,68 @@
+@import "../../../common";
+
+$icon-size: 20px;
+$space-between-items: 10px;
+$space-around-list: 20px;
+$space-after-icon: 12px;
+
+h1 {
+  background-color: rgba(0, 0, 0, 0.3);
+  height: $sidenav-title-height;
+  line-height: $sidenav-title-height;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.category {
+  margin: $space-around-list;
+
+  .label {
+    color: hsla(0, 0%, 100%, .3);
+    text-transform: uppercase;
+    font-family: 'Open Sans', 'sans-serif';
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: $space-between-items * 1.5;
+  }
+
+  ul {
+    li {
+      margin-bottom: $space-between-items;
+
+      &.active {
+        mat-icon {
+          color: $color-yellow;
+        }
+
+        a {
+          color: white;
+        }
+      }
+
+      a {
+        color: $font-color;
+
+        &:hover {
+          color: white;
+        }
+
+        mat-icon {
+          width: $icon-size;
+          height: $icon-size;
+          font-size: $icon-size;
+          margin-right: $space-after-icon;
+        }
+
+        & > div {
+          @include fontSize($font-size-sm);
+          height: $font-size-sm !important;
+        }
+      }
+    }
+  }
+}

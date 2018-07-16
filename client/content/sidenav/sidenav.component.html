@@ -1,0 +1,17 @@
+<div class="unselectable">
+  <h1 [translate]="'APP_TITLE'"></h1>
+
+  <div class="category" *ngFor="let cat of navItems">
+    <div class="label" *ngIf="cat.label" [translate]="'NAVBAR.' + cat.label"></div>
+    <ul>
+      <li *ngFor="let item of cat.items"
+          [routerLink]="[item.url]" routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: item.exactMatch || false}">
+        <a routerLink="{{item.url}}" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon>{{item.icon}}</mat-icon>
+          <div [translate]="item.translate"></div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

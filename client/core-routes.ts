@@ -2,7 +2,7 @@ import {LoginComponent} from './content/auth/login/login.component';
 import {RegisterComponent} from './content/auth/register/register.component';
 import {EPermission} from '../commons/core.enums';
 
-export const coreRoutes: [IRouteItem] = [
+export const coreRoutes: IRouteItem[] = [
 
   // Profile
   // {
