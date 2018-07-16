@@ -15,7 +15,7 @@ const auth_service_1 = require("../../services/auth.service");
 let SidenavComponent = class SidenavComponent {
     constructor(Auth) {
         this.Auth = Auth;
-        console.log("Generate sidenav with routes", this.routes);
+        console.log("Generate sidenav with routes", this.tmp);
         this._generateMenu();
     }
     /**
@@ -29,7 +29,7 @@ let SidenavComponent = class SidenavComponent {
                 items: []
             }
         ];
-        for (const item of this.routes) {
+        for (const item of this.tmp) {
             if (item.icon && item.translate && this.Auth.authorize(item.access)) {
                 item.url = `/${item.path}`;
                 if (item.category) {
@@ -54,9 +54,9 @@ let SidenavComponent = class SidenavComponent {
     }
 };
 __decorate([
-    core_1.Input('routes'),
+    core_1.Input('tmp'),
     __metadata("design:type", Array)
-], SidenavComponent.prototype, "routes", void 0);
+], SidenavComponent.prototype, "tmp", void 0);
 SidenavComponent = __decorate([
     core_1.Component({
         selector: 'ey-sidenav',
