@@ -13,6 +13,7 @@ const sidenav_component_1 = require("./content/sidenav/sidenav.component");
 const login_component_1 = require("./content/auth/login/login.component");
 const register_component_1 = require("./content/auth/register/register.component");
 const config_service_1 = require("./services/config.service");
+const auth_service_1 = require("./services/auth.service");
 let EygleCoreModule = class EygleCoreModule {
 };
 EygleCoreModule = __decorate([
@@ -26,11 +27,14 @@ EygleCoreModule = __decorate([
             http_1.HttpClientModule
         ],
         exports: [
-            sidenav_component_1.SidenavComponent
+            sidenav_component_1.SidenavComponent,
+            auth_service_1.AuthService,
+            config_service_1.ConfigService
         ],
         providers: [
             config_service_1.ConfigService,
-            ngx_cookie_service_1.CookieService
+            ngx_cookie_service_1.CookieService,
+            auth_service_1.AuthService
         ]
     })
 ], EygleCoreModule);

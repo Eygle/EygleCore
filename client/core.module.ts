@@ -6,6 +6,7 @@ import {SidenavComponent} from './content/sidenav/sidenav.component';
 import {LoginComponent} from './content/auth/login/login.component';
 import {RegisterComponent} from './content/auth/register/register.component';
 import {ConfigService} from './services/config.service';
+import {AuthService} from "./services/auth.service";
 
 @NgModule({
     declarations: [
@@ -17,11 +18,15 @@ import {ConfigService} from './services/config.service';
         HttpClientModule
     ],
     exports: [
-        SidenavComponent
+        SidenavComponent,
+        AuthService,
+        ConfigService
     ],
     providers: [
         ConfigService,
-        CookieService
+        CookieService,
+
+        AuthService
     ]
 })
 export class EygleCoreModule {
