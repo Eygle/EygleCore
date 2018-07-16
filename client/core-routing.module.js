@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const router_1 = require("@angular/router");
-class CoreRoutingModule {
+class EygleCoreRoutingModule {
     constructor(router, auth) {
         this.router = router;
         this.auth = auth;
@@ -77,5 +77,5 @@ class CoreRoutingModule {
         return !!~exclude.indexOf(url);
     }
 }
-exports.CoreRoutingModule = CoreRoutingModule;
+exports.EygleCoreRoutingModule = EygleCoreRoutingModule;
 //# sourceMappingURL=core-routing.module.js.map

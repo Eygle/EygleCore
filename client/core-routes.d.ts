@@ -1,5 +1,5 @@
 import { EPermission } from '../commons/core.enums';
-export declare const coreRoutes: IRouteItem[];
+export declare const eygleCoreRoutes: IRouteItem[];
 export interface IRouteItem {
     path: string;
     component: any;

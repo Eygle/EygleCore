@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
-export declare class CoreRoutingModule {
+export declare class EygleCoreRoutingModule {
     private router;
     private auth;
     /**

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const login_component_1 = require("./content/auth/login/login.component");
 const register_component_1 = require("./content/auth/register/register.component");
-exports.coreRoutes = [
+exports.eygleCoreRoutes = [
     // Profile
     // {
     //   path: 'account',

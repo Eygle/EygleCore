@@ -22,5 +22,5 @@ import {ConfigService} from './services/config.service';
         CookieService
     ]
 })
-export class AppModule {
+export class EygleCoreModule {
 }

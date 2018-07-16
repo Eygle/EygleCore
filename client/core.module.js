@@ -13,9 +13,9 @@ const sidenav_component_1 = require("./content/sidenav/sidenav.component");
 const login_component_1 = require("./content/auth/login/login.component");
 const register_component_1 = require("./content/auth/register/register.component");
 const config_service_1 = require("./services/config.service");
-let AppModule = class AppModule {
+let EygleCoreModule = class EygleCoreModule {
 };
-AppModule = __decorate([
+EygleCoreModule = __decorate([
     core_1.NgModule({
         declarations: [
             sidenav_component_1.SidenavComponent,
@@ -31,6 +31,6 @@ AppModule = __decorate([
             ngx_cookie_service_1.CookieService
         ]
     })
-], AppModule);
-exports.AppModule = AppModule;
+], EygleCoreModule);
+exports.EygleCoreModule = EygleCoreModule;
 //# sourceMappingURL=core.module.js.map

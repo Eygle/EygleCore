@@ -1,7 +1,7 @@
 import {NavigationEnd, Router, RouterEvent} from '@angular/router';
 import {AuthService} from './services/auth.service';
 
-export class CoreRoutingModule {
+export class EygleCoreRoutingModule {
   /**
    * Checks to perform
    */
