@@ -9,32 +9,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = require("@angular/core");
-const http_1 = require("@angular/common/http");
-const api_route_1 = require("../utils/api-route");
-let ApiService = class ApiService {
-    constructor(route, http) {
+var core_1 = require("@angular/core");
+var http_1 = require("@angular/common/http");
+var api_route_1 = require("../utils/api-route");
+var ApiService = (function () {
+    function ApiService(route, http) {
         this.api = new api_route_1.ApiRoute(http, route);
     }
     /**
      * Get all movies
      * @return {Observable<T[]>}
      */
-    getAll(limit = null) {
+    ApiService.prototype.getAll = function (limit) {
+        if (limit === void 0) { limit = null; }
         return this.api.get({ limit: limit });
-    }
+    };
     /**
      *
      * @param {string} id
      * @returns {Observable<T>}
      */
-    getById(id) {
+    ApiService.prototype.getById = function (id) {
         return this.api.get({ id: id });
-    }
-};
-ApiService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [String, http_1.HttpClient])
-], ApiService);
+    };
+    ApiService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [String, http_1.HttpClient])
+    ], ApiService);
+    return ApiService;
+}());
 exports.ApiService = ApiService;
 //# sourceMappingURL=api.service.js.map

@@ -1,45 +1,47 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const nodemailer = require("nodemailer");
-const smtpTransport = require("nodemailer-smtp-transport");
-const sendEmailTransport = require("nodemailer-sendmail-transport");
-const handlebars = require("handlebars");
-const fs = require("fs");
-const q = require("q");
-const EmailTemplate = require("email-templates");
-const ServerConfig_1 = require("../utils/ServerConfig");
-const Logger_1 = require("../utils/Logger");
-const core_enums_1 = require("../../commons/core.enums");
-class Emails {
-    /**
-     * TODO
-     */
-    static sendWelcome(dest) {
+var nodemailer = require("nodemailer");
+var smtpTransport = require("nodemailer-smtp-transport");
+var sendEmailTransport = require("nodemailer-sendmail-transport");
+var handlebars = require("handlebars");
+var fs = require("fs");
+var q = require("q");
+var EmailTemplate = require("email-templates");
+var ServerConfig_1 = require("../utils/ServerConfig");
+var Logger_1 = require("../utils/Logger");
+var core_enums_1 = require("../../commons/core.enums");
+var Emails = (function () {
+    function Emails() {
     }
     /**
      * TODO
      */
-    static sendPasswordRecovery(dest) {
-    }
+    Emails.sendWelcome = function (dest) {
+    };
     /**
      * TODO
      */
-    static sendLockedAccount(dest) {
-    }
+    Emails.sendPasswordRecovery = function (dest) {
+    };
     /**
      * TODO
      */
-    static sendUnlockedAccount(dest) {
-    }
+    Emails.sendLockedAccount = function (dest) {
+    };
+    /**
+     * TODO
+     */
+    Emails.sendUnlockedAccount = function (dest) {
+    };
     /**
      * Do send email with template
      * @param locals
      * @private
      */
-    static _sendTemplateMail(locals) {
-        const defer = q.defer();
-        const transporter = this._smtpConnect();
-        const template = new EmailTemplate(`${__dirname}/../templates/${locals.template}`);
+    Emails._sendTemplateMail = function (locals) {
+        var defer = q.defer();
+        var transporter = this._smtpConnect();
+        var template = new EmailTemplate(__dirname + "/../templates/" + locals.template);
         handlebars.registerHelper('if_even', function (conditional, options) {
             return conditional % 2 === 0 ? options.fn(this) : options.inverse(this);
         });
@@ -63,10 +65,10 @@ class Emails {
                     transporter.use('stream', require('nodemailer-dkim').signer({
                         domainName: 'eygle.fr',
                         keySelector: 'key1',
-                        privateKey: fs.readFileSync(`${ServerConfig_1.default.root}/server/misc/key1.eygle.fr.pem`)
+                        privateKey: fs.readFileSync(ServerConfig_1.default.root + "/server/misc/key1.eygle.fr.pem")
                     }));
                 }
-                const optSendMail = {
+                var optSendMail_1 = {
                     from: 'Eygle.fr ✔ <no-reply@eygle.fr>',
                     to: locals.email,
                     bcc: locals.bccmail,
@@ -75,11 +77,11 @@ class Emails {
                     text: results.text
                 };
                 if (locals.attachments) {
-                    optSendMail.attachments = locals.attachments;
+                    optSendMail_1.attachments = locals.attachments;
                 }
-                transporter.sendMail(optSendMail, function (err2, responseStatus) {
+                transporter.sendMail(optSendMail_1, function (err2, responseStatus) {
                     if (err2) {
-                        Logger_1.default.error(`Error while sending email to ${optSendMail.to}:`, err2);
+                        Logger_1.default.error("Error while sending email to " + optSendMail_1.to + ":", err2);
                         defer.reject(err2);
                     }
                     else {
@@ -89,13 +91,13 @@ class Emails {
             }
         });
         return defer.promise;
-    }
+    };
     /**
      * Create SMTP connexion
      * @return {Transporter}
      * @private
      */
-    static _smtpConnect() {
+    Emails._smtpConnect = function () {
         if (core_enums_1.EEnv.Dev === ServerConfig_1.default.env || core_enums_1.EEnv.Test === ServerConfig_1.default.env) {
             return nodemailer.createTransport(smtpTransport({
                 host: 'smtp.free.fr',
@@ -110,8 +112,9 @@ class Emails {
         else {
             return nodemailer.createTransport(sendEmailTransport({ path: '/usr/sbin/sendmail' }));
         }
-    }
-}
-Emails._siteURL = 'https://www.dl.eygle.fr';
+    };
+    Emails._siteURL = 'https://www.dl.eygle.fr';
+    return Emails;
+}());
 exports.default = Emails;
 //# sourceMappingURL=Emails.js.map

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const login_component_1 = require("./content/auth/login/login.component");
-const register_component_1 = require("./content/auth/register/register.component");
+var login_component_1 = require("./content/auth/login/login.component");
+var register_component_1 = require("./content/auth/register/register.component");
 exports.eygleCoreRoutes = [
     // Profile
     // {

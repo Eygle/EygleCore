@@ -1,52 +1,79 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ServerConfig_1 = require("./ServerConfig");
-class Logger {
-    static init() {
-        this._instance = ServerConfig_1.default.generateLogger();
+var ServerConfig_1 = require("./ServerConfig");
+var Logger = (function () {
+    function Logger() {
     }
+    Logger.init = function () {
+        this._instance = ServerConfig_1.default.generateLogger();
+    };
     /**
      * Trace lvl
      * @param args
      */
-    static trace(...args) {
+    Logger.trace = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         this._instance.trace.apply(this, args);
-    }
+    };
     /**
      * Log lvl
      * @param args
      */
-    static log(...args) {
+    Logger.log = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         this._instance.log.apply(this, args);
-    }
+    };
     /**
      * Info lvl
      * @param args
      */
-    static info(...args) {
+    Logger.info = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         this._instance.info.apply(this, args);
-    }
+    };
     /**
      * Debug lvl
      * @param args
      */
-    static debug(...args) {
+    Logger.debug = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         this._instance.debug.apply(this, args);
-    }
+    };
     /**
      * Warn lvl
      * @param args
      */
-    static warn(...args) {
+    Logger.warn = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         this._instance.warn.apply(this, args);
-    }
+    };
     /**
      * Error lvl
      * @param args
      */
-    static error(...args) {
+    Logger.error = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         this._instance.error.apply(this, args);
-    }
-}
+    };
+    return Logger;
+}());
 exports.default = Logger;
 //# sourceMappingURL=Logger.js.map

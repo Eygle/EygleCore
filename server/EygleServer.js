@@ -1,35 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = require("express");
-const http = require("http");
-const session = require("express-session");
-const q = require("q");
-const compress = require("compression");
-const bodyParser = require("body-parser");
-const busboy = require("connect-busboy");
-const methodOverride = require("method-override");
-const cookieParser = require("cookie-parser");
-const connectMongo = require("connect-mongo");
-const csrf = require("csurf");
-const Permissions_1 = require("./modules/Permissions");
-const DB_1 = require("./modules/DB");
-const CronManager_1 = require("./modules/CronManager");
-const Logger_1 = require("./utils/Logger");
-const ServerConfig_1 = require("./utils/ServerConfig");
-const core_enums_1 = require("../commons/core.enums");
-const PassportConfig_1 = require("./utils/PassportConfig");
-const Routes_1 = require("./utils/Routes");
-const EdError_1 = require("./utils/EdError");
-const MongoStore = connectMongo(session);
+var express = require("express");
+var http = require("http");
+var session = require("express-session");
+var q = require("q");
+var compress = require("compression");
+var bodyParser = require("body-parser");
+var busboy = require("connect-busboy");
+var methodOverride = require("method-override");
+var cookieParser = require("cookie-parser");
+var connectMongo = require("connect-mongo");
+var csrf = require("csurf");
+var Permissions_1 = require("./modules/Permissions");
+var DB_1 = require("./modules/DB");
+var CronManager_1 = require("./modules/CronManager");
+var Logger_1 = require("./utils/Logger");
+var ServerConfig_1 = require("./utils/ServerConfig");
+var core_enums_1 = require("../commons/core.enums");
+var PassportConfig_1 = require("./utils/PassportConfig");
+var Routes_1 = require("./utils/Routes");
+var EdError_1 = require("./utils/EdError");
+var MongoStore = connectMongo(session);
 /**
  * Entry point
  * WARNING: the ProjectConfig MUST be initialized before even importing this file!
  */
-class EygleServer {
+var EygleServer = (function () {
     /**
      * Constructor
      */
-    constructor() {
+    function EygleServer() {
         this._customRoutes = [];
         this._customModules = [];
         this._app = express();
@@ -38,41 +38,42 @@ class EygleServer {
     /**
      * Start node Express server
      */
-    start() {
+    EygleServer.prototype.start = function () {
+        var _this = this;
         this._printHeader();
-        const promises = [DB_1.default.init()];
+        var promises = [DB_1.default.init()];
         // Initialize all databases connections
-        q.allSettled(promises).then(() => {
+        q.allSettled(promises).then(function () {
             Logger_1.default.info('All databases are connected and ready\n');
-            this._init();
-            Logger_1.default.info(`Node v${process.versions.node}`);
-            Logger_1.default.info(`Environment: ${process.env.NODE_ENV || 'production'}`);
-            const inst = this._http.listen(this._app.get('port'), this._app.get('ip'), () => {
-                Logger_1.default.info("Express server listening on port %d\n", this._app.get('port'));
+            _this._init();
+            Logger_1.default.info("Node v" + process.versions.node);
+            Logger_1.default.info("Environment: " + (process.env.NODE_ENV || 'production'));
+            var inst = _this._http.listen(_this._app.get('port'), _this._app.get('ip'), function () {
+                Logger_1.default.info("Express server listening on port %d\n", _this._app.get('port'));
             });
         });
-    }
+    };
     /**
      * Add custom routes
      * @param route
      */
-    addRoute(route) {
+    EygleServer.prototype.addRoute = function (route) {
         this._customRoutes.push(route);
         return this;
-    }
+    };
     /**
      * Add custom routes
      * @param {ICustomModule} module
      */
-    addModule(module) {
+    EygleServer.prototype.addModule = function (module) {
         this._customModules.push(module);
         return this;
-    }
+    };
     /**
      * Initialize server
      * @private
      */
-    _init() {
+    EygleServer.prototype._init = function () {
         try {
             this._http = http.createServer(this._app);
             // connect-mongo instance
@@ -81,7 +82,7 @@ class EygleServer {
                 db: ServerConfig_1.default.dbName
             });
             // Common express session used in express and socket.io
-            const sessionX = session({
+            var sessionX = session({
                 name: ServerConfig_1.default.sessionCookieName,
                 secret: ServerConfig_1.default.sessionSecret,
                 cookie: {
@@ -125,38 +126,39 @@ class EygleServer {
                 CronManager_1.default.init();
             }
             // Initialize all custom modeules
-            for (const module of this._customModules) {
-                Logger_1.default.trace(`Module ${module.name} activated`);
-                module.init(this._app);
+            for (var _i = 0, _a = this._customModules; _i < _a.length; _i++) {
+                var module_1 = _a[_i];
+                Logger_1.default.trace("Module " + module_1.name + " activated");
+                module_1.init(this._app);
             }
             Logger_1.default.info("All modules are loaded and activated\n");
         }
         catch (err) {
             console.error(err);
         }
-    }
+    };
     /**
      * Handle error
      * @param app
      */
-    _handleErrors(app) {
+    EygleServer.prototype._handleErrors = function (app) {
         app.use(function (err, req, res, next) {
             if (err instanceof EdError_1.default || err.name === 'ValidationError') {
-                Logger_1.default.error(`[user ${req.user ? req.user._id : '[null]'}] HTTP ${req.method.toUpperCase()} ${req.url} - Error ${err.status || 500}: ${err.message}`);
+                Logger_1.default.error("[user " + (req.user ? req.user._id : '[null]') + "] HTTP " + req.method.toUpperCase() + " " + req.url + " - Error " + (err.status || 500) + ": " + err.message);
                 res.status(err.status || 500).send(err.message);
             }
             else {
-                Logger_1.default.error(`[user ${req.user ? req.user._id : '[null]'}] HTTP ${req.method.toUpperCase()} ${req.url} - Server Error ${err.status || 500}:`, err);
+                Logger_1.default.error("[user " + (req.user ? req.user._id : '[null]') + "] HTTP " + req.method.toUpperCase() + " " + req.url + " - Server Error " + (err.status || 500) + ":", err);
                 res.status(err.status || 500).send(new EdError_1.default(err.status || 500).message);
             }
         });
-    }
+    };
     /**
      * Init CSRF token checker
      * @param app
      * @private
      */
-    _initCSRF(app) {
+    EygleServer.prototype._initCSRF = function (app) {
         Logger_1.default.trace("Module CSRF activated");
         app.use(csrf({
             cookie: {
@@ -172,21 +174,22 @@ class EygleServer {
             if (err.code !== 'EBADCSRFTOKEN')
                 return next(err);
             // handle CSRF token errors here
-            const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
-            Logger_1.default.error(`Error with CSRF token: HTTP ${req.method.toUpperCase()} ${req.url} [${ip}]`);
+            var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
+            Logger_1.default.error("Error with CSRF token: HTTP " + req.method.toUpperCase() + " " + req.url + " [" + ip + "]");
             res.status(403).send('Form tampered with');
         });
-    }
+    };
     /**
      * Print header in logs
      * @private
      */
-    _printHeader() {
-        const sentence = `===== START ${ServerConfig_1.default.appName.toUpperCase()} SERVER =====`;
-        Logger_1.default.info(`     ${'='.repeat(sentence.length)}`);
-        Logger_1.default.info(`     ${sentence}`);
-        Logger_1.default.info(`     ${'='.repeat(sentence.length)}\n`);
-    }
-}
+    EygleServer.prototype._printHeader = function () {
+        var sentence = "===== START " + ServerConfig_1.default.appName.toUpperCase() + " SERVER =====";
+        Logger_1.default.info("     " + '='.repeat(sentence.length));
+        Logger_1.default.info("     " + sentence);
+        Logger_1.default.info("     " + '='.repeat(sentence.length) + "\n");
+    };
+    return EygleServer;
+}());
 exports.EygleServer = EygleServer;
 //# sourceMappingURL=EygleServer.js.map

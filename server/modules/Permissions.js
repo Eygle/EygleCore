@@ -1,24 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ConfigDB_1 = require("../db/ConfigDB");
-const Logger_1 = require("../utils/Logger");
+var ConfigDB_1 = require("../db/ConfigDB");
+var Logger_1 = require("../utils/Logger");
 /**
  * List of permissions
  */
-let list = null;
-class Permissions {
+var list = null;
+var Permissions = (function () {
+    function Permissions() {
+    }
     /**
      * Permission middleware
      */
-    static middleware() {
-        return (req, res, next) => {
+    Permissions.middleware = function () {
+        return function (req, res, next) {
             if (!list) {
                 ConfigDB_1.default.getPermissions()
-                    .then((permissions) => {
+                    .then(function (permissions) {
                     list = permissions;
                     next();
                 })
-                    .catch((err) => {
+                    .catch(function (err) {
                     Logger_1.default.error('Mongo error', err);
                     next(err);
                 });
@@ -27,24 +29,26 @@ class Permissions {
                 next();
             }
         };
-    }
+    };
     /**
      * Ensure [[User]] has accessRole access
      * @param user
      * @param accessRole
      * @return {boolean}
      */
-    static ensureAuthorized(user, accessRole) {
-        const memberRights = user.roles || ['public'];
+    Permissions.ensureAuthorized = function (user, accessRole) {
+        var memberRights = user.roles || ['public'];
         if (!!~memberRights.indexOf('admin')) {
             return true;
         }
         if (!list || !list.length) {
             return false;
         }
-        for (const perm of list) {
+        for (var _i = 0, list_1 = list; _i < list_1.length; _i++) {
+            var perm = list_1[_i];
             if (perm.name === accessRole) {
-                for (const m of memberRights) {
+                for (var _a = 0, memberRights_1 = memberRights; _a < memberRights_1.length; _a++) {
+                    var m = memberRights_1[_a];
                     if (!!~perm.roles.indexOf(m)) {
                         return true;
                     }
@@ -52,7 +56,8 @@ class Permissions {
             }
         }
         return false;
-    }
-}
+    };
+    return Permissions;
+}());
 exports.default = Permissions;
 //# sourceMappingURL=Permissions.js.map

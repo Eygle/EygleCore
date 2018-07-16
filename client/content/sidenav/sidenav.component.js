@@ -9,11 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const _ = require("underscore");
-const core_1 = require("@angular/core");
-const auth_service_1 = require("../../services/auth.service");
-let SidenavComponent = class SidenavComponent {
-    constructor(Auth) {
+var _ = require("underscore");
+var core_1 = require("@angular/core");
+var auth_service_1 = require("../../services/auth.service");
+var SidenavComponent = (function () {
+    function SidenavComponent(Auth) {
         this.Auth = Auth;
         console.log("Generate sidenav with routes", this.tmp);
         this._generateMenu();
@@ -22,48 +22,54 @@ let SidenavComponent = class SidenavComponent {
      * Generate menu from routes list
      * @private
      */
-    _generateMenu() {
+    SidenavComponent.prototype._generateMenu = function () {
         this.navItems = [
             {
                 label: undefined,
                 items: []
             }
         ];
-        for (const item of this.tmp) {
-            if (item.icon && item.translate && this.Auth.authorize(item.access)) {
-                item.url = `/${item.path}`;
+        var _loop_1 = function (item) {
+            if (item.icon && item.translate && this_1.Auth.authorize(item.access)) {
+                item.url = "/" + item.path;
                 if (item.category) {
-                    const cat = _.find(this.navItems, (it) => {
+                    var cat = _.find(this_1.navItems, function (it) {
                         return it.label === item.category;
                     });
                     if (cat) {
                         cat.items.push(item);
                     }
                     else {
-                        this.navItems.push({
+                        this_1.navItems.push({
                             label: item.category,
                             items: [item]
                         });
                     }
                 }
                 else {
-                    this.navItems[0].items.push(item);
+                    this_1.navItems[0].items.push(item);
                 }
             }
+        };
+        var this_1 = this;
+        for (var _i = 0, _a = this.tmp; _i < _a.length; _i++) {
+            var item = _a[_i];
+            _loop_1(item);
         }
-    }
-};
-__decorate([
-    core_1.Input('tmp'),
-    __metadata("design:type", Array)
-], SidenavComponent.prototype, "tmp", void 0);
-SidenavComponent = __decorate([
-    core_1.Component({
-        selector: 'ey-sidenav',
-        template: require('./sidenav.component.html'),
-        styles: [require('./sidenav.component.scss')]
-    }),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
-], SidenavComponent);
+    };
+    __decorate([
+        core_1.Input('tmp'),
+        __metadata("design:type", Array)
+    ], SidenavComponent.prototype, "tmp", void 0);
+    SidenavComponent = __decorate([
+        core_1.Component({
+            selector: 'ey-sidenav',
+            template: require('./sidenav.component.html'),
+            styles: [require('./sidenav.component.scss')]
+        }),
+        __metadata("design:paramtypes", [auth_service_1.AuthService])
+    ], SidenavComponent);
+    return SidenavComponent;
+}());
 exports.SidenavComponent = SidenavComponent;
 //# sourceMappingURL=sidenav.component.js.map

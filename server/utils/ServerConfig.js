@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tracer = require("tracer");
-const ProjectConfig_1 = require("../../commons/utils/ProjectConfig");
-const Utils_1 = require("../../commons/utils/Utils");
-class ServerConfig {
-    static init() {
+var tracer = require("tracer");
+var ProjectConfig_1 = require("../../commons/utils/ProjectConfig");
+var Utils_1 = require("../../commons/utils/Utils");
+var ServerConfig = (function () {
+    function ServerConfig() {
+    }
+    ServerConfig.init = function () {
         ServerConfig.dlURL = '/files/down';
         ServerConfig.viewURL = '/files';
         ServerConfig.sessionSecret = 'Un42Petit12Little75Secret12PuiMap!';
@@ -18,19 +20,20 @@ class ServerConfig {
         /**
          * Load all ProjectConfig here
          */
-        for (const key in ProjectConfig_1.default.server) {
+        for (var key in ProjectConfig_1.default.server) {
             if (ProjectConfig_1.default.server.hasOwnProperty(key)) {
                 this[key] = ProjectConfig_1.default.server[key];
             }
         }
-    }
+    };
     /**
      * Generate logger with ProjectConfig as default conf but it can be override by given conf
      * @param conf
      * @return {any}
      */
-    static generateLogger(conf = {}) {
-        const tracerConf = {
+    ServerConfig.generateLogger = function (conf) {
+        if (conf === void 0) { conf = {}; }
+        var tracerConf = {
             format: conf.format || ServerConfig.loggerFormat,
             dateFormat: conf.dateFormat || ServerConfig.loggerDateFormat
         };
@@ -41,8 +44,9 @@ class ServerConfig {
         tracerConf.maxLogFiles = conf.maxLogFiles || ServerConfig.loggerMaxLogFiles;
         tracerConf.allLogsFileName = conf.allLogsFileName || ServerConfig.loggerAllLogsFileName;
         return tracer.dailyfile(tracerConf);
-    }
-}
+    };
+    return ServerConfig;
+}());
 exports.default = ServerConfig;
 ServerConfig.init();
 //# sourceMappingURL=ServerConfig.js.map

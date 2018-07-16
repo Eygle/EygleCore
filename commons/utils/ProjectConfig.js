@@ -1,24 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const path = require("path");
-const core_enums_1 = require("../core.enums");
-class ProjectConfig {
+var path = require("path");
+var core_enums_1 = require("../core.enums");
+var ProjectConfig = (function () {
+    function ProjectConfig() {
+    }
     /**
      * Initialize
      * This method MUST BE called before the class is imported anywhere ! (static issues)
      */
-    static init() {
-        const root = path.resolve(`${path.dirname(process.mainModule.filename)}/..`);
-        const conf = require(`${root}/commons/eygle-conf.js`);
+    ProjectConfig.init = function () {
+        var root = path.resolve(path.dirname(process.mainModule.filename) + "/..");
+        var conf = require(root + "/commons/eygle-conf.js");
         ProjectConfig._initForServer(root, conf, process.env.NODE_ENV);
         ProjectConfig._initForClient(conf, process.env.NODE_ENV);
-    }
+    };
     /**
      *
      * @param conf
      * @param {string} envName
      */
-    static _initForClient(conf, envName) {
+    ProjectConfig._initForClient = function (conf, envName) {
         ProjectConfig._addCommons(ProjectConfig.client, conf, envName);
         ProjectConfig._addToConf(ProjectConfig.client, {
             loggerLvl: core_enums_1.ELoggerLvl.WARN
@@ -29,14 +31,14 @@ class ProjectConfig {
                 ProjectConfig._addToConf(ProjectConfig.client, conf.client[envName]);
             }
         }
-    }
+    };
     /**
      * initialise for server
      * @param {string} rootPath
      * @param conf
      * @param {string} envName
      */
-    static _initForServer(rootPath, conf, envName) {
+    ProjectConfig._initForServer = function (rootPath, conf, envName) {
         ProjectConfig._addCommons(ProjectConfig.server, conf, envName);
         ProjectConfig._addToConf(ProjectConfig.server, {
             includeEmailUnsubscribe: false,
@@ -68,7 +70,7 @@ class ProjectConfig {
         ProjectConfig.server.filesRoot = ProjectConfig._formatConfStr(ProjectConfig.server.filesRoot);
         ProjectConfig.server.loggerRoot = ProjectConfig._formatConfStr(ProjectConfig.server.loggerRoot);
         ProjectConfig.server.loggerAllLogsFileName = ProjectConfig._formatConfStr(ProjectConfig.server.loggerAllLogsFileName);
-    }
+    };
     /**
      * Add common default values
      * @param target
@@ -76,7 +78,7 @@ class ProjectConfig {
      * @param envName
      * @private
      */
-    static _addCommons(target, json, envName) {
+    ProjectConfig._addCommons = function (target, json, envName) {
         ProjectConfig.envName = envName || 'production';
         // Add default common configuration
         ProjectConfig._addToConf(target, {
@@ -89,42 +91,43 @@ class ProjectConfig {
         if (json.hasOwnProperty(envName)) {
             ProjectConfig._addToConf(target, json[envName]);
         }
-    }
+    };
     /**
      * Add all data to conf and erase existing data
      * @param conf
      * @param data
      * @private
      */
-    static _addToConf(conf, data) {
-        for (let i in data) {
+    ProjectConfig._addToConf = function (conf, data) {
+        for (var i in data) {
             if (data.hasOwnProperty(i) && typeof data[i] !== 'object') {
                 conf[i] = data[i];
             }
         }
-    }
+    };
     /**
      * Format given string using saved data
      * @param {string} str
      * @return {string}
      * @private
      */
-    static _formatConfStr(str) {
+    ProjectConfig._formatConfStr = function (str) {
         str = str.replace('{{root}}', ProjectConfig.server.root);
         str = str.replace('{{appName}}', ProjectConfig.server.appName || ProjectConfig.client.appName);
         str = str.replace('{{env}}', ProjectConfig.envName);
         str = str.replace('{{pmId}}', process.env.pm_id);
         return str;
-    }
-}
-/**
- * Server configuration
- */
-ProjectConfig.server = {};
-/**
- * Client configuration
- */
-ProjectConfig.client = {};
+    };
+    /**
+     * Server configuration
+     */
+    ProjectConfig.server = {};
+    /**
+     * Client configuration
+     */
+    ProjectConfig.client = {};
+    return ProjectConfig;
+}());
 exports.default = ProjectConfig;
 ProjectConfig.init();
 //# sourceMappingURL=ProjectConfig.js.map

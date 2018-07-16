@@ -1,31 +1,46 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const q = require("q");
-const core_enums_1 = require("../../commons/core.enums");
-const ADBModel_1 = require("./ADBModel");
-const config_schema_1 = require("../schemas/config.schema");
-class ConfigDB extends ADBModel_1.default {
+var q = require("q");
+var core_enums_1 = require("../../commons/core.enums");
+var ADBModel_1 = require("./ADBModel");
+var config_schema_1 = require("../schemas/config.schema");
+var ConfigDB = (function (_super) {
+    __extends(ConfigDB, _super);
+    function ConfigDB() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
     /**
      * Get list of permissions
      * @return {Promise<Array<Permission>>}
      */
-    static getPermissions() {
-        const defer = q.defer();
+    ConfigDB.getPermissions = function () {
+        var _this = this;
+        var defer = q.defer();
         this._model.findOne({ name: 'permissions' })
-            .exec((err, permission) => {
+            .exec(function (err, permission) {
             if (err)
                 return defer.reject(err);
-            defer.resolve(permission ? permission.data : this._fill());
+            defer.resolve(permission ? permission.data : _this._fill());
         });
         return defer.promise;
-    }
+    };
     /**
      * Fill permissions if empty
      * @returns {{}[]}
      * @private
      */
-    static _fill() {
-        const permissions = [{
+    ConfigDB._fill = function () {
+        var permissions = [{
                 name: core_enums_1.EPermission.SeeHome,
                 roles: [core_enums_1.ERole.Guest, core_enums_1.ERole.User]
             }, {
@@ -112,8 +127,9 @@ class ConfigDB extends ADBModel_1.default {
             data: permissions
         });
         return permissions;
-    }
-}
+    };
+    return ConfigDB;
+}(ADBModel_1.default));
 exports.default = ConfigDB;
 ConfigDB.init(config_schema_1.configSchema);
 module.exports.schema = ConfigDB; // Used by MongoDB models loader (need require)

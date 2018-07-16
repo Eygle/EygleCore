@@ -1,45 +1,49 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose = require("mongoose");
-const q = require("q");
-const DB_1 = require("../modules/DB");
-const Permissions_1 = require("../modules/Permissions");
-const EdError_1 = require("../utils/EdError");
-const server_enums_1 = require("../typings/server.enums");
-const Utils_1 = require("../../commons/utils/Utils");
-class ADBModel {
+var mongoose = require("mongoose");
+var q = require("q");
+var DB_1 = require("../modules/DB");
+var Permissions_1 = require("../modules/Permissions");
+var EdError_1 = require("../utils/EdError");
+var server_enums_1 = require("../typings/server.enums");
+var Utils_1 = require("../../commons/utils/Utils");
+var ADBModel = (function () {
+    function ADBModel() {
+    }
     /**
      * Initialise class
      * @param {mongoose.Schema} schema
      * @param {string[]} encryptKeys
      */
-    static init(schema, encryptKeys = null) {
+    ADBModel.init = function (schema, encryptKeys) {
+        if (encryptKeys === void 0) { encryptKeys = null; }
         this._schema = schema;
-    }
+    };
     /**
      * Method called from MongoDB.ts in
      * @param name
      * @return {mongoose.Model<any>}
      */
-    static importSchema(name) {
+    ADBModel.importSchema = function (name) {
         this._model = mongoose.model(name, this._schema, name);
         return this._model;
-    }
+    };
     /**
      * Get model by id
      * @param id
      * @param queryParams
      * @return {Promise<T>}
      */
-    static get(id, queryParams = null) {
-        const defer = q.defer();
+    ADBModel.get = function (id, queryParams) {
+        if (queryParams === void 0) { queryParams = null; }
+        var defer = q.defer();
         if (!Utils_1.default.isMongoId(id)) {
-            defer.reject(new Error(`Invalid mongo id ${id}`));
+            defer.reject(new Error("Invalid mongo id " + id));
         }
         else {
-            const query = this._model.findById(id);
+            var query = this._model.findById(id);
             this.applyQueryParams(query, queryParams);
-            query.exec((err, item) => {
+            query.exec(function (err, item) {
                 if (err)
                     return defer.reject(err);
                 if (!item)
@@ -48,31 +52,33 @@ class ADBModel {
             });
         }
         return defer.promise;
-    }
+    };
     /**
      * Get all model
      * @return {Promise<AModel[]>}
      */
-    static getAll(queryParams = null) {
-        const defer = q.defer();
-        const query = this._model.find();
+    ADBModel.getAll = function (queryParams) {
+        if (queryParams === void 0) { queryParams = null; }
+        var defer = q.defer();
+        var query = this._model.find();
         this.applyQueryParams(query, queryParams);
-        query.exec((err, items) => {
+        query.exec(function (err, items) {
             if (err)
                 return defer.reject(err);
             defer.resolve(items);
         });
         return defer.promise;
-    }
+    };
     /**
      * Create new model instance
      * @param data
      * @param exclude
      * @return mongoose.Model<any>
      */
-    static create(data, exclude = null) {
+    ADBModel.create = function (data, exclude) {
+        if (exclude === void 0) { exclude = null; }
         return new this._model(this.formatData(data, exclude));
-    }
+    };
     /**
      * Create new model instance
      * @param data
@@ -80,9 +86,11 @@ class ADBModel {
      * @param populateOptions
      * @return {Promise<T>}
      */
-    static add(data, exclude = null, populateOptions = null) {
+    ADBModel.add = function (data, exclude, populateOptions) {
+        if (exclude === void 0) { exclude = null; }
+        if (populateOptions === void 0) { populateOptions = null; }
         return DB_1.default.createItem(new this._model(this.formatData(data, exclude)), populateOptions, this._model);
-    }
+    };
     /**
      * Save model instance
      * @param item
@@ -90,9 +98,12 @@ class ADBModel {
      * @param exclude
      * @param populateOptions
      */
-    static save(item, data = null, exclude = null, populateOptions = null) {
+    ADBModel.save = function (item, data, exclude, populateOptions) {
+        if (data === void 0) { data = null; }
+        if (exclude === void 0) { exclude = null; }
+        if (populateOptions === void 0) { populateOptions = null; }
         return DB_1.default.saveItem(item, this.formatData(data, exclude), populateOptions, this._model);
-    }
+    };
     /**
      * Find model instance by id and save it
      * @param id
@@ -101,20 +112,24 @@ class ADBModel {
      * @param populateOptions
      * @return {Promise<T>}
      */
-    static saveById(id, data = null, exclude = null, populateOptions = null) {
-        const defer = q.defer();
+    ADBModel.saveById = function (id, data, exclude, populateOptions) {
+        var _this = this;
+        if (data === void 0) { data = null; }
+        if (exclude === void 0) { exclude = null; }
+        if (populateOptions === void 0) { populateOptions = null; }
+        var defer = q.defer();
         if (data && data.hasOwnProperty('_id')) {
             delete data._id;
         }
         this.get(id, {})
-            .then(item => {
-            this.save(item, data, exclude, populateOptions)
-                .then(item => defer.resolve(item))
-                .catch(err => defer.reject(err));
+            .then(function (item) {
+            _this.save(item, data, exclude, populateOptions)
+                .then(function (item) { return defer.resolve(item); })
+                .catch(function (err) { return defer.reject(err); });
         })
-            .catch(err => defer.reject(err));
+            .catch(function (err) { return defer.reject(err); });
         return defer.promise;
-    }
+    };
     /**
      * Mark item as deleted (without really deleting it)
      * @param item
@@ -122,8 +137,10 @@ class ADBModel {
      * @param checkIsAuthor
      * @return {Promise<T>}
      */
-    static setDeleted(item, user = null, checkIsAuthor = true) {
-        const defer = q.defer();
+    ADBModel.setDeleted = function (item, user, checkIsAuthor) {
+        if (user === void 0) { user = null; }
+        if (checkIsAuthor === void 0) { checkIsAuthor = true; }
+        var defer = q.defer();
         if (!item) {
             defer.reject(new Error('Item not found'));
         }
@@ -133,29 +150,32 @@ class ADBModel {
             }
             else {
                 DB_1.default.saveItem(item, user, { deleted: true })
-                    .then(item => defer.resolve(item))
-                    .catch(err => defer.reject(err));
+                    .then(function (item) { return defer.resolve(item); })
+                    .catch(function (err) { return defer.reject(err); });
             }
         }
         return defer.promise;
-    }
+    };
     /**
      * Mark item as deleted (without really deleting it)
      * @param id
      * @param user
      * @param checkIsAuthor
      */
-    static setDeletedById(id, user = null, checkIsAuthor = false) {
-        const defer = q.defer();
+    ADBModel.setDeletedById = function (id, user, checkIsAuthor) {
+        var _this = this;
+        if (user === void 0) { user = null; }
+        if (checkIsAuthor === void 0) { checkIsAuthor = false; }
+        var defer = q.defer();
         this.get(id, {})
-            .then(item => {
-            this.setDeleted(item, user, checkIsAuthor)
-                .then((item) => defer.resolve(item))
-                .catch(err => defer.reject(err));
+            .then(function (item) {
+            _this.setDeleted(item, user, checkIsAuthor)
+                .then(function (item) { return defer.resolve(item); })
+                .catch(function (err) { return defer.reject(err); });
         })
-            .catch(err => defer.reject(err));
+            .catch(function (err) { return defer.reject(err); });
         return defer.promise;
-    }
+    };
     /**
      * Delete item
      * @param item
@@ -163,8 +183,10 @@ class ADBModel {
      * @param checkIsAuthor
      * @return {Promise<T>}
      */
-    static remove(item, user = null, checkIsAuthor = true) {
-        const defer = q.defer();
+    ADBModel.remove = function (item, user, checkIsAuthor) {
+        if (user === void 0) { user = null; }
+        if (checkIsAuthor === void 0) { checkIsAuthor = true; }
+        var defer = q.defer();
         if (!item) {
             defer.reject(new Error('Item not found'));
         }
@@ -173,7 +195,7 @@ class ADBModel {
                 defer.reject(new Error('Permission denied'));
             }
             else {
-                item.remove((err) => {
+                item.remove(function (err) {
                     if (err)
                         return defer.reject(err);
                     defer.resolve();
@@ -181,44 +203,49 @@ class ADBModel {
             }
         }
         return defer.promise;
-    }
+    };
     /**
      * Delete item by id
      * @param id
      * @param user
      * @param checkIsAuthor
      */
-    static removeById(id, user = null, checkIsAuthor = false) {
-        const defer = q.defer();
+    ADBModel.removeById = function (id, user, checkIsAuthor) {
+        var _this = this;
+        if (user === void 0) { user = null; }
+        if (checkIsAuthor === void 0) { checkIsAuthor = false; }
+        var defer = q.defer();
         this.get(id, {})
-            .then(item => {
-            this.remove(item, user, checkIsAuthor)
-                .then((item) => defer.resolve(item))
-                .catch(err => defer.reject(err));
+            .then(function (item) {
+            _this.remove(item, user, checkIsAuthor)
+                .then(function (item) { return defer.resolve(item); })
+                .catch(function (err) { return defer.reject(err); });
         })
-            .catch(err => defer.reject(err));
+            .catch(function (err) { return defer.reject(err); });
         return defer.promise;
-    }
+    };
     /**
      * This method will format the given body by excluding provided keys (if any) and formatting any reference Objects
      * @param body
      * @param exclude
      */
-    static formatData(body, exclude = null) {
+    ADBModel.formatData = function (body, exclude) {
+        if (exclude === void 0) { exclude = null; }
         if (!body)
             return null;
         if (exclude) {
-            for (let e of exclude) {
+            for (var _i = 0, exclude_1 = exclude; _i < exclude_1.length; _i++) {
+                var e = exclude_1[_i];
                 if (body.hasOwnProperty(e)) {
                     delete body[e];
                 }
             }
         }
-        for (let idx in body) {
+        for (var idx in body) {
             if (body.hasOwnProperty(idx)) {
-                const value = body[idx];
+                var value = body[idx];
                 if (value instanceof Array) {
-                    for (let i in value) {
+                    for (var i in value) {
                         if (value.hasOwnProperty(i) && value[i] && value[i].hasOwnProperty('_id')) {
                             value[i] = value[i]._id;
                         }
@@ -233,29 +260,31 @@ class ADBModel {
             }
         }
         return body;
-    }
+    };
     /**
      * Apply custom mongoose select and/or populate
      * @param query
      * @param queryParams
      * @private
      */
-    static applyQueryParams(query, queryParams) {
+    ADBModel.applyQueryParams = function (query, queryParams) {
         if (queryParams) {
             if (queryParams.select) {
                 queryParams.select = queryParams.select instanceof Array ? queryParams.select : [queryParams.select];
-                for (let select of queryParams.select) {
+                for (var _i = 0, _a = queryParams.select; _i < _a.length; _i++) {
+                    var select = _a[_i];
                     query.select(select);
                 }
             }
             if (queryParams.populate) {
                 queryParams.populate = queryParams.populate instanceof Array ? queryParams.populate : [queryParams.populate];
-                for (let populate of queryParams.populate) {
+                for (var _b = 0, _c = queryParams.populate; _b < _c.length; _b++) {
+                    var populate = _c[_b];
                     query.populate(populate);
                 }
             }
             if (queryParams.where) {
-                for (const i in queryParams.where) {
+                for (var i in queryParams.where) {
                     if (queryParams.where.hasOwnProperty(i)) {
                         query.where(i).equals(queryParams.where[i]);
                     }
@@ -271,7 +300,8 @@ class ADBModel {
                 query.skip(parseInt(queryParams.skip));
             }
         }
-    }
-}
+    };
+    return ADBModel;
+}());
 exports.default = ADBModel;
 //# sourceMappingURL=ADBModel.js.map

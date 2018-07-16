@@ -1,11 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const q = require("q");
-const os = require("os");
-const clamscan = require("clamscan");
-const Logger_1 = require("../utils/Logger");
-class Antivirus {
-    static init() {
+var q = require("q");
+var os = require("os");
+var clamscan = require("clamscan");
+var Logger_1 = require("../utils/Logger");
+var Antivirus = (function () {
+    function Antivirus() {
+    }
+    Antivirus.init = function () {
         this._binPath = os.platform() === 'win32' ? 'C:\\Program Files\\ClamAV-x64\\clamscan.exe' : '/usr/local/bin/clamscan';
         this._logPath = os.platform() === 'win32' ? '../clamscan.log' : '/var/log/node-clam/all.log';
         this._clam = clamscan({
@@ -16,14 +18,14 @@ class Antivirus {
             },
             preference: 'clamscan'
         });
-    }
+    };
     /**
      * Check file using CLamAV
      * @param file path
      */
-    static checkFile(file) {
-        const defer = q.defer();
-        this._clam.is_infected(file, (err, fileRes, is_infected) => {
+    Antivirus.checkFile = function (file) {
+        var defer = q.defer();
+        this._clam.is_infected(file, function (err, fileRes, is_infected) {
             if (err) {
                 Logger_1.default.error('Error during virus scan', err);
                 defer.reject(null);
@@ -36,7 +38,8 @@ class Antivirus {
             }
         });
         return defer.promise;
-    }
-}
+    };
+    return Antivirus;
+}());
 exports.default = Antivirus;
 //# sourceMappingURL=Antivirus.js.map

@@ -9,11 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = require("@angular/core");
-const auth_service_1 = require("../../../services/auth.service");
-const config_service_1 = require("../../../services/config.service");
-let RegisterComponent = class RegisterComponent {
-    constructor(config, auth) {
+var core_1 = require("@angular/core");
+var auth_service_1 = require("../../../services/auth.service");
+var config_service_1 = require("../../../services/config.service");
+var RegisterComponent = (function () {
+    function RegisterComponent(config, auth) {
         this.config = config;
         this.auth = auth;
         this.config.setSettings({
@@ -26,18 +26,19 @@ let RegisterComponent = class RegisterComponent {
     /**
      * Register action
      */
-    register(event) {
+    RegisterComponent.prototype.register = function (event) {
         event.preventDefault();
         this.auth.register(this.email, this.password, this.username, this.desc);
-    }
-};
-RegisterComponent = __decorate([
-    core_1.Component({
-        selector: 'ey-register',
-        template: require('./register.component.html'),
-        styles: [require('../auth-common.scss')]
-    }),
-    __metadata("design:paramtypes", [config_service_1.ConfigService, auth_service_1.AuthService])
-], RegisterComponent);
+    };
+    RegisterComponent = __decorate([
+        core_1.Component({
+            selector: 'ey-register',
+            template: require('./register.component.html'),
+            styles: [require('../auth-common.scss')]
+        }),
+        __metadata("design:paramtypes", [config_service_1.ConfigService, auth_service_1.AuthService])
+    ], RegisterComponent);
+    return RegisterComponent;
+}());
 exports.RegisterComponent = RegisterComponent;
 //# sourceMappingURL=register.component.js.map

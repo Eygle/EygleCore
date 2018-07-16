@@ -1,9 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class Permission {
-}
+var Permission = (function () {
+    function Permission() {
+    }
+    return Permission;
+}());
 exports.Permission = Permission;
-class CronConfig {
-}
+var CronConfig = (function () {
+    function CronConfig() {
+    }
+    return CronConfig;
+}());
 exports.CronConfig = CronConfig;
 //# sourceMappingURL=Config.js.map

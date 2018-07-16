@@ -6,83 +6,86 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = require("@angular/core");
-const material_1 = require("@angular/material");
-const table_1 = require("@angular/cdk/table");
-let MaterialModule = class MaterialModule {
-};
-MaterialModule = __decorate([
-    core_1.NgModule({
-        imports: [
-            material_1.MatAutocompleteModule,
-            material_1.MatButtonModule,
-            material_1.MatButtonToggleModule,
-            material_1.MatCardModule,
-            material_1.MatCheckboxModule,
-            material_1.MatChipsModule,
-            material_1.MatDatepickerModule,
-            material_1.MatDialogModule,
-            material_1.MatExpansionModule,
-            material_1.MatFormFieldModule,
-            material_1.MatGridListModule,
-            material_1.MatIconModule,
-            material_1.MatInputModule,
-            material_1.MatListModule,
-            material_1.MatMenuModule,
-            material_1.MatNativeDateModule,
-            material_1.MatPaginatorModule,
-            material_1.MatProgressBarModule,
-            material_1.MatProgressSpinnerModule,
-            material_1.MatRadioModule,
-            material_1.MatRippleModule,
-            material_1.MatSelectModule,
-            material_1.MatSidenavModule,
-            material_1.MatSliderModule,
-            material_1.MatSlideToggleModule,
-            material_1.MatSnackBarModule,
-            material_1.MatStepperModule,
-            material_1.MatSortModule,
-            material_1.MatTableModule,
-            material_1.MatTabsModule,
-            material_1.MatToolbarModule,
-            material_1.MatTooltipModule,
-            table_1.CdkTableModule
-        ],
-        exports: [
-            material_1.MatAutocompleteModule,
-            material_1.MatButtonModule,
-            material_1.MatButtonToggleModule,
-            material_1.MatCardModule,
-            material_1.MatCheckboxModule,
-            material_1.MatChipsModule,
-            material_1.MatDatepickerModule,
-            material_1.MatDialogModule,
-            material_1.MatExpansionModule,
-            material_1.MatGridListModule,
-            material_1.MatIconModule,
-            material_1.MatInputModule,
-            material_1.MatListModule,
-            material_1.MatMenuModule,
-            material_1.MatNativeDateModule,
-            material_1.MatPaginatorModule,
-            material_1.MatProgressBarModule,
-            material_1.MatProgressSpinnerModule,
-            material_1.MatRadioModule,
-            material_1.MatRippleModule,
-            material_1.MatSelectModule,
-            material_1.MatSidenavModule,
-            material_1.MatSliderModule,
-            material_1.MatSlideToggleModule,
-            material_1.MatSnackBarModule,
-            material_1.MatStepperModule,
-            material_1.MatSortModule,
-            material_1.MatTableModule,
-            material_1.MatTabsModule,
-            material_1.MatToolbarModule,
-            material_1.MatTooltipModule,
-            table_1.CdkTableModule
-        ]
-    })
-], MaterialModule);
+var core_1 = require("@angular/core");
+var material_1 = require("@angular/material");
+var table_1 = require("@angular/cdk/table");
+var MaterialModule = (function () {
+    function MaterialModule() {
+    }
+    MaterialModule = __decorate([
+        core_1.NgModule({
+            imports: [
+                material_1.MatAutocompleteModule,
+                material_1.MatButtonModule,
+                material_1.MatButtonToggleModule,
+                material_1.MatCardModule,
+                material_1.MatCheckboxModule,
+                material_1.MatChipsModule,
+                material_1.MatDatepickerModule,
+                material_1.MatDialogModule,
+                material_1.MatExpansionModule,
+                material_1.MatFormFieldModule,
+                material_1.MatGridListModule,
+                material_1.MatIconModule,
+                material_1.MatInputModule,
+                material_1.MatListModule,
+                material_1.MatMenuModule,
+                material_1.MatNativeDateModule,
+                material_1.MatPaginatorModule,
+                material_1.MatProgressBarModule,
+                material_1.MatProgressSpinnerModule,
+                material_1.MatRadioModule,
+                material_1.MatRippleModule,
+                material_1.MatSelectModule,
+                material_1.MatSidenavModule,
+                material_1.MatSliderModule,
+                material_1.MatSlideToggleModule,
+                material_1.MatSnackBarModule,
+                material_1.MatStepperModule,
+                material_1.MatSortModule,
+                material_1.MatTableModule,
+                material_1.MatTabsModule,
+                material_1.MatToolbarModule,
+                material_1.MatTooltipModule,
+                table_1.CdkTableModule
+            ],
+            exports: [
+                material_1.MatAutocompleteModule,
+                material_1.MatButtonModule,
+                material_1.MatButtonToggleModule,
+                material_1.MatCardModule,
+                material_1.MatCheckboxModule,
+                material_1.MatChipsModule,
+                material_1.MatDatepickerModule,
+                material_1.MatDialogModule,
+                material_1.MatExpansionModule,
+                material_1.MatGridListModule,
+                material_1.MatIconModule,
+                material_1.MatInputModule,
+                material_1.MatListModule,
+                material_1.MatMenuModule,
+                material_1.MatNativeDateModule,
+                material_1.MatPaginatorModule,
+                material_1.MatProgressBarModule,
+                material_1.MatProgressSpinnerModule,
+                material_1.MatRadioModule,
+                material_1.MatRippleModule,
+                material_1.MatSelectModule,
+                material_1.MatSidenavModule,
+                material_1.MatSliderModule,
+                material_1.MatSlideToggleModule,
+                material_1.MatSnackBarModule,
+                material_1.MatStepperModule,
+                material_1.MatSortModule,
+                material_1.MatTableModule,
+                material_1.MatTabsModule,
+                material_1.MatToolbarModule,
+                material_1.MatTooltipModule,
+                table_1.CdkTableModule
+            ]
+        })
+    ], MaterialModule);
+    return MaterialModule;
+}());
 exports.MaterialModule = MaterialModule;
 //# sourceMappingURL=material.module.js.map

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const DB_1 = require("../modules/DB");
+var DB_1 = require("../modules/DB");
 exports.cronJobSchema = DB_1.default.createSchema({
     name: String,
     logFilename: String,

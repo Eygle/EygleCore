@@ -9,11 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = require("@angular/core");
-const BehaviorSubject_1 = require("rxjs/BehaviorSubject");
-const router_1 = require("@angular/router");
-let ConfigService = class ConfigService {
-    constructor(router) {
+var core_1 = require("@angular/core");
+var BehaviorSubject_1 = require("rxjs/BehaviorSubject");
+var router_1 = require("@angular/router");
+var ConfigService = (function () {
+    function ConfigService(router) {
+        var _this = this;
         this.router = router;
         // Set the default settings
         this.defaultSettings = {
@@ -28,9 +29,9 @@ let ConfigService = class ConfigService {
         // Set the settings from the default settings
         this.settings = Object.assign({}, this.defaultSettings);
         // Reload the default settings on every navigation start
-        router.events.subscribe((event) => {
+        router.events.subscribe(function (event) {
             if (event instanceof router_1.NavigationStart) {
-                this.setSettings({ layout: this.defaultSettings.layout });
+                _this.setSettings({ layout: _this.defaultSettings.layout });
             }
         });
         // Create the behavior subject
@@ -40,16 +41,17 @@ let ConfigService = class ConfigService {
      * Sets settings
      * @param settings
      */
-    setSettings(settings) {
+    ConfigService.prototype.setSettings = function (settings) {
         // Set the settings from the given object
         this.settings = Object.assign({}, this.settings, settings);
         // Trigger the event
         this.onSettingsChanged.next(this.settings);
-    }
-};
-ConfigService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [router_1.Router])
-], ConfigService);
+    };
+    ConfigService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [router_1.Router])
+    ], ConfigService);
+    return ConfigService;
+}());
 exports.ConfigService = ConfigService;
 //# sourceMappingURL=config.service.js.map

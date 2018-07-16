@@ -9,11 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = require("@angular/core");
-const config_service_1 = require("../../../services/config.service");
-const auth_service_1 = require("../../../services/auth.service");
-let LoginComponent = class LoginComponent {
-    constructor(config, auth) {
+var core_1 = require("@angular/core");
+var config_service_1 = require("../../../services/config.service");
+var auth_service_1 = require("../../../services/auth.service");
+var LoginComponent = (function () {
+    function LoginComponent(config, auth) {
         this.config = config;
         this.auth = auth;
         this.config.setSettings({
@@ -26,21 +26,22 @@ let LoginComponent = class LoginComponent {
     /**
      * Login action
      */
-    logIn(event) {
+    LoginComponent.prototype.logIn = function (event) {
         event.preventDefault();
         this.auth.logIn(this.email, this.password)
-            .subscribe((user) => {
+            .subscribe(function (user) {
             console.log(user);
         });
-    }
-};
-LoginComponent = __decorate([
-    core_1.Component({
-        selector: 'ey-login',
-        template: require('./login.component.html'),
-        styles: [require('../auth-common.scss')]
-    }),
-    __metadata("design:paramtypes", [config_service_1.ConfigService, auth_service_1.AuthService])
-], LoginComponent);
+    };
+    LoginComponent = __decorate([
+        core_1.Component({
+            selector: 'ey-login',
+            template: require('./login.component.html'),
+            styles: [require('../auth-common.scss')]
+        }),
+        __metadata("design:paramtypes", [config_service_1.ConfigService, auth_service_1.AuthService])
+    ], LoginComponent);
+    return LoginComponent;
+}());
 exports.LoginComponent = LoginComponent;
 //# sourceMappingURL=login.component.js.map
