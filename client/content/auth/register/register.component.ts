@@ -1,12 +1,11 @@
 import {Component} from '@angular/core';
 import {AuthService} from '../../../services/auth.service';
 import {ConfigService} from '../../../services/config.service';
-import {User} from '../../../../commons/models/User';
 
 @Component({
   selector: 'ems-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  templateUrl: require('./register.component.html'),
+  styleUrls: [require('./register.component.scss')]
 })
 export class RegisterComponent {
   /**

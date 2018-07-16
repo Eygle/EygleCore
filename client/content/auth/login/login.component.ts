@@ -5,8 +5,8 @@ import {User} from '../../../../commons/models/User';
 
 @Component({
   selector: 'ems-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  templateUrl: require('./login.component.html'),
+  styleUrls: [require('./login.component.scss')]
 })
 export class LoginComponent {
   /**

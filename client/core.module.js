@@ -28,7 +28,6 @@ EygleCoreModule = __decorate([
         exports: [
             sidenav_component_1.SidenavComponent
         ],
-        entryComponents: [],
         providers: [
             config_service_1.ConfigService,
             ngx_cookie_service_1.CookieService
