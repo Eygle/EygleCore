@@ -3,7 +3,7 @@ import {AuthService} from '../../../services/auth.service';
 import {ConfigService} from '../../../services/config.service';
 
 @Component({
-    selector: 'ems-register',
+    selector: 'ey-register',
     template: require('./register.component.html'),
     styles: [require('../auth-common.scss')]
 })

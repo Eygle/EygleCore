@@ -4,7 +4,7 @@ import {AuthService} from "../../services/auth.service";
 import {IRouteItem} from "../../core-routes";
 
 @Component({
-    selector: 'ems-sidenav',
+    selector: 'ey-sidenav',
     template: require('./sidenav.component.html'),
     styles: [require('./sidenav.component.scss')]
 })
@@ -15,6 +15,7 @@ export class SidenavComponent {
     navItems: [{ label?: string, items: [IRouteItem] }];
 
     constructor(private Auth: AuthService) {
+        console.log("Generate sidenav with routes", this.routes);
         this._generateMenu();
     }
 

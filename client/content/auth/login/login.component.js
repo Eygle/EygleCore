@@ -36,7 +36,7 @@ let LoginComponent = class LoginComponent {
 };
 LoginComponent = __decorate([
     core_1.Component({
-        selector: 'ems-login',
+        selector: 'ey-login',
         template: require('./login.component.html'),
         styles: [require('../auth-common.scss')]
     }),

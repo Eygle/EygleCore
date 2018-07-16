@@ -15,6 +15,7 @@ const auth_service_1 = require("../../services/auth.service");
 let SidenavComponent = class SidenavComponent {
     constructor(Auth) {
         this.Auth = Auth;
+        console.log("Generate sidenav with routes", this.routes);
         this._generateMenu();
     }
     /**
@@ -58,7 +59,7 @@ __decorate([
 ], SidenavComponent.prototype, "routes", void 0);
 SidenavComponent = __decorate([
     core_1.Component({
-        selector: 'ems-sidenav',
+        selector: 'ey-sidenav',
         template: require('./sidenav.component.html'),
         styles: [require('./sidenav.component.scss')]
     }),

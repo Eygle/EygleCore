@@ -6,16 +6,22 @@ export declare class EygleCoreRoutingModule {
     /**
      * Checks to perform
      */
-    private _checks;
+    private readonly _checks;
     /**
      * Routes not to include in checks
      */
-    private _ignoreRoutes;
+    protected ignoreRoutes: Array<String>;
     /**
      * List of errors routes (404, 500, ...)
      */
-    private _errorsRoutes;
+    protected errorsRoutes: Array<string>;
     constructor(router: Router, auth: AuthService);
+    /**
+     * Add check
+     * @param {(url: string) => boolean} callback
+     * @param {string} routeToRedirect
+     */
+    addCheck(callback: (url: string) => boolean, routeToRedirect: string): void;
     /**
      * Perform all checks and redirects
      * @private

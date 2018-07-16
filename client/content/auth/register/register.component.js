@@ -33,7 +33,7 @@ let RegisterComponent = class RegisterComponent {
 };
 RegisterComponent = __decorate([
     core_1.Component({
-        selector: 'ems-register',
+        selector: 'ey-register',
         template: require('./register.component.html'),
         styles: [require('../auth-common.scss')]
     }),
