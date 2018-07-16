@@ -19,6 +19,7 @@ const register_component_1 = require("./content/auth/register/register.component
 const config_service_1 = require("./services/config.service");
 const auth_service_1 = require("./services/auth.service");
 const router_1 = require("@angular/router");
+const forms_1 = require("@angular/forms");
 let EygleCoreModule = class EygleCoreModule {
 };
 EygleCoreModule = __decorate([
@@ -34,7 +35,8 @@ EygleCoreModule = __decorate([
             core_2.TranslateModule,
             material_module_1.MaterialModule,
             flex_layout_1.FlexLayoutModule,
-            http_1.HttpClientModule
+            http_1.HttpClientModule,
+            forms_1.FormsModule
         ],
         exports: [
             sidenav_component_1.SidenavComponent,
@@ -42,7 +44,8 @@ EygleCoreModule = __decorate([
             router_1.RouterModule,
             core_2.TranslateModule,
             material_module_1.MaterialModule,
-            flex_layout_1.FlexLayoutModule
+            flex_layout_1.FlexLayoutModule,
+            forms_1.FormsModule
         ],
         providers: [
             ngx_cookie_service_1.CookieService,

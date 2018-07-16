@@ -12,6 +12,7 @@ import {RegisterComponent} from './content/auth/register/register.component';
 import {ConfigService} from './services/config.service';
 import {AuthService} from "./services/auth.service";
 import {RouterModule} from "@angular/router";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import {RouterModule} from "@angular/router";
         TranslateModule,
         MaterialModule,
         FlexLayoutModule,
-        HttpClientModule
+        HttpClientModule,
+        FormsModule
     ],
     exports: [
         SidenavComponent,
@@ -33,7 +35,8 @@ import {RouterModule} from "@angular/router";
         RouterModule,
         TranslateModule,
         MaterialModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        FormsModule
     ],
     providers: [
         CookieService,
