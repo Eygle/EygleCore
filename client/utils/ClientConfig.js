@@ -11,28 +11,26 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var ProjectConfig_1 = require("../../commons/utils/ProjectConfig");
-var ProjectConfig_2 = require("../../commons/utils/ProjectConfig");
-var core_enums_1 = require("../../commons/core.enums");
 var ClientConfig = (function (_super) {
     __extends(ClientConfig, _super);
     function ClientConfig() {
-        var _this = _super.call(this) || this;
-        /**
-         * Load all ProjectConfig here
-         */
-        for (var key in ProjectConfig_2.default.client) {
-            if (ProjectConfig_2.default.client.hasOwnProperty(key)) {
-                _this[key] = ProjectConfig_2.default.client[key];
-            }
-        }
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     /**
      * Initialise environment
+     * @param conf
      * @param isProd
      */
-    ClientConfig.prototype.initEnv = function (isProd) {
-        this.env = isProd ? core_enums_1.EEnv.Prod : core_enums_1.EEnv.Dev;
+    ClientConfig.prototype.init = function (conf, isProd) {
+        ProjectConfig_1.default.initForClient(conf, isProd ? 'production' : 'development');
+        /**
+         * Load all ProjectConfig here
+         */
+        for (var key in ProjectConfig_1.default.client) {
+            if (ProjectConfig_1.default.client.hasOwnProperty(key)) {
+                this[key] = ProjectConfig_1.default.client[key];
+            }
+        }
     };
     return ClientConfig;
 }(ProjectConfig_1.AProjectConfigClient));

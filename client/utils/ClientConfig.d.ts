@@ -1,11 +1,11 @@
 import { AProjectConfigClient } from '../../commons/utils/ProjectConfig';
 export declare class ClientConfig extends AProjectConfigClient {
-    constructor();
     /**
      * Initialise environment
+     * @param conf
      * @param isProd
      */
-    initEnv(isProd: any): void;
+    init(conf: any, isProd: boolean): void;
 }
 declare const _default: ClientConfig;
 export default _default;

@@ -1,9 +1,14 @@
 import ProjectConfig, {AProjectConfigClient} from '../../commons/utils/ProjectConfig';
-import {EEnv} from '../../commons/core.enums';
 
 export class ClientConfig extends AProjectConfigClient {
-    constructor() {
-        super();
+
+    /**
+     * Initialise environment
+     * @param conf
+     * @param isProd
+     */
+    public init(conf: any, isProd: boolean) {
+        ProjectConfig.initForClient(conf, isProd ? 'production' : 'development');
 
         /**
          * Load all ProjectConfig here
@@ -13,14 +18,6 @@ export class ClientConfig extends AProjectConfigClient {
                 this[key] = ProjectConfig.client[key];
             }
         }
-    }
-
-    /**
-     * Initialise environment
-     * @param isProd
-     */
-    public initEnv(isProd) {
-        this.env = isProd ? EEnv.Prod : EEnv.Dev;
     }
 }
 

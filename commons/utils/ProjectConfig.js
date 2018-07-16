@@ -20,7 +20,7 @@ var ProjectConfig = (function () {
      * This method MUST BE called before the class is imported anywhere ! (static issues)
      */
     ProjectConfig.init = function () {
-        if (process) {
+        if (process && process.mainModule) {
             var root = path.resolve(path.dirname(process.mainModule.filename) + "/..");
             var conf = require(root + "/commons/eygle-conf.js");
             ProjectConfig._initForServer(root, conf, process.env.NODE_ENV);

@@ -50,7 +50,6 @@ export declare class ServerConfig extends AProjectConfigServer {
      * Number of milliseconds the IP is locked
      */
     ipLockedTime: number;
-
     constructor();
     /**
      * Generate logger with ProjectConfig as default conf but it can be override by given conf
@@ -59,6 +58,5 @@ export declare class ServerConfig extends AProjectConfigServer {
      */
     generateLogger(conf?: any): any;
 }
-
 declare const _default: ServerConfig;
 export default _default;
