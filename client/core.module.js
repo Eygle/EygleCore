@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
+const common_1 = require("@angular/common");
 const http_1 = require("@angular/common/http");
 const ngx_cookie_service_1 = require("ngx-cookie-service");
 const sidenav_component_1 = require("./content/sidenav/sidenav.component");
@@ -24,10 +25,12 @@ EygleCoreModule = __decorate([
             register_component_1.RegisterComponent
         ],
         imports: [
+            common_1.CommonModule,
             http_1.HttpClientModule
         ],
         exports: [
-            sidenav_component_1.SidenavComponent
+            sidenav_component_1.SidenavComponent,
+            common_1.CommonModule
         ],
         providers: [
             ngx_cookie_service_1.CookieService,
