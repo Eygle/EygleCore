@@ -54,7 +54,7 @@ let SidenavComponent = class SidenavComponent {
     }
 };
 __decorate([
-    core_1.Input(),
+    core_1.Input('routes'),
     __metadata("design:type", Array)
 ], SidenavComponent.prototype, "routes", void 0);
 SidenavComponent = __decorate([

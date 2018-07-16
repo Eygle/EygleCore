@@ -10,7 +10,7 @@ import {IRouteItem} from "../../core-routes";
 })
 export class SidenavComponent {
 
-    @Input() routes: IRouteItem[];
+    @Input('routes') routes: IRouteItem[];
 
     navItems: [{ label?: string, items: [IRouteItem] }];
 
