@@ -3,7 +3,7 @@ import {AuthService} from './services/auth.service';
 import {NgModule} from "@angular/core";
 
 @NgModule()
-export class EygleCoreRoutingModule {
+export abstract class EygleCoreRoutingModule {
     /**
      * Checks to perform
      */

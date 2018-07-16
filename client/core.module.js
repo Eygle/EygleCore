@@ -20,6 +20,7 @@ const config_service_1 = require("./services/config.service");
 const auth_service_1 = require("./services/auth.service");
 const router_1 = require("@angular/router");
 const forms_1 = require("@angular/forms");
+const platform_browser_1 = require("@angular/platform-browser");
 let EygleCoreModule = class EygleCoreModule {
 };
 EygleCoreModule = __decorate([
@@ -31,6 +32,7 @@ EygleCoreModule = __decorate([
         ],
         imports: [
             common_1.CommonModule,
+            platform_browser_1.BrowserModule,
             router_1.RouterModule,
             core_2.TranslateModule,
             material_module_1.MaterialModule,
