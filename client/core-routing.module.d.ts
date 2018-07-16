@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
-export declare class EygleCoreRouting {
+export declare abstract class EygleCoreRoutingModule {
     private router;
     private auth;
     /**
@@ -10,11 +10,11 @@ export declare class EygleCoreRouting {
     /**
      * Routes not to include in checks
      */
-    ignoreRoutes: Array<String>;
+    protected ignoreRoutes: Array<String>;
     /**
      * List of errors routes (404, 500, ...)
      */
-    errorsRoutes: Array<string>;
+    protected errorsRoutes: Array<string>;
     constructor(router: Router, auth: AuthService);
     /**
      * Add check

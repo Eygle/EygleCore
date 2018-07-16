@@ -10,12 +10,12 @@ import {IRouteItem} from "../../core-routes";
 })
 export class SidenavComponent {
 
-    @Input('tmp') tmp: IRouteItem[];
+    @Input() routes: IRouteItem[];
 
     navItems: [{ label?: string, items: [IRouteItem] }];
 
     constructor(private Auth: AuthService) {
-        console.log("Generate sidenav with routes", this.tmp);
+        console.log("Generate sidenav with routes", this.routes);
         this._generateMenu();
     }
 
@@ -31,7 +31,7 @@ export class SidenavComponent {
             }
         ];
 
-        for (const item of this.tmp) {
+        for (const item of this.routes || []) {
             if (item.icon && item.translate && this.Auth.authorize(item.access)) {
                 item.url = `/${item.path}`;
                 if (item.category) {

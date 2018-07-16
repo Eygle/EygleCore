@@ -15,7 +15,7 @@ var auth_service_1 = require("../../services/auth.service");
 var SidenavComponent = (function () {
     function SidenavComponent(Auth) {
         this.Auth = Auth;
-        console.log("Generate sidenav with routes", this.tmp);
+        console.log("Generate sidenav with routes", this.routes);
         this._generateMenu();
     }
     /**
@@ -52,15 +52,15 @@ var SidenavComponent = (function () {
             }
         };
         var this_1 = this;
-        for (var _i = 0, _a = this.tmp; _i < _a.length; _i++) {
+        for (var _i = 0, _a = this.routes || []; _i < _a.length; _i++) {
             var item = _a[_i];
             _loop_1(item);
         }
     };
     __decorate([
-        core_1.Input('tmp'),
+        core_1.Input(),
         __metadata("design:type", Array)
-    ], SidenavComponent.prototype, "tmp", void 0);
+    ], SidenavComponent.prototype, "routes", void 0);
     SidenavComponent = __decorate([
         core_1.Component({
             selector: 'ey-sidenav',

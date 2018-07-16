@@ -2,7 +2,7 @@ import { AuthService } from "../../services/auth.service";
 import { IRouteItem } from "../../core-routes";
 export declare class SidenavComponent {
     private Auth;
-    tmp: IRouteItem[];
+    routes: IRouteItem[];
     navItems: [{
         label?: string;
         items: [IRouteItem];
