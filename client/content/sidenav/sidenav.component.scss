@@ -2,6 +2,11 @@ $font-size-sm: 14px;
 $font-color: rgba(255, 255, 255, 0.7);
 $color-yellow: #FFD740;
 
+@mixin fontSize($size) {
+  font-size: $size;
+  line-height: $size;
+}
+
 // SIDENAV
 $sidenav-width: 260px;
 $sidenav-title-height: 60px;
