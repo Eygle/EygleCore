@@ -1,0 +1,23 @@
+<div class="container" fxLayout="column" fxLayoutAlign="center center">
+  <div class="content">
+    <h2 [translate]="'AUTH.LOGIN.TITLE'"></h2>
+
+    <form (submit)="logIn($event)">
+      <mat-form-field>
+        <input matInput placeholder="{{'AUTH.INPUT.USERNAME_EMAIL' | translate}}" [(ngModel)]="email" name="email"
+               required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input type="password" matInput placeholder="{{'AUTH.INPUT.PASSWORD' | translate}}" [(ngModel)]="password"
+               name="password" required>
+      </mat-form-field>
+
+      <div>
+        <a routerLink="/auth/register" [translate]="'AUTH.LOGIN.REGISTER_LINK'"></a>
+      </div>
+
+      <button mat-raised-button>{{'AUTH.LOGIN.ACTION' | translate}}</button>
+    </form>
+  </div>
+</div>

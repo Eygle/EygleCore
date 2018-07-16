@@ -1,0 +1,38 @@
+@import "../../../common";
+
+.container {
+  height: 100%;
+
+  .content {
+    width: 360px;
+    min-height: 300px;
+    padding: 25px;
+    background-color: $bg-darken;
+    text-align: center;
+
+    h2 {
+      font-weight: 400;
+    }
+
+    form {
+      width: 100%;
+      padding-top: 25px;
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      button {
+        margin-top: 25px;
+      }
+    }
+
+    a {
+      color: $color-yellow;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
