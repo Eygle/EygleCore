@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.coreLocale = {
+exports.locale = {
     'COMMON': {
         'NAME': 'Nom',
         'SIZE': 'Taille',

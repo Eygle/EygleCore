@@ -1,4 +1,4 @@
-export const coreLocale = {
+export const locale = {
     'COMMON': {
         'NAME': 'Nom',
         'SIZE': 'Taille',
