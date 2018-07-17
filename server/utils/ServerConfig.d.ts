@@ -1,5 +1,4 @@
-import {AProjectConfigServer} from '../../commons/utils/ProjectConfig';
-
+import { AProjectConfigServer } from '../../commons/utils/ProjectConfig';
 export declare class ServerConfig extends AProjectConfigServer {
     /**
      * Application name

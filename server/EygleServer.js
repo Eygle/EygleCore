@@ -94,7 +94,7 @@ var EygleServer = (function () {
                 saveUninitialized: true,
                 store: this._mongoStore
             });
-            this._app.set('view options', {layout: false});
+            this._app.set('view options', { layout: false });
             this._app.set('port', ServerConfig_1.default.port);
             this._app.disable('x-powered-by');
             this._app.use(bodyParser.urlencoded({ extended: true }));
