@@ -5,8 +5,8 @@ import {User} from "../../../../commons/models/User";
 
 @Component({
     selector: 'core-account',
-    templateUrl: './account.component.html',
-    styleUrls: ['./account.component.scss']
+    template: require('./account.component.html'),
+    styles: [require('./account.component.scss')]
 })
 export class AccountComponent {
 
