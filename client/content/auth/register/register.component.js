@@ -32,7 +32,7 @@ var RegisterComponent = (function () {
     };
     RegisterComponent = __decorate([
         core_1.Component({
-            selector: 'ey-register',
+            selector: 'core-register',
             template: require('./register.component.html'),
             styles: [require('../auth-common.scss')]
         }),

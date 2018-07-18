@@ -19,4 +19,10 @@ var User = (function (_super) {
     return User;
 }(AModel_1.AModel));
 exports.User = User;
+var UserSettings = (function () {
+    function UserSettings() {
+    }
+    return UserSettings;
+}());
+exports.UserSettings = UserSettings;
 //# sourceMappingURL=User.js.map

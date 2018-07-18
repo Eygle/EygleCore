@@ -15,12 +15,17 @@ import {RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {LangService} from "./services/lang.service";
+import {AccountComponent} from "./content/profile/account/account.component";
+import {NotFoundComponent} from "./content/errors/not-found/not-found.component";
+import {ProfileService} from "./content/profile/profile.service";
 
 @NgModule({
     declarations: [
         SidenavComponent,
         LoginComponent,
-        RegisterComponent
+        RegisterComponent,
+        AccountComponent,
+        NotFoundComponent
     ],
     imports: [
         CommonModule,
@@ -34,6 +39,7 @@ import {LangService} from "./services/lang.service";
     ],
     exports: [
         SidenavComponent,
+
         CommonModule,
         RouterModule,
         TranslateModule,
@@ -46,7 +52,8 @@ import {LangService} from "./services/lang.service";
 
         ConfigService,
         AuthService,
-        LangService
+        LangService,
+        ProfileService
     ]
 })
 export class EygleCoreModule {

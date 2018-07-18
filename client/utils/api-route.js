@@ -47,7 +47,8 @@ var ApiRoute = (function () {
      * @param body
      * @returns {Observable<any>}
      */
-    ApiRoute.prototype.post = function (params, body) {
+    ApiRoute.prototype.post = function (body, params) {
+        if (params === void 0) { params = null; }
         return this._request('post', params, body);
     };
     /**

@@ -35,7 +35,7 @@ var LoginComponent = (function () {
     };
     LoginComponent = __decorate([
         core_1.Component({
-            selector: 'ey-login',
+            selector: 'core-login',
             template: require('./login.component.html'),
             styles: [require('../auth-common.scss')]
         }),

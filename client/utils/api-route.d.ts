@@ -36,7 +36,7 @@ export declare class ApiRoute {
      * @param body
      * @returns {Observable<any>}
      */
-    post<T>(params: any, body: any): any;
+    post<T>(body: any, params?: any): any;
     /**
      * Format url and replace all params
      *   ie:

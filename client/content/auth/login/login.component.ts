@@ -4,7 +4,7 @@ import {AuthService} from '../../../services/auth.service';
 import {User} from '../../../../commons/models/User';
 
 @Component({
-    selector: 'ey-login',
+    selector: 'core-login',
     template: require('./login.component.html'),
     styles: [require('../auth-common.scss')]
 })

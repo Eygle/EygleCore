@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { ApiRoute } from '../utils/api-route';
+import { AModel } from "../../commons/models/AModel";
 export declare abstract class ApiService {
     /**
      * ApiRoute instance
@@ -17,4 +18,14 @@ export declare abstract class ApiService {
      * @returns {Observable<T>}
      */
     getById<T>(id: string): any;
+    /**
+     * Save item
+     * @param {AModel} item
+     */
+    save<T>(item: AModel): any;
+    /**
+     * Save item
+     * @param {AModel} item
+     */
+    add<T>(item: AModel): any;
 }

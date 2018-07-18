@@ -13,11 +13,16 @@ exports.locale = {
         'ROLES': 'Roles',
         'DESC': 'Description',
         'STATUS': 'Status',
-        'ACTIONS': 'Actions'
+        'ACTIONS': 'Actions',
+        'SAVE': 'Enregistrer',
+        'CANCEL': 'Annuler'
     },
     // ACCOUNT
     'ACCOUNT': {
-        'TITLE': 'Mon compte'
+        'TITLE': 'Mon compte',
+        'UPDATE_INFO': 'Mettre à jour mes informations',
+        'CHANGE_PASSWORD': 'Changer de mot de passe',
+        'LOGOUT': 'Se déconnecter',
     },
     // SETTINGS
     'SETTINGS': {

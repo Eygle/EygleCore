@@ -2,26 +2,25 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var login_component_1 = require("./content/auth/login/login.component");
 var register_component_1 = require("./content/auth/register/register.component");
-exports.eygleCoreRoutes = [
-    // Profile
-    // {
-    //   path: 'account',
-    //   component: HomeComponent,
-    //   translate: 'ACCOUNT.TITLE',
-    //   icon: 'account_circle',
-    //   access: EPermission.SeeAccount,
-    //   category: 'PROFILE'
-    // },
-    // {
-    //   path: 'settings',
-    //   component: HomeComponent,
-    //   translate: 'SETTINGS.TITLE',
-    //   icon: 'settings',
-    //   access: EPermission.SeeSettings,
-    //   category: 'PROFILE'
-    // },
-    // Auth
-    { path: 'auth/login', component: login_component_1.LoginComponent },
-    { path: 'auth/register', component: register_component_1.RegisterComponent },
+var core_enums_1 = require("../commons/core.enums");
+var ServerConfig_1 = require("../server/utils/ServerConfig");
+var account_component_1 = require("./content/profile/account/account.component");
+var not_found_component_1 = require("./content/errors/not-found/not-found.component");
+var routes = [
+    { path: 'error-404', name: 'NotFound', component: not_found_component_1.NotFoundComponent },
+    { path: '/*path', redirectTo: ['NotFound'] }
 ];
+if (ServerConfig_1.default.implementsAuth) {
+    routes.push({
+        path: 'account',
+        component: account_component_1.AccountComponent,
+        translate: 'ACCOUNT.TITLE',
+        icon: 'account_circle',
+        access: core_enums_1.EPermission.SeeAccount,
+        category: 'PROFILE'
+    });
+    routes.push({ path: 'auth/login', component: login_component_1.LoginComponent });
+    routes.push({ path: 'auth/register', component: register_component_1.RegisterComponent });
+}
+exports.eygleCoreRoutes = routes;
 //# sourceMappingURL=core-routes.js.map

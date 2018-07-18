@@ -12,9 +12,14 @@ export declare const locale: {
         'DESC': string;
         'STATUS': string;
         'ACTIONS': string;
+        'SAVE': string;
+        'CANCEL': string;
     };
     'ACCOUNT': {
         'TITLE': string;
+        'UPDATE_INFO': string;
+        'CHANGE_PASSWORD': string;
+        'LOGOUT': string;
     };
     'SETTINGS': {
         'TITLE': string;

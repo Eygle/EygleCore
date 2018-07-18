@@ -32,6 +32,20 @@ var ApiService = (function () {
     ApiService.prototype.getById = function (id) {
         return this.api.get({ id: id });
     };
+    /**
+     * Save item
+     * @param {AModel} item
+     */
+    ApiService.prototype.save = function (item) {
+        return this.api.put({ id: item._id }, item);
+    };
+    /**
+     * Save item
+     * @param {AModel} item
+     */
+    ApiService.prototype.add = function (item) {
+        return this.api.post(item);
+    };
     ApiService = __decorate([
         core_1.Injectable(),
         __metadata("design:paramtypes", [String, http_1.HttpClient])

@@ -17,7 +17,6 @@ var SidenavComponent = (function () {
         this.Auth = Auth;
     }
     SidenavComponent.prototype.ngOnInit = function () {
-        console.log("Generate sidenav with routes", this.routes);
         this._generateMenu();
     };
     /**
@@ -65,7 +64,7 @@ var SidenavComponent = (function () {
     ], SidenavComponent.prototype, "routes", void 0);
     SidenavComponent = __decorate([
         core_1.Component({
-            selector: 'ey-sidenav',
+            selector: 'core-sidenav',
             template: require('./sidenav.component.html'),
             styles: [require('./sidenav.component.scss')]
         }),

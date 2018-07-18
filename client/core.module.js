@@ -22,6 +22,9 @@ var router_1 = require("@angular/router");
 var forms_1 = require("@angular/forms");
 var platform_browser_1 = require("@angular/platform-browser");
 var lang_service_1 = require("./services/lang.service");
+var account_component_1 = require("./content/profile/account/account.component");
+var not_found_component_1 = require("./content/errors/not-found/not-found.component");
+var profile_service_1 = require("./content/profile/profile.service");
 var EygleCoreModule = (function () {
     function EygleCoreModule() {
     }
@@ -30,7 +33,9 @@ var EygleCoreModule = (function () {
             declarations: [
                 sidenav_component_1.SidenavComponent,
                 login_component_1.LoginComponent,
-                register_component_1.RegisterComponent
+                register_component_1.RegisterComponent,
+                account_component_1.AccountComponent,
+                not_found_component_1.NotFoundComponent
             ],
             imports: [
                 common_1.CommonModule,
@@ -55,7 +60,8 @@ var EygleCoreModule = (function () {
                 ngx_cookie_service_1.CookieService,
                 config_service_1.ConfigService,
                 auth_service_1.AuthService,
-                lang_service_1.LangService
+                lang_service_1.LangService,
+                profile_service_1.ProfileService
             ]
         })
     ], EygleCoreModule);

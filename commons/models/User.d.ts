@@ -8,4 +8,8 @@ export declare class User extends AModel {
     changePassword?: boolean;
     roles: Array<string>;
     desc?: string;
+    settings: UserSettings;
+}
+export declare class UserSettings {
+    notifications: any;
 }

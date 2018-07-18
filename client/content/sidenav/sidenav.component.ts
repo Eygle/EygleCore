@@ -4,7 +4,7 @@ import {AuthService} from "../../services/auth.service";
 import {IRouteItem} from "../../core-routes";
 
 @Component({
-    selector: 'ey-sidenav',
+    selector: 'core-sidenav',
     template: require('./sidenav.component.html'),
     styles: [require('./sidenav.component.scss')]
 })
@@ -18,7 +18,6 @@ export class SidenavComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log("Generate sidenav with routes", this.routes);
         this._generateMenu();
     }
 

@@ -11,4 +11,11 @@ export class User extends AModel {
 
   roles: Array<string>;
   desc?: string;
+
+  settings: UserSettings;
+}
+
+export class UserSettings {
+  notifications: any;
+
 }

@@ -1,40 +1,41 @@
 import {LoginComponent} from './content/auth/login/login.component';
 import {RegisterComponent} from './content/auth/register/register.component';
 import {EPermission} from '../commons/core.enums';
+import ServerConfig from "../server/utils/ServerConfig";
+import {AccountComponent} from "./content/profile/account/account.component";
+import {NotFoundComponent} from "./content/errors/not-found/not-found.component";
 
-export const eygleCoreRoutes: IRouteItem[] = [
-
-  // Profile
-  // {
-  //   path: 'account',
-  //   component: HomeComponent,
-  //   translate: 'ACCOUNT.TITLE',
-  //   icon: 'account_circle',
-  //   access: EPermission.SeeAccount,
-  //   category: 'PROFILE'
-  // },
-  // {
-  //   path: 'settings',
-  //   component: HomeComponent,
-  //   translate: 'SETTINGS.TITLE',
-  //   icon: 'settings',
-  //   access: EPermission.SeeSettings,
-  //   category: 'PROFILE'
-  // },
-
-  // Auth
-  {path: 'auth/login', component: LoginComponent},
-  {path: 'auth/register', component: RegisterComponent},
+const routes: IRouteItem[] = [
+    <IRouteItem>{path: 'error-404', name: 'NotFound', component: NotFoundComponent},
+    <IRouteItem>{path: '/*path', redirectTo: ['NotFound']}
 ];
 
-export interface IRouteItem {
-  path: string;
-  component: any;
+if (ServerConfig.implementsAuth) {
+    routes.push({
+        path: 'account',
+        component: AccountComponent,
+        translate: 'ACCOUNT.TITLE',
+        icon: 'account_circle',
+        access: EPermission.SeeAccount,
+        category: 'PROFILE'
+    });
+    routes.push({path: 'auth/login', component: LoginComponent});
+    routes.push({path: 'auth/register', component: RegisterComponent})
+}
 
-  translate?: string;
-  icon?: string;
-  category?: string;
-  access?: EPermission;
-  exactMatch?: boolean;
-  url?: string;
+export const eygleCoreRoutes = routes;
+
+export interface IRouteItem {
+    path: string;
+    name?: string;
+    component: any;
+
+    redirectTo?: any[];
+
+    translate?: string;
+    icon?: string;
+    category?: string;
+    access?: EPermission;
+    exactMatch?: boolean;
+    url?: string;
 }
