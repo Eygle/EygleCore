@@ -10,8 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var config_service_1 = require("../../../services/config.service");
 var NotFoundComponent = (function () {
-    function NotFoundComponent() {
+    function NotFoundComponent(config) {
+        config.setSettings({
+            layout: {
+                navbar: true,
+                toolbar: false
+            }
+        });
     }
     NotFoundComponent.prototype.ngOnInit = function () {
     };
@@ -21,7 +28,7 @@ var NotFoundComponent = (function () {
             template: require('./not-found.component.html'),
             styles: [require('./not-found.component.scss')]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [config_service_1.ConfigService])
     ], NotFoundComponent);
     return NotFoundComponent;
 }());

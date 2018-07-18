@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ConfigService} from "../../../services/config.service";
 
 @Component({
   selector: 'core-not-found',
@@ -7,7 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotFoundComponent implements OnInit {
 
-  constructor() { }
+  constructor(config: ConfigService) {
+      config.setSettings({
+          layout: {
+              navbar: true,
+              toolbar: false
+          }
+      });
+  }
 
   ngOnInit() {
   }
