@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var login_component_1 = require("./content/auth/login/login.component");
 var register_component_1 = require("./content/auth/register/register.component");
 var core_enums_1 = require("../commons/core.enums");
-var ServerConfig_1 = require("../server/utils/ServerConfig");
 var account_component_1 = require("./content/profile/account/account.component");
 var not_found_component_1 = require("./content/errors/not-found/not-found.component");
+var ClientConfig_1 = require("./utils/ClientConfig");
 var routes = [
     { path: 'error-404', name: 'NotFound', component: not_found_component_1.NotFoundComponent },
     { path: '/*path', redirectTo: 'NotFound' }
 ];
-if (ServerConfig_1.default.implementsAuth) {
+if (ClientConfig_1.default.implementsAuth) {
     routes.push({
         path: 'account',
         component: account_component_1.AccountComponent,

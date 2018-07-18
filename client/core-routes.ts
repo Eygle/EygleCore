@@ -1,16 +1,16 @@
 import {LoginComponent} from './content/auth/login/login.component';
 import {RegisterComponent} from './content/auth/register/register.component';
 import {EPermission} from '../commons/core.enums';
-import ServerConfig from "../server/utils/ServerConfig";
 import {AccountComponent} from "./content/profile/account/account.component";
 import {NotFoundComponent} from "./content/errors/not-found/not-found.component";
+import ClientConfig from "./utils/ClientConfig";
 
 const routes: IRouteItem[] = [
     <IRouteItem>{path: 'error-404', name: 'NotFound', component: NotFoundComponent},
     <IRouteItem>{path: '/*path', redirectTo: 'NotFound'}
 ];
 
-if (ServerConfig.implementsAuth) {
+if (ClientConfig.implementsAuth) {
     routes.push({
         path: 'account',
         component: AccountComponent,

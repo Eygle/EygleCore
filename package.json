@@ -27,12 +27,12 @@
   },
   "homepage": "https://github.com/Eygle/EygleCore#readme",
   "dependencies": {
+    "@angular-devkit/core": "^0.6.8",
     "@angular/animations": "^5.2.11",
     "@angular/cdk": "^5.1.0",
     "@angular/common": "^5.2.11",
     "@angular/compiler": "^5.2.11",
     "@angular/core": "^5.2.11",
-    "@angular-devkit/core": "^0.6.8",
     "@angular/flex-layout": "^5.0.0-beta.15",
     "@angular/forms": "^5.2.11",
     "@angular/http": "^5.2.11",
@@ -88,7 +88,7 @@
     "path": "^0.12.7",
     "q": "^1.5.1",
     "rxjs": "^5.5.11",
-    "tracer": "^0.8.11",
+    "tracer": "^0.8.15",
     "twig": "^1.10.5",
     "underscore": "^1.8.3"
   },
