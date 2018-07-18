@@ -8,13 +8,7 @@ import {ConfigService} from "../../../services/config.service";
 })
 export class NotFoundComponent implements OnInit {
 
-  constructor(config: ConfigService) {
-      config.setSettings({
-          layout: {
-              navbar: true,
-              toolbar: false
-          }
-      });
+  constructor() {
   }
 
   ngOnInit() {
