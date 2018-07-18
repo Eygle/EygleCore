@@ -16,6 +16,13 @@ export const locale = {
         'CANCEL': 'Annuler'
     },
 
+    'ERRORS': {
+        '404': {
+            'TITLE': 'Erreur 404',
+            'DESC': 'Page non trouvée !'
+        }
+    },
+
     // ACCOUNT
     'ACCOUNT': {
         'TITLE': 'Mon compte',

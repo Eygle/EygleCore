@@ -6,8 +6,7 @@ import {NotFoundComponent} from "./content/errors/not-found/not-found.component"
 import ClientConfig from "./utils/ClientConfig";
 
 const routes: IRouteItem[] = [
-    <IRouteItem>{path: 'error-404', name: 'NotFound', component: NotFoundComponent},
-    <IRouteItem>{path: '/*path', redirectTo: 'NotFound'}
+    <IRouteItem>{path: '**', component: NotFoundComponent}
 ];
 
 if (ClientConfig.implementsAuth) {

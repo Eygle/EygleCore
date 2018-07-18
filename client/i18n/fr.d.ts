@@ -15,6 +15,12 @@ export declare const locale: {
         'SAVE': string;
         'CANCEL': string;
     };
+    'ERRORS': {
+        '404': {
+            'TITLE': string;
+            'DESC': string;
+        };
+    };
     'ACCOUNT': {
         'TITLE': string;
         'UPDATE_INFO': string;

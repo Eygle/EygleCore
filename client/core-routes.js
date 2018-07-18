@@ -7,8 +7,7 @@ var account_component_1 = require("./content/profile/account/account.component")
 var not_found_component_1 = require("./content/errors/not-found/not-found.component");
 var ClientConfig_1 = require("./utils/ClientConfig");
 var routes = [
-    { path: 'error-404', name: 'NotFound', component: not_found_component_1.NotFoundComponent },
-    { path: '/*path', redirectTo: 'NotFound' }
+    { path: '**', component: not_found_component_1.NotFoundComponent }
 ];
 if (ClientConfig_1.default.implementsAuth) {
     routes.push({
