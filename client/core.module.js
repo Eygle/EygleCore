@@ -21,6 +21,7 @@ var auth_service_1 = require("./services/auth.service");
 var router_1 = require("@angular/router");
 var forms_1 = require("@angular/forms");
 var platform_browser_1 = require("@angular/platform-browser");
+var lang_service_1 = require("./services/lang.service");
 var EygleCoreModule = (function () {
     function EygleCoreModule() {
     }
@@ -53,7 +54,8 @@ var EygleCoreModule = (function () {
             providers: [
                 ngx_cookie_service_1.CookieService,
                 config_service_1.ConfigService,
-                auth_service_1.AuthService
+                auth_service_1.AuthService,
+                lang_service_1.LangService
             ]
         })
     ], EygleCoreModule);

@@ -14,6 +14,7 @@ import {AuthService} from './services/auth.service';
 import {RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
+import {LangService} from "./services/lang.service";
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import {BrowserModule} from '@angular/platform-browser';
         CookieService,
 
         ConfigService,
-        AuthService
+        AuthService,
+        LangService
     ]
 })
 export class EygleCoreModule {

@@ -23,6 +23,7 @@ var LangService = (function () {
      * @param en
      */
     LangService.prototype.init = function (fr, en) {
+        if (en === void 0) { en = null; }
         // Add languages
         this.translate.addLangs(en ? ['fr', 'en'] : ['fr']);
         if (en) {

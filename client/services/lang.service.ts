@@ -13,7 +13,7 @@ export class LangService {
      * @param fr
      * @param en
      */
-    public init(fr: any, en: any) {
+    public init(fr: any, en: any = null) {
 
         // Add languages
         this.translate.addLangs(en ? ['fr', 'en'] : ['fr']);

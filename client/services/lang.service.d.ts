@@ -7,5 +7,5 @@ export declare class LangService {
      * @param fr
      * @param en
      */
-    init(fr: any, en: any): void;
+    init(fr: any, en?: any): void;
 }
