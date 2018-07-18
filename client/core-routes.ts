@@ -9,7 +9,9 @@ const routes: IRouteItem[] = [
     <IRouteItem>{path: '**', component: NotFoundComponent}
 ];
 
+console.log(ClientConfig);
 if (ClientConfig.implementsAuth) {
+    console.log("implement auth !");
     routes.push({
         path: 'account',
         component: AccountComponent,

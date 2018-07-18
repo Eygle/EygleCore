@@ -9,7 +9,9 @@ var ClientConfig_1 = require("./utils/ClientConfig");
 var routes = [
     { path: '**', component: not_found_component_1.NotFoundComponent }
 ];
+console.log(ClientConfig_1.default);
 if (ClientConfig_1.default.implementsAuth) {
+    console.log("implement auth !");
     routes.push({
         path: 'account',
         component: account_component_1.AccountComponent,
