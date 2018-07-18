@@ -4,7 +4,7 @@ export interface IRouteItem {
     path: string;
     name?: string;
     component: any;
-    redirectTo?: any[];
+    redirectTo?: string;
     translate?: string;
     icon?: string;
     category?: string;

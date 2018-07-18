@@ -7,7 +7,7 @@ import {NotFoundComponent} from "./content/errors/not-found/not-found.component"
 
 const routes: IRouteItem[] = [
     <IRouteItem>{path: 'error-404', name: 'NotFound', component: NotFoundComponent},
-    <IRouteItem>{path: '/*path', redirectTo: ['NotFound']}
+    <IRouteItem>{path: '/*path', redirectTo: 'NotFound'}
 ];
 
 if (ServerConfig.implementsAuth) {
@@ -30,7 +30,7 @@ export interface IRouteItem {
     name?: string;
     component: any;
 
-    redirectTo?: any[];
+    redirectTo?: string;
 
     translate?: string;
     icon?: string;
