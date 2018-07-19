@@ -17,6 +17,8 @@ var AccountComponent = (function () {
         this.user = this.auth.user;
         this.updateView = { info: false, password: false };
     }
+    AccountComponent.prototype.ngOnInit = function () {
+    };
     /**
      * Update info
      */

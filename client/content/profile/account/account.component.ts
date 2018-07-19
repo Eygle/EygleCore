@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../services/auth.service";
 import {User} from "../../../../commons/models/User";
 
@@ -7,7 +7,7 @@ import {User} from "../../../../commons/models/User";
     template: require('./account.component.html'),
     styles: [require('./account.component.scss')]
 })
-export class AccountComponent {
+export class AccountComponent implements OnInit {
 
     /**
      * Current logged user;
@@ -19,6 +19,9 @@ export class AccountComponent {
     constructor(private auth: AuthService) {
         this.user = this.auth.user;
         this.updateView = {info: false, password: false};
+    }
+
+    ngOnInit() {
     }
 
     /**
