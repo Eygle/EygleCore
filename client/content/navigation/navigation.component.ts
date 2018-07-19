@@ -1,7 +1,7 @@
 import * as _ from 'underscore';
 import {Component, Input, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
-import {IRouteItem} from "../../utils/ClientConfig";
+import {IRouteItem} from "../../typings/route-item.interface";
 
 @Component({
     selector: 'core-navigation',

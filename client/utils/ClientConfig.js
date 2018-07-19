@@ -12,10 +12,6 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ProjectConfig_1 = require("../../commons/utils/ProjectConfig");
 var Utils_1 = require("../../commons/utils/Utils");
-// import {AccountComponent} from "../content/profile/account/account.component";
-var register_component_1 = require("../content/auth/register/register.component");
-var login_component_1 = require("../content/auth/login/login.component");
-var not_found_component_1 = require("../content/errors/not-found/not-found.component");
 var ClientConfig = (function (_super) {
     __extends(ClientConfig, _super);
     function ClientConfig() {
@@ -33,29 +29,6 @@ var ClientConfig = (function (_super) {
         }
         return _this;
     }
-    /**
-     * Prepare routes by merging core routes with given routes
-     * @param clientRoutes
-     * @return {any}
-     */
-    ClientConfig.prototype.prepareRoutes = function (clientRoutes) {
-        var routes = [];
-        if (this.implementsAuth) {
-            // routes.push({
-            //     path: 'account',
-            //     component: AccountComponent,
-            //     translate: 'ACCOUNT.TITLE',
-            //     icon: 'account_circle',
-            //     access: EPermission.SeeAccount,
-            //     category: 'PROFILE',
-            //     order: 100
-            // });
-            routes.push({ path: 'auth/login', component: login_component_1.LoginComponent });
-            routes.push({ path: 'auth/register', component: register_component_1.RegisterComponent });
-        }
-        routes.push({ path: '**', component: not_found_component_1.NotFoundComponent }); // Must be last
-        return clientRoutes.concat(routes);
-    };
     return ClientConfig;
 }(ProjectConfig_1.AProjectConfigClient));
 exports.ClientConfig = ClientConfig;

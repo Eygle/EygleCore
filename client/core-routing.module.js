@@ -12,6 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var router_1 = require("@angular/router");
 var auth_service_1 = require("./services/auth.service");
 var core_1 = require("@angular/core");
+var ClientConfig_1 = require("./utils/ClientConfig");
+var core_enums_1 = require("../commons/core.enums");
+var account_component_1 = require("./content/profile/account/account.component");
+var register_component_1 = require("./content/auth/register/register.component");
+var login_component_1 = require("./content/auth/login/login.component");
+var not_found_component_1 = require("./content/errors/not-found/not-found.component");
 var EygleCoreRoutingModule = (function () {
     function EygleCoreRoutingModule(router, auth) {
         var _this = this;
@@ -29,6 +35,29 @@ var EygleCoreRoutingModule = (function () {
             }
         });
     }
+    /**
+     * Prepare routes by merging core routes with given routes
+     * @param clientRoutes
+     * @return {any}
+     */
+    EygleCoreRoutingModule.prepareRoutes = function (clientRoutes) {
+        var routes = [];
+        if (ClientConfig_1.default.implementsAuth) {
+            routes.push({
+                path: 'account',
+                component: account_component_1.AccountComponent,
+                translate: 'ACCOUNT.TITLE',
+                icon: 'account_circle',
+                access: core_enums_1.EPermission.SeeAccount,
+                category: 'PROFILE',
+                order: 100
+            });
+            routes.push({ path: 'auth/login', component: login_component_1.LoginComponent });
+            routes.push({ path: 'auth/register', component: register_component_1.RegisterComponent });
+        }
+        routes.push({ path: '**', component: not_found_component_1.NotFoundComponent }); // Must be last
+        return clientRoutes.concat(routes);
+    };
     /**
      * Add check
      * @param {(url: string) => boolean} callback

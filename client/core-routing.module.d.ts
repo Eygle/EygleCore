@@ -1,5 +1,6 @@
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import { IRouteItem } from "./typings/route-item.interface";
 export declare abstract class EygleCoreRoutingModule {
     private router;
     private auth;
@@ -16,6 +17,12 @@ export declare abstract class EygleCoreRoutingModule {
      */
     protected errorsRoutes: Array<string>;
     constructor(router: Router, auth: AuthService);
+    /**
+     * Prepare routes by merging core routes with given routes
+     * @param clientRoutes
+     * @return {any}
+     */
+    static prepareRoutes(clientRoutes: any): IRouteItem[];
     /**
      * Add check
      * @param {(url: string) => boolean} callback
