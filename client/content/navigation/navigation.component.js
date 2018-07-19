@@ -65,8 +65,8 @@ var NavigationComponent = (function () {
     NavigationComponent = __decorate([
         core_1.Component({
             selector: 'core-navigation',
-            template: require('./sidenav.component.html'),
-            styles: [require('./sidenav.component.scss')]
+            template: require('./navigation.component.html'),
+            styles: [require('./navigation.component.scss')]
         }),
         __metadata("design:paramtypes", [auth_service_1.AuthService])
     ], NavigationComponent);

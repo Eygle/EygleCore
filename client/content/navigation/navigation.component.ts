@@ -5,8 +5,8 @@ import {IRouteItem} from "../../core-routes";
 
 @Component({
     selector: 'core-navigation',
-    template: require('./sidenav.component.html'),
-    styles: [require('./sidenav.component.scss')]
+    template: require('./navigation.component.html'),
+    styles: [require('./navigation.component.scss')]
 })
 export class NavigationComponent implements OnInit {
 
