@@ -26,7 +26,7 @@ export class ClientConfig extends AProjectConfigClient {
     }
 
     /**
-     * Prepare routes by merginf core routes with given routes
+     * Prepare routes by merging core routes with given routes
      * @param clientRoutes
      * @return {any}
      */

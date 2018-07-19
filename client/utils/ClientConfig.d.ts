@@ -3,7 +3,7 @@ import { EPermission } from "../../commons/core.enums";
 export declare class ClientConfig extends AProjectConfigClient {
     constructor();
     /**
-     * Prepare routes by merginf core routes with given routes
+     * Prepare routes by merging core routes with given routes
      * @param clientRoutes
      * @return {any}
      */
