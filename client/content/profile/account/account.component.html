@@ -1,8 +1,8 @@
-<div class="content" fxFlex="flex" fxLayout="row" fxLayoutAlign="space-between start">
-    <mat-card fxFlex="50">
-        <mat-card-header>
+<div class="content" fxFlex="flex" fxLayout="row" fxLayoutAlign="space-between stretch">
+    <mat-card fxFlex="flex">
+        <mat-card-header class="actions">
             <div fxLayout="row" fxLayoutAlign="space-between center">
-                <h2 translate="ACCOUNT.UPDATE_INFO"></h2>
+                <h2 translate="ACCOUNT.UPDATE_INFO" fxFlex="flex"></h2>
                 <mat-icon class="action" (click)="updateView.info = true" *ngIf="!updateView.info">edit</mat-icon>
             </div>
         </mat-card-header>
@@ -38,7 +38,7 @@
         </mat-card-actions>
     </mat-card>
 
-    <mat-card fxFlex="50">
+    <mat-card fxFlex="flex">
         <mat-card-header>
             <h2 translate="COMMON.ACTIONS"></h2>
         </mat-card-header>

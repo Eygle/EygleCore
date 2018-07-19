@@ -180,6 +180,43 @@ html {
       }
     }
 
+    mat-card {
+      $padding: 12px;
+
+      padding: 0!important;
+
+      mat-card-header {
+        padding: $padding;
+        background-color: rgba(0, 0, 0, 0.15);
+        font-size: 1.2em;
+
+        &.actions {
+          > .mat-card-header-text {
+            display: none;
+          }
+
+          * {
+            width: 100%;
+          }
+        }
+      }
+
+      mat-card-content {
+        padding: $padding;
+
+        mat-form-field {
+          width: 100%;
+          margin-top: $padding!important;
+        }
+      }
+
+      mat-card-actions {
+        margin: 0!important;
+        padding: $padding !important;
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+      }
+    }
+
     /*
      * OVERRIDE ANGULAR MATERIAL THEME
      */
