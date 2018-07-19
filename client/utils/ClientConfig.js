@@ -12,9 +12,8 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ProjectConfig_1 = require("../../commons/utils/ProjectConfig");
 var Utils_1 = require("../../commons/utils/Utils");
-var account_component_1 = require("../content/profile/account/account.component");
+// import {AccountComponent} from "../content/profile/account/account.component";
 var register_component_1 = require("../content/auth/register/register.component");
-var core_enums_1 = require("../../commons/core.enums");
 var login_component_1 = require("../content/auth/login/login.component");
 var not_found_component_1 = require("../content/errors/not-found/not-found.component");
 var ClientConfig = (function (_super) {
@@ -42,15 +41,15 @@ var ClientConfig = (function (_super) {
     ClientConfig.prototype.prepareRoutes = function (clientRoutes) {
         var routes = [];
         if (this.implementsAuth) {
-            routes.push({
-                path: 'account',
-                component: account_component_1.AccountComponent,
-                translate: 'ACCOUNT.TITLE',
-                icon: 'account_circle',
-                access: core_enums_1.EPermission.SeeAccount,
-                category: 'PROFILE',
-                order: 100
-            });
+            // routes.push({
+            //     path: 'account',
+            //     component: AccountComponent,
+            //     translate: 'ACCOUNT.TITLE',
+            //     icon: 'account_circle',
+            //     access: EPermission.SeeAccount,
+            //     category: 'PROFILE',
+            //     order: 100
+            // });
             routes.push({ path: 'auth/login', component: login_component_1.LoginComponent });
             routes.push({ path: 'auth/register', component: register_component_1.RegisterComponent });
         }

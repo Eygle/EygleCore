@@ -1,6 +1,6 @@
 import ProjectConfig, {AProjectConfigClient} from '../../commons/utils/ProjectConfig';
 import Utils from "../../commons/utils/Utils";
-import {AccountComponent} from "../content/profile/account/account.component";
+// import {AccountComponent} from "../content/profile/account/account.component";
 import {RegisterComponent} from "../content/auth/register/register.component";
 import {EPermission} from "../../commons/core.enums";
 import {LoginComponent} from "../content/auth/login/login.component";
@@ -34,15 +34,15 @@ export class ClientConfig extends AProjectConfigClient {
         const routes = [];
 
         if (this.implementsAuth) {
-            routes.push({
-                path: 'account',
-                component: AccountComponent,
-                translate: 'ACCOUNT.TITLE',
-                icon: 'account_circle',
-                access: EPermission.SeeAccount,
-                category: 'PROFILE',
-                order: 100
-            });
+            // routes.push({
+            //     path: 'account',
+            //     component: AccountComponent,
+            //     translate: 'ACCOUNT.TITLE',
+            //     icon: 'account_circle',
+            //     access: EPermission.SeeAccount,
+            //     category: 'PROFILE',
+            //     order: 100
+            // });
             routes.push({path: 'auth/login', component: LoginComponent});
             routes.push({path: 'auth/register', component: RegisterComponent})
         }
