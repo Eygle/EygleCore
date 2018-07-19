@@ -48,7 +48,7 @@
             <button mat-raised-button (click)="logout()">{{'ACCOUNT.LOGOUT' | translate}}</button>
         </mat-card-content>
 
-        <mat-card-content fxLayout="column" fxLayoutAlign="start center" *ngIf="updateView.password">
+        <mat-card-content fxLayout="column" fxLayoutAlign="space-between center" *ngIf="updateView.password">
             <mat-form-field>
                 <input type="password" matInput placeholder="{{'COMMON.PASSWORD' | translate}}" [(ngModel)]="password"
                        name="password" required>
@@ -62,6 +62,7 @@
 
         <mat-card-actions *ngIf="updateView.password">
             <button mat-raised-button (click)="changePassword($event)">{{'COMMON.SAVE' | translate}}</button>
+            <button mat-button (click)="updateView.password = false">{{'COMMON.CANCEL' | translate}}</button>
         </mat-card-actions>
     </mat-card>
 </div>

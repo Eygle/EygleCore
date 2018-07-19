@@ -184,18 +184,22 @@ html {
       $padding: 12px;
 
       padding: 0!important;
+      margin-right: 12px!important;
 
       mat-card-header {
         padding: $padding;
         background-color: rgba(0, 0, 0, 0.15);
-        font-size: 1.2em;
+
+        h2 {
+          font-size: 1.2em;
+        }
 
         &.actions {
           > .mat-card-header-text {
             display: none;
           }
 
-          * {
+          & > * {
             width: 100%;
           }
         }
