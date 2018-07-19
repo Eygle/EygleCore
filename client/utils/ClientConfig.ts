@@ -5,8 +5,8 @@ export class ClientConfig extends AProjectConfigClient {
 
     constructor() {
         super();
-        const conf = require('../../../commons/eygle-conf'); // load conf from node_module
-        const env =  require('../../../client/environments/environment'); // load env
+        const conf = require('../../../../commons/eygle-conf'); // load conf from node_module
+        const env =  require('../../../../client/environments/environment'); // load env
         ProjectConfig.initForClient(conf, Utils.getEnvNameFromEnv(env));
 
         /**

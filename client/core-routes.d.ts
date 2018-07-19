@@ -5,6 +5,7 @@ export interface IRouteItem {
     name?: string;
     component: any;
     redirectTo?: string;
+    order?: number;
     translate?: string;
     icon?: string;
     category?: string;

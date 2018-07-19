@@ -9,16 +9,15 @@ const routes: IRouteItem[] = [
     <IRouteItem>{path: '**', component: NotFoundComponent}
 ];
 
-console.log(ClientConfig.implementsAuth, ClientConfig);
 if (ClientConfig.implementsAuth) {
-    console.log("implement auth !");
     routes.push({
         path: 'account',
         component: AccountComponent,
         translate: 'ACCOUNT.TITLE',
         icon: 'account_circle',
         access: EPermission.SeeAccount,
-        category: 'PROFILE'
+        category: 'PROFILE',
+        order: 100
     });
     routes.push({path: 'auth/login', component: LoginComponent});
     routes.push({path: 'auth/register', component: RegisterComponent})
@@ -30,9 +29,9 @@ export interface IRouteItem {
     path: string;
     name?: string;
     component: any;
-
     redirectTo?: string;
 
+    order?: number;
     translate?: string;
     icon?: string;
     category?: string;

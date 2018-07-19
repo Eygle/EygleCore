@@ -16,8 +16,8 @@ var ClientConfig = (function (_super) {
     __extends(ClientConfig, _super);
     function ClientConfig() {
         var _this = _super.call(this) || this;
-        var conf = require('../../../commons/eygle-conf'); // load conf from node_module
-        var env = require('../../../client/environments/environment'); // load env
+        var conf = require('../../../../commons/eygle-conf'); // load conf from node_module
+        var env = require('../../../../client/environments/environment'); // load env
         ProjectConfig_1.default.initForClient(conf, Utils_1.default.getEnvNameFromEnv(env));
         /**
          * Load all ProjectConfig here

@@ -9,16 +9,15 @@ var ClientConfig_1 = require("./utils/ClientConfig");
 var routes = [
     { path: '**', component: not_found_component_1.NotFoundComponent }
 ];
-console.log(ClientConfig_1.default.implementsAuth, ClientConfig_1.default);
 if (ClientConfig_1.default.implementsAuth) {
-    console.log("implement auth !");
     routes.push({
         path: 'account',
         component: account_component_1.AccountComponent,
         translate: 'ACCOUNT.TITLE',
         icon: 'account_circle',
         access: core_enums_1.EPermission.SeeAccount,
-        category: 'PROFILE'
+        category: 'PROFILE',
+        order: 100
     });
     routes.push({ path: 'auth/login', component: login_component_1.LoginComponent });
     routes.push({ path: 'auth/register', component: register_component_1.RegisterComponent });

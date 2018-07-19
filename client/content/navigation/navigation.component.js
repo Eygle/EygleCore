@@ -12,18 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("underscore");
 var core_1 = require("@angular/core");
 var auth_service_1 = require("../../services/auth.service");
-var SidenavComponent = (function () {
-    function SidenavComponent(Auth) {
+var NavigationComponent = (function () {
+    function NavigationComponent(Auth) {
         this.Auth = Auth;
     }
-    SidenavComponent.prototype.ngOnInit = function () {
+    NavigationComponent.prototype.ngOnInit = function () {
         this._generateMenu();
     };
     /**
      * Generate menu from routes list
      * @private
      */
-    SidenavComponent.prototype._generateMenu = function () {
+    NavigationComponent.prototype._generateMenu = function () {
         this.navItems = [
             {
                 label: undefined,
@@ -53,7 +53,7 @@ var SidenavComponent = (function () {
             }
         };
         var this_1 = this;
-        for (var _i = 0, _a = this.routes || []; _i < _a.length; _i++) {
+        for (var _i = 0, _a = _.sortBy(this.routes, 'order') || []; _i < _a.length; _i++) {
             var item = _a[_i];
             _loop_1(item);
         }
@@ -61,16 +61,16 @@ var SidenavComponent = (function () {
     __decorate([
         core_1.Input(),
         __metadata("design:type", Array)
-    ], SidenavComponent.prototype, "routes", void 0);
-    SidenavComponent = __decorate([
+    ], NavigationComponent.prototype, "routes", void 0);
+    NavigationComponent = __decorate([
         core_1.Component({
-            selector: 'core-sidenav',
+            selector: 'core-navigation',
             template: require('./sidenav.component.html'),
             styles: [require('./sidenav.component.scss')]
         }),
         __metadata("design:paramtypes", [auth_service_1.AuthService])
-    ], SidenavComponent);
-    return SidenavComponent;
+    ], NavigationComponent);
+    return NavigationComponent;
 }());
-exports.SidenavComponent = SidenavComponent;
-//# sourceMappingURL=sidenav.component.js.map
+exports.NavigationComponent = NavigationComponent;
+//# sourceMappingURL=navigation.component.js.map

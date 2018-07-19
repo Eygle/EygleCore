@@ -13,7 +13,7 @@ var ngx_cookie_service_1 = require("ngx-cookie-service");
 var core_2 = require("@ngx-translate/core");
 var material_module_1 = require("./material.module");
 var flex_layout_1 = require("@angular/flex-layout");
-var sidenav_component_1 = require("./content/sidenav/sidenav.component");
+var navigation_component_1 = require("./content/navigation/navigation.component");
 var login_component_1 = require("./content/auth/login/login.component");
 var register_component_1 = require("./content/auth/register/register.component");
 var config_service_1 = require("./services/config.service");
@@ -31,7 +31,7 @@ var EygleCoreModule = (function () {
     EygleCoreModule = __decorate([
         core_1.NgModule({
             declarations: [
-                sidenav_component_1.SidenavComponent,
+                navigation_component_1.NavigationComponent,
                 login_component_1.LoginComponent,
                 register_component_1.RegisterComponent,
                 account_component_1.AccountComponent,
@@ -48,7 +48,7 @@ var EygleCoreModule = (function () {
                 forms_1.FormsModule
             ],
             exports: [
-                sidenav_component_1.SidenavComponent,
+                navigation_component_1.NavigationComponent,
                 common_1.CommonModule,
                 router_1.RouterModule,
                 core_2.TranslateModule,

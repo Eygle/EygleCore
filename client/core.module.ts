@@ -6,7 +6,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {MaterialModule} from './material.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
-import {SidenavComponent} from './content/sidenav/sidenav.component';
+import {NavigationComponent} from './content/navigation/navigation.component';
 import {LoginComponent} from './content/auth/login/login.component';
 import {RegisterComponent} from './content/auth/register/register.component';
 import {ConfigService} from './services/config.service';
@@ -21,7 +21,7 @@ import {ProfileService} from "./content/profile/profile.service";
 
 @NgModule({
     declarations: [
-        SidenavComponent,
+        NavigationComponent,
         LoginComponent,
         RegisterComponent,
         AccountComponent,
@@ -38,7 +38,7 @@ import {ProfileService} from "./content/profile/profile.service";
         FormsModule
     ],
     exports: [
-        SidenavComponent,
+        NavigationComponent,
 
         CommonModule,
         RouterModule,

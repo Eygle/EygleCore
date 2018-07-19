@@ -1,7 +1,7 @@
 import { OnInit } from '@angular/core';
 import { AuthService } from "../../services/auth.service";
 import { IRouteItem } from "../../core-routes";
-export declare class SidenavComponent implements OnInit {
+export declare class NavigationComponent implements OnInit {
     private Auth;
     routes: IRouteItem[];
     navItems: [{

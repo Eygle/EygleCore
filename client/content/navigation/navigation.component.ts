@@ -4,11 +4,11 @@ import {AuthService} from "../../services/auth.service";
 import {IRouteItem} from "../../core-routes";
 
 @Component({
-    selector: 'core-sidenav',
+    selector: 'core-navigation',
     template: require('./sidenav.component.html'),
     styles: [require('./sidenav.component.scss')]
 })
-export class SidenavComponent implements OnInit {
+export class NavigationComponent implements OnInit {
 
     @Input() routes: IRouteItem[];
 
@@ -33,7 +33,7 @@ export class SidenavComponent implements OnInit {
             }
         ];
 
-        for (const item of this.routes || []) {
+        for (const item of _.sortBy(this.routes, 'order') || []) {
             if (item.icon && item.translate && this.Auth.authorize(item.access)) {
                 item.url = `/${item.path}`;
                 if (item.category) {
