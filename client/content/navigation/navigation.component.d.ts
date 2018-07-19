@@ -1,6 +1,6 @@
 import { OnInit } from '@angular/core';
 import { AuthService } from "../../services/auth.service";
-import { IRouteItem } from "../../core-routes";
+import { IRouteItem } from "../../utils/ClientConfig";
 export declare class NavigationComponent implements OnInit {
     private Auth;
     routes: IRouteItem[];
