@@ -11,27 +11,24 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var ProjectConfig_1 = require("../../commons/utils/ProjectConfig");
+var Utils_1 = require("../../commons/utils/Utils");
 var ClientConfig = (function (_super) {
     __extends(ClientConfig, _super);
     function ClientConfig() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    /**
-     * Initialise environment
-     * @param conf
-     * @param isProd
-     */
-    ClientConfig.prototype.init = function (conf, isProd) {
-        ProjectConfig_1.default.initForClient(conf, isProd ? 'production' : 'development');
+        var _this = _super.call(this) || this;
+        var conf = require('../../../commons/eygle-conf'); // load conf from node_module
+        var env = require('../../../client/environments/environment'); // load env
+        ProjectConfig_1.default.initForClient(conf, Utils_1.default.getEnvNameFromEnv(env));
         /**
          * Load all ProjectConfig here
          */
         for (var key in ProjectConfig_1.default.client) {
             if (ProjectConfig_1.default.client.hasOwnProperty(key)) {
-                this[key] = ProjectConfig_1.default.client[key];
+                _this[key] = ProjectConfig_1.default.client[key];
             }
         }
-    };
+        return _this;
+    }
     return ClientConfig;
 }(ProjectConfig_1.AProjectConfigClient));
 exports.ClientConfig = ClientConfig;

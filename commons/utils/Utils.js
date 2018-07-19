@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("underscore");
-var ProjectConfig_1 = require("./ProjectConfig");
 var core_enums_1 = require("../core.enums");
 var Utils = (function () {
     function Utils() {
@@ -145,8 +144,25 @@ var Utils = (function () {
                 return core_enums_1.EEnv.Preprod;
             case 'production':
             default:
-                ProjectConfig_1.default.envName = 'production';
                 return core_enums_1.EEnv.Prod;
+        }
+    };
+    /**
+     * Get envName from EEnv
+     * @param {EEnv} env
+     * @return {string}
+     */
+    Utils.getEnvNameFromEnv = function (env) {
+        switch (env) {
+            case core_enums_1.EEnv.Dev:
+                return 'development';
+            case core_enums_1.EEnv.Test:
+                return 'test';
+            case core_enums_1.EEnv.Preprod:
+                return 'preprod';
+            case core_enums_1.EEnv.Prod:
+            default:
+                return 'production';
         }
     };
     /**

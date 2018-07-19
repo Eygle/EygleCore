@@ -80,6 +80,12 @@ export default class Utils {
      */
     static getEnvFromName(envName: string): EEnv;
     /**
+     * Get envName from EEnv
+     * @param {EEnv} env
+     * @return {string}
+     */
+    static getEnvNameFromEnv(env: EEnv): string;
+    /**
      * Normalize string
      * Lowercase string
      * Replace any non alphanumerical character by a single '-'

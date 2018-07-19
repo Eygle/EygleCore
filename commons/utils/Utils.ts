@@ -158,8 +158,27 @@ export default class Utils {
                 return EEnv.Preprod;
             case 'production':
             default:
-                ProjectConfig.envName = 'production';
                 return EEnv.Prod;
+        }
+    }
+
+    /**
+     * Get envName from EEnv
+     * @param {EEnv} env
+     * @return {string}
+     */
+
+    public static getEnvNameFromEnv(env: EEnv): string {
+        switch (env) {
+            case EEnv.Dev:
+                return 'development';
+            case EEnv.Test:
+                return 'test';
+            case EEnv.Preprod:
+                return 'preprod';
+            case EEnv.Prod:
+            default:
+                return 'production';
         }
     }
 
