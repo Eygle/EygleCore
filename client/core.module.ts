@@ -17,7 +17,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {LangService} from "./services/lang.service";
 import {AccountComponent} from "./content/profile/account/account.component";
 import {NotFoundComponent} from "./content/errors/not-found/not-found.component";
-import {ProfileService} from "./content/profile/profile.service";
+import {UserService} from "./services/user.service";
 
 @NgModule({
     declarations: [
@@ -53,7 +53,7 @@ import {ProfileService} from "./content/profile/profile.service";
         ConfigService,
         AuthService,
         LangService,
-        ProfileService
+        UserService
     ]
 })
 export class EygleCoreModule {

@@ -1,0 +1,256 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+@import "core-common";
+
+body, html {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+html {
+  display: block;
+  font-family: $font-family;
+  @include fontSize($font-size);
+  color: $font-color;
+
+  *, :after, :before {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  * {
+    text-rendering: optimizeLegibility;
+    -o-text-rendering: optimizeLegibility;
+    -ms-text-rendering: optimizeLegibility;
+    -moz-text-rendering: optimizeLegibility;
+    -webkit-text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.7);
+
+    a {
+      text-decoration: none;
+      color: inherit;
+
+      &:hover {
+        color: $color-yellow;
+      }
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      font-family: "Open Sans", sans-serif;
+      color: #eee;
+    }
+
+    mat-icon.action {
+      cursor: pointer;
+
+      &:hover {
+        color: white;
+      }
+    }
+
+    .unselectable {
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+    }
+
+    .boxed {
+      background-color: $bg-darken-full;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    table.label-value {
+      width: 100%;
+      border-collapse: collapse;
+
+      td {
+        padding: 12px 0;
+
+        &.label {
+          padding-right: 10px;
+          color: transparentize($font-color, 0.3);
+        }
+      }
+
+      &.separated tr:not(:last-of-type) > td {
+        padding: 12px 0;
+        border-bottom: 1px solid transparentize($font-color, 0.6);
+      }
+    }
+
+    .background-container {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: -1;
+      //background-color: #3f4245;
+
+      .background-img {
+        background-image: url('/assets/images/background-light.jpg');
+        background-size: cover;
+        background-position: center center;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 2;
+      }
+
+      .background-noise {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: url('/assets/images/noise-light.png');
+        z-index: 2;
+      }
+    }
+
+    mat-sidenav-container {
+      height: 100%;
+      background-color: transparent !important;
+
+      mat-sidenav {
+        width: $sidenav-width;
+        background-color: $bg-darken !important;
+        font-family: $font-family;
+        color: $font-color;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      mat-sidenav-content {
+        $space-around: 25px;
+
+        min-height: 100%;
+        font-family: $font-family;
+        color: $font-color;
+
+        &.with-toolbar > * > div {
+          height: 100%;
+
+          & > .toolbar {
+            width: 100%;
+            height: $toolbar-height;
+            min-height: $toolbar-height;
+            background-color: $bg-darken;
+            padding: 0 25px;
+
+            & > * {
+              * {
+                margin: 0 5px;
+
+                &.mat-icon:hover {
+                  color: white;
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+
+          & > .content {
+            position: relative;
+            max-height: calc(100% - 60px);
+            padding: $space-around;
+          }
+        }
+
+        &:not(.with-toolbar) {
+          padding: $space-around !important;
+        }
+      }
+    }
+
+    /*
+     * OVERRIDE ANGULAR MATERIAL THEME
+     */
+
+    .mat-fab, .mat-mini-fab, .mat-raised-button {
+      color: $font-color;
+      background-color: $bg-darken;
+    }
+
+    .mat-input-element {
+      caret-color: $input-placeholder-color;
+    }
+
+    .mat-form-field-label {
+      color: transparentize($font-color, 0.4);
+    }
+
+    .mat-form-field-underline {
+      background-color: transparentize($font-color, 0.5);
+    }
+
+    .mat-focused {
+      .mat-form-field-label {
+        color: $input-placeholder-color;
+      }
+
+      .mat-form-field-required-marker {
+        color: $color-yellow;
+      }
+    }
+
+    .mat-form-field-ripple {
+      background-color: $input-placeholder-color;
+    }
+
+    .mat-select-value, .mat-select-arrow {
+      color: $font-color;
+    }
+
+    .mat-table {
+      background: $bg-darken;
+
+      .mat-header-row {
+        background: $bg-darken;
+
+        .mat-header-cell {
+          color: $font-color;
+        }
+      }
+
+      .mat-cell {
+        color: $font-color;
+      }
+    }
+
+    .mat-progress-spinner circle, .mat-spinner circle {
+      stroke: transparentize($color-yellow, 0.2);
+    }
+
+    .mat-card {
+      background-color: rgba(0, 0, 0, 0.1);
+      color: $font-color;
+    }
+
+    /*
+     * OVERRIDE perfect scrollbar
+     */
+    .ps__rail-x:hover, .ps__rail-y:hover, .ps__rail-x:focus, .ps__rail-y:focus {
+      background-color: $bg-darken;
+      opacity: 1;
+      border-radius: 15px;
+    }
+  }
+}

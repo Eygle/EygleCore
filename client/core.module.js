@@ -24,7 +24,7 @@ var platform_browser_1 = require("@angular/platform-browser");
 var lang_service_1 = require("./services/lang.service");
 var account_component_1 = require("./content/profile/account/account.component");
 var not_found_component_1 = require("./content/errors/not-found/not-found.component");
-var profile_service_1 = require("./content/profile/profile.service");
+var user_service_1 = require("./services/user.service");
 var EygleCoreModule = (function () {
     function EygleCoreModule() {
     }
@@ -61,7 +61,7 @@ var EygleCoreModule = (function () {
                 config_service_1.ConfigService,
                 auth_service_1.AuthService,
                 lang_service_1.LangService,
-                profile_service_1.ProfileService
+                user_service_1.UserService
             ]
         })
     ], EygleCoreModule);

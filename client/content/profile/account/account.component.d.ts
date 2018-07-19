@@ -1,10 +1,12 @@
 import { OnInit } from '@angular/core';
 import { AuthService } from "../../../services/auth.service";
 import { User } from "../../../../commons/models/User";
-import { ProfileService } from "../profile.service";
+import { ConfigService } from "../../../services/config.service";
+import { UserService } from "../../../services/user.service";
 export declare class AccountComponent implements OnInit {
     private auth;
-    private profile;
+    private userService;
+    private config;
     /**
      * Current logged user;
      */
@@ -13,7 +15,7 @@ export declare class AccountComponent implements OnInit {
         info: boolean;
         password: boolean;
     };
-    constructor(auth: AuthService, profile: ProfileService);
+    constructor(auth: AuthService, userService: UserService, config: ConfigService);
     ngOnInit(): void;
     /**
      * Update info

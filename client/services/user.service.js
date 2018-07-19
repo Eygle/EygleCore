@@ -20,18 +20,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var api_service_1 = require("../../services/api.service");
+var api_service_1 = require("./api.service");
 var http_1 = require("@angular/common/http");
-var ProfileService = (function (_super) {
-    __extends(ProfileService, _super);
-    function ProfileService(http) {
-        return _super.call(this, '/api/user', http) || this;
+var UserService = (function (_super) {
+    __extends(UserService, _super);
+    function UserService(http) {
+        return _super.call(this, '/api/users/:id', http) || this;
     }
-    ProfileService = __decorate([
+    UserService = __decorate([
         core_1.Injectable(),
         __metadata("design:paramtypes", [http_1.HttpClient])
-    ], ProfileService);
-    return ProfileService;
+    ], UserService);
+    return UserService;
 }(api_service_1.ApiService));
-exports.ProfileService = ProfileService;
-//# sourceMappingURL=profile.service.js.map
+exports.UserService = UserService;
+//# sourceMappingURL=user.service.js.map

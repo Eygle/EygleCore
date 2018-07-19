@@ -11,11 +11,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var auth_service_1 = require("../../../services/auth.service");
-var profile_service_1 = require("../profile.service");
+var config_service_1 = require("../../../services/config.service");
+var user_service_1 = require("../../../services/user.service");
 var AccountComponent = (function () {
-    function AccountComponent(auth, profile) {
+    function AccountComponent(auth, userService, config) {
         this.auth = auth;
-        this.profile = profile;
+        this.userService = userService;
+        this.config = config;
+        this.config.setSettings({
+            layout: {
+                navbar: true,
+                toolbar: false
+            }
+        });
         this.user = this.auth.user;
         this.updateView = { info: false, password: false };
     }
@@ -26,7 +34,7 @@ var AccountComponent = (function () {
      */
     AccountComponent.prototype.updateInfo = function () {
         var _this = this;
-        this.profile.save(this.user)
+        this.userService.save(this.user)
             .subscribe(function () {
             _this.updateView.info = false;
         });
@@ -37,7 +45,7 @@ var AccountComponent = (function () {
             template: require('./account.component.html'),
             styles: [require('./account.component.scss')]
         }),
-        __metadata("design:paramtypes", [auth_service_1.AuthService, profile_service_1.ProfileService])
+        __metadata("design:paramtypes", [auth_service_1.AuthService, user_service_1.UserService, config_service_1.ConfigService])
     ], AccountComponent);
     return AccountComponent;
 }());
