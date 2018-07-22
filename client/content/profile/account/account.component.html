@@ -34,7 +34,7 @@
 
         <mat-card-actions *ngIf="updateView.info">
             <button mat-raised-button (click)="updateInfo($event)">{{'COMMON.SAVE' | translate}}</button>
-            <button mat-button (click)="updateView.info = false">{{'COMMON.CANCEL' | translate}}</button>
+            <button mat-button (click)="updateView.info = false" class="pt-16">{{'COMMON.CANCEL' | translate}}</button>
         </mat-card-actions>
     </mat-card>
 
@@ -45,7 +45,7 @@
 
         <mat-card-content fxLayout="column" fxLayoutAlign="start center" *ngIf="!updateView.password">
             <button mat-raised-button (click)="updateView.password = true">{{'ACCOUNT.CHANGE_PASSWORD' | translate}}</button>
-            <button mat-raised-button (click)="logout()">{{'ACCOUNT.LOGOUT' | translate}}</button>
+            <button mat-raised-button (click)="logout()" class="m-16">{{'ACCOUNT.LOGOUT' | translate}}</button>
         </mat-card-content>
 
         <mat-card-content fxLayout="column" fxLayoutAlign="space-between center" *ngIf="updateView.password">

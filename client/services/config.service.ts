@@ -4,8 +4,8 @@ import {NavigationStart, Router} from '@angular/router';
 
 @Injectable()
 export class ConfigService {
-  settings: any;
-  defaultSettings: any;
+    settings: IConfigSettings;
+    defaultSettings: IConfigSettings;
   onSettingsChanged: BehaviorSubject<any>;
 
   constructor(private router: Router) {
@@ -16,7 +16,6 @@ export class ConfigService {
         navbarFolded: false, // true, false
         toolbar: true, // true, false
       },
-      customScrollbars: true,
       routerAnimation: 'fadeIn' // fadeIn, slideUp, slideDown, slideRight, slideLeft, none
     };
 
@@ -40,11 +39,16 @@ export class ConfigService {
    * Sets settings
    * @param settings
    */
-  setSettings(settings) {
+  setSettings(settings: IConfigSettings) {
     // Set the settings from the given object
-    this.settings = Object.assign({}, this.settings, settings);
+      this.settings = Object.assign({}, this.defaultSettings, settings);
 
     // Trigger the event
     this.onSettingsChanged.next(this.settings);
   }
+}
+
+export interface IConfigSettings {
+    layout: { navbar?: boolean, navbarFolded?: boolean, toolbar?: boolean };
+    routerAnimation?: string;
 }
