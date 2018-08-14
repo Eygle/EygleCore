@@ -81,8 +81,6 @@ export class ServerConfig extends AProjectConfigServer {
         this.loginIpAttemptsExpire = 20 * 60 * 1000; // 20 minutes
         this.ipLockedTime = 60 * 60 * 1000; // 1 hour
 
-        this.env = Utils.getEnvFromName(ProjectConfig.envName);
-
         /**
          * Load all ProjectConfig here
          */

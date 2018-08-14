@@ -1,5 +1,6 @@
 import * as path from 'path';
 import {EEnv, ELoggerLvl} from '../core.enums';
+import Utils from "./Utils";
 
 export default class ProjectConfig {
 
@@ -113,6 +114,7 @@ export default class ProjectConfig {
             implementsAuth: false,
             includeCronManager: false,
             appName: process.env.NODE_APP,
+            env: Utils.getEnvFromName(ProjectConfig.envName),
             debug: false
         });
         ProjectConfig._addToConf(target, json);
@@ -152,12 +154,14 @@ export default class ProjectConfig {
     }
 }
 
+ProjectConfig.init();
+
 export abstract class AProjectConfigCommon {
 
     /**
      * Current environment
      */
-    public env: EEnv;
+    env: EEnv;
 
     /**
      * Include implementsAuth
@@ -266,8 +270,6 @@ export abstract class AProjectConfigServer extends AProjectConfigCommon {
      */
     loggerAllLogsFileName: string;
 }
-
-ProjectConfig.init();
 
 export abstract class AProjectConfigClient extends AProjectConfigCommon {
     /**
