@@ -23,7 +23,6 @@ var ConfigService = (function () {
                 navbarFolded: false,
                 toolbar: true,
             },
-            customScrollbars: true,
             routerAnimation: 'fadeIn' // fadeIn, slideUp, slideDown, slideRight, slideLeft, none
         };
         // Set the settings from the default settings
@@ -43,7 +42,7 @@ var ConfigService = (function () {
      */
     ConfigService.prototype.setSettings = function (settings) {
         // Set the settings from the given object
-        this.settings = Object.assign({}, this.settings, settings);
+        this.settings = Object.assign({}, this.defaultSettings, settings);
         // Trigger the event
         this.onSettingsChanged.next(this.settings);
     };

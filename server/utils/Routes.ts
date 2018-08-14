@@ -3,10 +3,10 @@ import * as express from 'express';
 import Resty from '../middlewares/Resty';
 import Auth from '../middlewares/Auth';
 import EmailsUnsubscribe from '../middlewares/EmailsUnsubscribe';
-import Logger from "./Logger";
-import ServerConfig from "./ServerConfig";
-import {EEnv} from "../../commons/core.enums";
-import {ICustomRoute} from "../typings/customs.interface";
+import Logger from './Logger';
+import ServerConfig from './ServerConfig';
+import {EEnv} from '../../commons/core.enums';
+import {ICustomRoute} from '../typings/customs.interface';
 
 class Routes {
    public static init(app, routes: ICustomRoute[]) {
@@ -45,8 +45,10 @@ class Routes {
          app[route.method](route.path, route.middleware);
       }
 
-      // FALLBACK (when reloading on a route redirect to index.html)
-      app.get('/*', [this.indexRedirect()]);
+       if (EEnv.Dev !== ServerConfig.env) {
+           // FALLBACK (when reloading on a route redirect to index.html)
+           app.get('/*', [this.indexRedirect()]);
+       }
    }
 
    private static indexRedirect() {

@@ -1,8 +1,8 @@
 // FONT
 $font-family: Roboto, Helvetica Neue, Arial, sans-serif;
 $font-color: rgba(255, 255, 255, 0.7);
-$font-size: 16px;
-$font-size-sm: 14px;
+$font-size: 14px;
+$font-size-sm: 13px;
 
 @mixin fontSize($size) {
   font-size: $size;

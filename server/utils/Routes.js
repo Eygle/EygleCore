@@ -40,8 +40,10 @@ var Routes = (function () {
             var route = routes_1[_i];
             app[route.method](route.path, route.middleware);
         }
-        // FALLBACK (when reloading on a route redirect to index.html)
-        app.get('/*', [this.indexRedirect()]);
+        if (core_enums_1.EEnv.Dev !== ServerConfig_1.default.env) {
+            // FALLBACK (when reloading on a route redirect to index.html)
+            app.get('/*', [this.indexRedirect()]);
+        }
     };
     Routes.indexRedirect = function () {
         return function (req, res) {

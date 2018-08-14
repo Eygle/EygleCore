@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import '~perfect-scrollbar/css/perfect-scrollbar.css';
-@import "core-common";
+@import "common";
+@import "helpers";
+@import "breakpoints";
 
 body, html {
   margin: 0;
@@ -35,6 +37,8 @@ html {
   body {
     background-color: transparent;
     color: rgba(255, 255, 255, 0.7);
+    font-family: $font-family;
+    font-size: $font-size;
 
     a {
       text-decoration: none;
@@ -288,10 +292,10 @@ html {
     /*
      * OVERRIDE perfect scrollbar
      */
-    .ps__rail-x:hover, .ps__rail-y:hover, .ps__rail-x:focus, .ps__rail-y:focus {
-      background-color: $bg-darken;
-      opacity: 1;
-      border-radius: 15px;
+    .ps__rail-x:hover, .ps__rail-y:hover, .ps__rail-x:focus, .ps__rail-y:focus, .ps__rail-x.ps--clicking, .ps__rail-y.ps--clicking {
+      background-color: $bg-darken !important;
+      opacity: 1 !important;
+      border-radius: 15px !important;
     }
   }
 }
